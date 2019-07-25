@@ -1,0 +1,20 @@
+program Project1;
+
+uses
+  Vcl.Forms,
+  UServidorRest in 'UServidorRest.pas' {FServidorRest},
+  UCliente in 'UCliente.pas' {Form2},
+  UdmServidor in 'UdmServidor.pas' {DmServidor: TDataModule},
+  UConexaoServer in 'UConexaoServer.pas',
+  UDataModuloServidorRest in 'UDataModuloServidorRest.pas' {DataModule1: TDataModule};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TFServidorRest, FServidorRest);
+  Application.CreateForm(TForm2, Form2);
+  Application.CreateForm(TDataModule1, DataModule1);
+  Application.Run;
+end.

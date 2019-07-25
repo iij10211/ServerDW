@@ -1,0 +1,15 @@
+unit Configuracoes;
+
+interface
+type
+  TConfiguracoesServer = Class
+
+    public
+
+    private
+
+  End;
+
+implementation
+
+end.

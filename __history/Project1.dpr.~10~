@@ -1,0 +1,18 @@
+program Project1;
+
+uses
+  Vcl.Forms,
+  UServidorRest in 'UServidorRest.pas' {FServidorRest},
+  UCliente in 'UCliente.pas' {FCliente},
+  UDataModuloServidorRest in 'UDataModuloServidorRest.pas' {DataModuleServidorRestFull: TDataModule};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TFCliente, FCliente);
+  Application.CreateForm(TFServidorRest, FServidorRest);
+  Application.CreateForm(TDataModuleServidorRestFull, DataModuleServidorRestFull);
+  Application.Run;
+end.

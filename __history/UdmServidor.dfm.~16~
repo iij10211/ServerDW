@@ -1,0 +1,55 @@
+object DmServidor: TDmServidor
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  Encoding = esASCII
+  Height = 326
+  Width = 363
+  object FDConnection1: TFDConnection
+    Params.Strings = (
+      'Database=E:\MaxSystem\MAXSYSTEMERP.FDB'
+      'User_Name=sysdba'
+      'Password=masterkey'
+      'Server=localhost'
+      'Port=3050'
+      'DriverID=FB')
+    ConnectedStoredUsage = []
+    LoginPrompt = False
+    Left = 80
+    Top = 64
+  end
+  object FDGUIxWaitCursor1: TFDGUIxWaitCursor
+    Provider = 'Forms'
+    Left = 208
+    Top = 64
+  end
+  object FDPhysFBDriverLink1: TFDPhysFBDriverLink
+    Left = 208
+    Top = 136
+  end
+  object FDQuery1: TFDQuery
+    Connection = FDConnection1
+    SQL.Strings = (
+      'SELECT * FROM PRODUTO')
+    Left = 208
+    Top = 208
+  end
+  object RESTDWDriverFD1: TRESTDWDriverFD
+    CommitRecords = 100
+    Connection = FDConnection1
+    Left = 80
+    Top = 136
+  end
+  object RESTDWPoolerDB1: TRESTDWPoolerDB
+    RESTDriver = RESTDWDriverFD1
+    Compression = True
+    Encoding = esUtf8
+    StrsTrim = False
+    StrsEmpty2Null = False
+    StrsTrim2Len = True
+    Active = True
+    PoolerOffMessage = 'RESTPooler not active.'
+    ParamCreate = True
+    Left = 80
+    Top = 208
+  end
+end

@@ -1,0 +1,152 @@
+unit UCliente;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Data.DB, Vcl.Grids, Vcl.DBGrids,
+  Vcl.StdCtrls, FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
+  FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf,
+  FireDAC.Comp.DataSet, FireDAC.Comp.Client, uDWConstsData, uRESTDWPoolerDB,
+  uRESTDWBase, uDWAbout, Vcl.ExtCtrls, AdvPanel,IniFiles;
+
+type
+  TFCliente = class(TForm)
+    Button1: TButton;
+    Button3: TButton;
+    DataSource1: TDataSource;
+    RESTDWDataBase1: TRESTDWDataBase;
+    RESTDWClientSQL1: TRESTDWClientSQL;
+    AdvPanel1: TAdvPanel;
+    AdvPanel2: TAdvPanel;
+    AdvPanel3: TAdvPanel;
+    Button2: TButton;
+    AdvPanel4: TAdvPanel;
+    DBGrid1: TDBGrid;
+    Edit1: TEdit;
+    Edit2: TEdit;
+    Label1: TLabel;
+    Label2: TLabel;
+    lSeguro: TLabel;
+    RESTDWPoolerList1: TRESTDWPoolerList;
+    Button4: TButton;
+    procedure Button3Click(Sender: TObject);
+    procedure ConectarServer;
+    procedure Busca;
+    procedure Edit2KeyPress(Sender: TObject; var Key: Char);
+    procedure Button4Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FCliente: TFCliente;
+
+implementation
+
+uses
+  UConexaoCliente;
+
+{$R *.dfm}
+
+procedure TFCliente.Busca;
+var
+arquivoIni : TIniFile;
+begin
+
+  if FileExists('C:\MaxSystemConfig\ConfiguracaoRemotaServidor.ini') then
+  begin
+
+    arquivoIni := TIniFile.Create('C:\MaxSystemConfig\ConfiguracaoRemotaServidor.ini');
+    RESTDWPoolerList1.Active        := False;
+    RESTDWPoolerList1.PoolerService := arquivoIni.ReadString('config','Host','');
+    RESTDWPoolerList1.PoolerPort    := StrToInt(arquivoIni.ReadString('config','Port',''));
+    RESTDWPoolerList1.Login         := arquivoIni.ReadString('config','User','');
+    RESTDWPoolerList1.Password      := arquivoIni.ReadString('config','Password','');
+    RESTDWPoolerList1.Active        := True;
+
+    if RESTDWPoolerList1.Active then
+    begin
+
+      if RESTDWPoolerList1.Poolers <> NIL then
+      begin
+        if RESTDWPoolerList1.Poolers.Count > 0 then
+        begin
+          RESTDWDataBase1.PoolerName := Trim(RESTDWPoolerList1.Poolers.Text);
+        end;
+
+      end;
+
+      RESTDWClientSQL1.Close;
+      RESTDWClientSQL1.SQL.Clear;
+      RESTDWClientSQL1.SQL.Add('SELECT * FROM PRODUTO');
+      RESTDWClientSQL1.SQL.Add('WHERE IDPRODUTO IS NOT NULL');
+      if Edit2.Text <> '' then
+      begin
+        RESTDWClientSQL1.SQL.Add('AND PRODUTO.IDPRODUTO =:IDPRODUTO');
+        RESTDWClientSQL1.ParamByName('IDPRODUTO').AsInteger := StrToInt(Edit2.Text);
+      end;
+
+      RESTDWClientSQL1.Active := True;
+
+    end;
+  end;
+end;
+
+procedure TFCliente.Button2Click(Sender: TObject);
+var
+conexao : TConexaoCliente;
+begin
+  conexao := TConexaoCliente.Create;
+  conexao.ConexaoRestCliente;
+  conexao.Insert;
+end;
+
+procedure TFCliente.Button3Click(Sender: TObject);
+begin
+  ConectarServer;
+end;
+
+procedure TFCliente.Button4Click(Sender: TObject);
+var
+conexao : TConexaoCliente;
+begin
+  conexao := TConexaoCliente.Create;
+  conexao.ConexaoRestCliente;
+  conexao.IDCLI := Edit2.Text;
+  conexao.Consulta;
+end;
+
+procedure TFCliente.ConectarServer;
+var
+ArquivoIni : TIniFile;
+begin
+  ArquivoIni := TIniFile.Create('C:\MaxSystemConfig\ConfiguracaoRemotaServidor.ini');
+  try
+
+    RESTDWDataBase1.Close;
+    RESTDWDataBase1.PoolerService := ArquivoIni.ReadString('config','Host','');
+    RESTDWDataBase1.PoolerPort := StrToInt(ArquivoIni.ReadString('config','Port',''));
+    RESTDWDataBase1.Login := ArquivoIni.ReadString('config','User','');
+    RESTDWDataBase1.Password := ArquivoIni.ReadString('config','Password','');
+    RESTDWDataBase1.TypeRequest := TTypeRequest.trHttp;
+    RESTDWDataBase1.Open;
+    lSeguro.Caption := 'Conectado : Seguro';
+
+  finally
+    ArquivoIni.Free;
+  end;
+end;
+
+procedure TFCliente.Edit2KeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+  begin
+    Busca;
+  end;
+end;
+
+end.

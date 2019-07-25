@@ -1,0 +1,17 @@
+program ServidorDW;
+
+uses
+  Vcl.Forms,
+  UServidorRest in 'UServidorRest.pas' {FServidor},
+  UDataModuloServidorRest in 'UDataModuloServidorRest.pas' {DataModuleServidorRestFull: TDataModule},
+  URecurso in 'E:\MaxSystem\MaxSystemERP\maxsystem\Control\URecurso.pas',
+  URESTDWDataBase1ConexaoArquivo in 'E:\MaxSystem\MaxSystemERP\maxsystem\Model\URESTDWDataBase1ConexaoArquivo.pas';
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TFServidor, FServidor);
+  Application.Run;
+end.

@@ -1,0 +1,80 @@
+unit URESTDWDataBase1ConexaoArquivo;
+
+interface
+uses uRESTDWPoolerDB,IniFiles,uDWConstsData,System.SysUtils,Vcl.Dialogs,Data.DB;
+type
+  TURESTDWDataBaseConection = class(TRESTDWDataBase)
+
+    RESTDWDataBase1  :  TRESTDWDataBase;
+    RESTDWPoolerList1: TRESTDWPoolerList;
+
+  private
+
+  public
+    procedure ConexaoRestCliente;
+    procedure PoolerConexaoCliente;
+    constructor Create;
+
+  end;
+implementation
+
+{ TURESTDWDataBaseConection }
+
+procedure TURESTDWDataBaseConection.ConexaoRestCliente;
+var
+ArquivoIni : TIniFile;
+begin
+  ArquivoIni := TIniFile.Create('C:\MaxSystemConfig\ConfiguracaoRemotaServidor.ini');
+  try
+
+    RESTDWDataBase1.Close;
+    RESTDWDataBase1.PoolerService := ArquivoIni.ReadString('config','Host',''); //Host
+    RESTDWDataBase1.PoolerPort := StrToInt(ArquivoIni.ReadString('config','Port',''));
+    RESTDWDataBase1.Login := ArquivoIni.ReadString('config','User','');
+    RESTDWDataBase1.Password := ArquivoIni.ReadString('config','Password','');
+    RESTDWDataBase1.TypeRequest := TTypeRequest.trHttp;
+    RESTDWDataBase1.Open;
+    PoolerConexaoCliente;
+    ShowMessage('Conectado : Seguro');
+
+  finally
+    ArquivoIni.Free;
+  end;
+end;
+constructor TURESTDWDataBaseConection.Create;
+begin
+  RESTDWDataBase1   := TRESTDWDataBase.Create(nil);
+  RESTDWPoolerList1 := TRESTDWPoolerList.Create(nil);
+end;
+
+procedure TURESTDWDataBaseConection.PoolerConexaoCliente;
+var
+arquivoIni : TIniFile;
+begin
+
+  if FileExists('C:\MaxSystemConfig\ConfiguracaoRemotaServidor.ini') then
+  begin
+    arquivoIni := TIniFile.Create('C:\MaxSystemConfig\ConfiguracaoRemotaServidor.ini');
+    RESTDWPoolerList1.Active        := False;
+    RESTDWPoolerList1.PoolerService := arquivoIni.ReadString('config','Host','');
+    RESTDWPoolerList1.PoolerPort    := StrToInt(arquivoIni.ReadString('config','Port',''));
+    RESTDWPoolerList1.Login         := arquivoIni.ReadString('config','User','');
+    RESTDWPoolerList1.Password      := arquivoIni.ReadString('config','Password','');
+    RESTDWPoolerList1.Active        := True;
+
+    if RESTDWPoolerList1.Active then
+    begin
+      if RESTDWPoolerList1.Poolers <> NIL then
+      begin
+        if RESTDWPoolerList1.Poolers.Count > 0 then
+        begin
+          RESTDWDataBase1.PoolerName := Trim(RESTDWPoolerList1.Poolers.Text);
+        end;
+
+      end;
+    end;
+  end;
+end;
+End.
+
+

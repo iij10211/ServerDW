@@ -1,0 +1,17 @@
+program Project1;
+
+uses
+  Vcl.Forms,
+  UServidorRest in 'UServidorRest.pas' {FServidorRest},
+  UDataModuloServidorRest in 'UDataModuloServidorRest.pas' {DataModuleServidorRestFull: TDataModule},
+  URecurso in 'URecurso.pas',
+  URESTDWDataBase1ConexaoArquivo in 'URESTDWDataBase1ConexaoArquivo.pas';
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TFServidorRest, FServidorRest);
+  Application.Run;
+end.

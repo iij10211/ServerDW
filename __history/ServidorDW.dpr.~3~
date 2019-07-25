@@ -1,0 +1,28 @@
+program ServidorDW;
+
+uses
+  EMemLeaks,
+  EResLeaks,
+  EDialogWinAPIMSClassic,
+  EDialogWinAPIEurekaLogDetailed,
+  EDialogWinAPIStepsToReproduce,
+  EDebugExports,
+  EFixSafeCallException,
+  EMapWin32,
+  EAppVCL,
+  ExceptionLog7,
+  Vcl.Forms,
+  UServidorRest in 'UServidorRest.pas' {FServidor},
+  UDataModuloServidorRest in 'UDataModuloServidorRest.pas' {DataModuleServidorRestFull: TDataModule},
+  UConexaoCliente in 'UConexaoCliente.pas',
+  URESTDWDataBase1ConexaoArquivo in 'URESTDWDataBase1ConexaoArquivo.pas',
+  URecurso in 'E:\MaxSystem\MaxSystemERP\maxsystem\Control\URecurso.pas';
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TFServidor, FServidor);
+  Application.Run;
+end.

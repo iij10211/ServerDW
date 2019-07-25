@@ -1,0 +1,56 @@
+unit UTest;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, FireDAC.Stan.Intf,
+  FireDAC.Stan.Option, FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS,
+  FireDAC.Phys.Intf, FireDAC.DApt.Intf, Data.DB, FireDAC.Comp.DataSet,
+  FireDAC.Comp.Client, uDWConstsData, uRESTDWPoolerDB;
+
+type
+  TFTest = class(TForm)
+    Button1: TButton;
+    Button2: TButton;
+    Button3: TButton;
+    RESTDWClientSQL1: TRESTDWClientSQL;
+    procedure Button2Click(Sender: TObject);
+
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FTest: TFTest;
+
+implementation
+
+uses
+  UConexaoCliente,URESTDWDataBase1ConexaoArquivo;
+
+{$R *.dfm}
+
+procedure TFTest.Button2Click(Sender: TObject);
+var
+conexao : TURESTDWDataBaseConection;
+begin
+
+  conexao := TURESTDWDataBaseConection.Create;
+  conexao.ConexaoRestCliente;
+
+  RESTDWClientSQL1.DataBase := conexao.RESTDWDataBase1;
+  RESTDWClientSQL1.Close;
+  RESTDWClientSQL1.SQL.Clear;
+  RESTDWClientSQL1.SQL.Add('SELECT * FROM CLIENTE');
+  RESTDWClientSQL1.Active := True;
+  ShowMessage('+++'+Trim(RESTDWClientSQL1.FieldByName('IDPRODUTO').AsString));
+  ShowMessage('+++'+Trim(RESTDWClientSQL1.FieldByName('NOMEPRODUTO').AsString));
+  ShowMessage('+++'+Trim(RESTDWClientSQL1.FieldByName('DESCRICAOPRODUTO').AsString));
+  ShowMessage('+++'+Trim(RESTDWClientSQL1.FieldByName('MARCA').AsString));
+
+end;
+
+end.

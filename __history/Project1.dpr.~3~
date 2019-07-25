@@ -1,0 +1,17 @@
+program Project1;
+
+uses
+  Vcl.Forms,
+  UServidorRest in 'UServidorRest.pas' {Form1},
+  UCliente in 'UCliente.pas' {Form2},
+  UdmServidor in 'UdmServidor.pas' {DataModule1: TDataModule};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TForm2, Form2);
+  Application.CreateForm(TForm1, Form1);
+  Application.Run;
+end.

@@ -1,0 +1,20 @@
+program PServidorRestDataWare;
+
+uses
+  Vcl.Forms,
+  UServidorRest in 'UServidorRest.pas' {FServidorRest},
+  UCliente in 'UCliente.pas' {FCliente},
+  UDataModuloServidorRest in 'UDataModuloServidorRest.pas' {DataModuleServidorRestFull: TDataModule},
+  UConexaoCliente in 'UConexaoCliente.pas',
+  UTest in 'UTest.pas' {FTest},
+  URESTDWDataBase1ConexaoArquivo in 'URESTDWDataBase1ConexaoArquivo.pas';
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TFServidorRest, FServidorRest);
+  Application.CreateForm(TFCliente, FCliente);
+  Application.Run;
+end.

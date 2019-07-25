@@ -1,0 +1,49 @@
+unit UdmServidor;
+
+interface
+
+uses
+  System.SysUtils, System.Classes, FireDAC.Stan.Intf, FireDAC.Stan.Option,
+  FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf, FireDAC.Stan.Def,
+  FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys, FireDAC.Phys.FB,
+  FireDAC.Phys.FBDef, FireDAC.VCLUI.Wait, FireDAC.Stan.Param, FireDAC.DatS,
+  FireDAC.DApt.Intf, FireDAC.DApt, uRESTDWPoolerDB, uDWAbout, uRestDWDriverFD,
+  Data.DB, FireDAC.Comp.DataSet, FireDAC.Comp.Client, FireDAC.Phys.IBBase,
+  FireDAC.Comp.UI,uDWDatamodule,Vcl.Dialogs;
+
+type
+  TDmServidor = class(TServerMethodDataModule)
+    FDConnection1: TFDConnection;
+    FDGUIxWaitCursor1: TFDGUIxWaitCursor;
+    FDPhysFBDriverLink1: TFDPhysFBDriverLink;
+    FDQuery1: TFDQuery;
+    RESTDWDriverFD1: TRESTDWDriverFD;
+    RESTDWPoolerDB1: TRESTDWPoolerDB;
+    procedure ConfiguraBD;
+    procedure DataModuleCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DataModule1: TDmServidor;
+
+implementation
+
+{%CLASSGROUP 'Vcl.Controls.TControl'}
+
+{$R *.dfm}
+
+procedure TDmServidor.ConfiguraBD;
+begin
+  ShowMessage('Test1');
+end;
+
+procedure TDmServidor.DataModuleCreate(Sender: TObject);
+begin
+  ConfiguraBD;
+end;
+
+end.

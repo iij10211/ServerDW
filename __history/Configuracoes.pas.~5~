@@ -1,0 +1,25 @@
+unit Configuracoes;
+
+interface
+type
+  TConfiguracoesServer = Class
+
+    public
+
+      property PortaServ : String;
+      property UsuarioServ : String;
+      property SenhaServ : String;
+
+      property PortBD : String;
+      property UsuarioBD : STring;
+      property PasswordBD : String;
+      property CaminhoBD : String;
+      property HostBD : String;
+
+    private
+
+  End;
+
+implementation
+
+end.

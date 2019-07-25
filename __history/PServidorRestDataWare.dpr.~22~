@@ -1,0 +1,20 @@
+program PServidorRestDataWare;
+
+uses
+  Vcl.Forms,
+  UServidorRest in 'UServidorRest.pas' {FServidor},
+  UCliente in 'UCliente.pas' {FCliente},
+  UDataModuloServidorRest in 'UDataModuloServidorRest.pas' {DataModuleServidorRestFull: TDataModule},
+  UConexaoCliente in 'UConexaoCliente.pas',
+  UTest in 'UTest.pas' {FTest},
+  URESTDWDataBase1ConexaoArquivo in 'URESTDWDataBase1ConexaoArquivo.pas',
+  URecurso in 'E:\MaxSystem\MaxSystemERP\maxsystem\Control\URecurso.pas';
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TFServidor, FServidor);
+  Application.Run;
+end.

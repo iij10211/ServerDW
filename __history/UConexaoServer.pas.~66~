@@ -1,0 +1,230 @@
+unit UConexaoServer;
+
+interface
+  uses FireDAC.Stan.Intf, FireDAC.Stan.Option,
+  FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf, FireDAC.Stan.Def,
+  FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys, Data.DB,
+  FireDAC.Comp.Client,Dialogs,System.SysUtils,FireDAC.DApt,IniFiles,uRestDWDriverFD,uRESTDWPoolerDB,uDWDatamodule;
+type
+  TConexaoServer = class(TServerMethodDataModule)
+
+      Fconexaoserver : TFDConnection;
+      FRestFiredacDriver :TRESTDWDriverFD;
+      FRestPooler : TRESTDWPoolerDB;
+    private
+    //Banco de Dados
+      FFCaminhoBD: string;
+      FFPortBD: Integer;
+      FFPasswordBD: string;
+      FFHostBD: string;
+      FFUsuarioBD: string;
+
+    // Servidor Login
+      FFSenhaServ: string;
+      FFUsuarioServ: string;
+      FFPortaServ: string;
+
+      procedure SetFCaminhoBD(const Value: string);
+      procedure SetFHostBD(const Value: string);
+      procedure SetFPasswordBD(const Value: string);
+      procedure SetFPortBD(const Value: Integer);
+      procedure SetFUsuarioBD(const Value: string);
+
+      procedure SetFPortaServ(const Value: string);
+      procedure SetFSenhaServ(const Value: string);
+      procedure SetFUsuarioServ(const Value: string);
+
+    public
+
+      property FCaminhoBD  : string read FFCaminhoBD write SetFCaminhoBD;
+      property FUsuarioBD  : string read FFUsuarioBD write SetFUsuarioBD;
+      property FPasswordBD : string read FFPasswordBD write SetFPasswordBD;
+      property FHostBD : string read FFHostBD write SetFHostBD;
+      property FPortBD : Integer read FFPortBD write SetFPortBD;
+      property FPortaServ : string read FFPortaServ write SetFPortaServ;
+      property FUsuarioServ : string read FFUsuarioServ write SetFUsuarioServ;
+      property FSenhaServ : string read FFSenhaServ write SetFSenhaServ;
+
+      procedure ConfigurarConexao;
+      procedure LerArquivo;
+      procedure ArquivoConfiguracao;
+      constructor Create;
+
+end;
+
+implementation
+
+uses
+  UdmServidor, UServidorRest;
+
+{ TConexaoServer }
+
+procedure TConexaoServer.ArquivoConfiguracao;
+var
+arquivoIni : TIniFile;
+begin
+   if not FileExists('C:\MaxSystemConfig\ConfiguracaoRemota.ini') then
+   begin
+     arquivoIni := TIniFile.Create('C:\MaxSystemConfig\ConfiguracaoRemota.ini');
+     try
+        arquivoIni.WriteString('config','Driver','FB');
+        arquivoIni.WriteString('config','Caminho',FFCaminhoBD);
+        arquivoIni.WriteString('config','User',FUsuarioBD);
+        arquivoIni.WriteString('config','Key',FFPasswordBD);
+        arquivoIni.WriteString('config','Server',FHostBD);
+        arquivoIni.WriteString('config','Port',IntToStr(FPortBD));
+        arquivoIni.WriteString('config','UserSv',FUsuarioServ);
+        arquivoIni.WriteString('config','KeySv',FSenhaServ);
+        arquivoIni.WriteString('config','PortSv',FPortaServ);
+     finally
+        arquivoIni.Free;
+     end;
+   end;
+end;
+
+procedure TConexaoServer.ConfigurarConexao;
+var
+ArquivoIni : TIniFile;
+begin
+    if not DirectoryExists('C:\MaxSystemConfig') then
+    begin
+      ForceDirectories('C:\MaxSystemConfig');
+    end;
+    if DirectoryExists('C:\MaxSystemConfig') then
+    begin
+
+      ArquivoConfiguracao;
+      if FileExists('C:\MaxSystemConfig\ConfiguracaoRemota.ini') then
+      begin
+        ArquivoIni := TIniFile.Create('C:\MaxSystemConfig\ConfiguracaoRemota.ini');
+
+        FRestPooler := TRESTDWPoolerDB.Create(nil);
+        Fconexaoserver := TFDConnection.Create(nil);
+        FRestFiredacDriver := TRESTDWDriverFD.Create(nil);
+
+        try
+          try
+
+            Fconexaoserver.Params.DriverID :=  ArquivoIni.ReadString('config','Driver','');
+            Fconexaoserver.Params.Database :=  ArquivoIni.ReadString('config','Caminho','');
+            Fconexaoserver.Params.UserName :=  ArquivoIni.ReadString('config','User','');
+            Fconexaoserver.Params.Password :=  ArquivoIni.ReadString('config','Key','');
+            Fconexaoserver.Params.Values['Server'] :=  ArquivoIni.ReadString('config','Server','');
+  //
+  //          Fconexaoserver.Params.Password :=  ArquivoIni.ReadString('config','Port','');
+  //          Fconexaoserver.Params.Password :=  ArquivoIni.ReadString('config','UserSv','');
+  //          Fconexaoserver.Params.Password :=  ArquivoIni.ReadString('config','KeySv','');
+  //          Fconexaoserver.Params.Password :=  ArquivoIni.ReadString('config','PortSv','');
+
+            if Fconexaoserver.Connected = false then
+            begin
+              Fconexaoserver.Connected := true;
+            end;
+            if Fconexaoserver.Connected then
+            begin
+              ShowMessage(' Conectado ao Banco de Dados! ');
+            end;
+
+            FRestFiredacDriver.CommitRecords := 100;
+            FRestFiredacDriver.Connection := Fconexaoserver;
+            FRestPooler.RESTDriver := FRestFiredacDriver;
+            FRestPooler.Active := True;
+
+          except on E: Exception do
+            raise Exception.Create(' Erro ao conectar a DataBase ' + E.Message);
+          end;
+        finally
+          Fconexaoserver.Connected := false;
+          ArquivoIni.Free;
+        end;
+      end;
+    end;
+end;
+
+constructor TConexaoServer.Create;
+begin
+  Fconexaoserver := TFDConnection.Create(nil);
+  FRestFiredacDriver := TRESTDWDriverFD.Create(nil);;
+  FRestPooler := TRESTDWPoolerDB.Create(nil);
+end;
+
+procedure TConexaoServer.LerArquivo;
+var
+ArquivoIni : TIniFile;
+begin
+  if FileExists('C:\MaxSystemConfig\ConfiguracaoRemota.ini') then
+  begin
+     ArquivoIni := TIniFile.Create('C:\MaxSystemConfig\ConfiguracaoRemota.ini');
+     try
+
+       FFCaminhoBD  :=  ArquivoIni.ReadString('config','Caminho','');
+       FUsuarioBD :=  ArquivoIni.ReadString('config','User','');
+       FPasswordBD :=  ArquivoIni.ReadString('config','Key','');
+       FFHostBD :=  ArquivoIni.ReadString('config','Server','');
+
+       FPortaServ :=  ArquivoIni.ReadString('config','Port','');
+       FUsuarioServ :=  ArquivoIni.ReadString('config','UserSv','');
+       FSenhaServ :=  ArquivoIni.ReadString('config','KeySv','');
+       FPortaServ :=  ArquivoIni.ReadString('config','PortSv','');
+     finally
+      ArquivoIni.Free;
+     end;
+  end;
+end;
+
+procedure TConexaoServer.SetFCaminhoBD(const Value: string);
+begin
+  FFCaminhoBD := Value;
+end;
+
+procedure TConexaoServer.SetFHostBD(const Value: string);
+begin
+  FFHostBD := Value;
+end;
+
+procedure TConexaoServer.SetFPasswordBD(const Value: string);
+begin
+  FFPasswordBD := Value;
+end;
+
+procedure TConexaoServer.SetFPortaServ(const Value: string);
+begin
+  if Value = '' then
+  begin
+    raise Exception.Create(' Campo Obrigatorio Porta! ');
+  end
+  else
+  FFPortaServ := Value;
+end;
+
+procedure TConexaoServer.SetFPortBD(const Value: Integer);
+begin
+  FFPortBD := Value;
+end;
+
+procedure TConexaoServer.SetFSenhaServ(const Value: string);
+begin
+  if Value = '' then
+  begin
+    raise Exception.Create(' Campo Obrigatorio Senha! ');
+  end
+  else
+  FFSenhaServ := Value;
+end;
+
+procedure TConexaoServer.SetFUsuarioBD(const Value: string);
+begin
+  FFUsuarioBD := Value;
+end;
+
+procedure TConexaoServer.SetFUsuarioServ(const Value: string);
+begin
+  if Value = '' then
+  begin
+    raise Exception.Create(' Campo Obrigatorio Usuario! ');
+  end
+  else
+  FFUsuarioServ := Value;
+end;
+
+end.

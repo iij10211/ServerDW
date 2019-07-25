@@ -1,0 +1,165 @@
+unit UConexaoCliente;
+
+interface
+uses uRESTDWPoolerDB,IniFiles,uDWConstsData,System.SysUtils,Vcl.Dialogs,Data.DB;
+type
+  TConexaoCliente = class
+
+      RESTDWDataBase1:  TRESTDWDataBase;
+      RESTDWPoolerList1: TRESTDWPoolerList;
+      DataSource1: TDataSource;
+
+    private
+      FIDCLI: string;
+
+      procedure SetIDCLI(const Value: String);
+
+    public
+      property IDCLI : string read FIDCLI write SetIDCLI;
+
+      procedure ConexaoRestCliente;
+      procedure PoolerConexaoCliente;
+      procedure Consulta;
+      procedure Insert;
+
+      constructor Create;
+      destructor Destroy; override;
+
+
+  end;
+implementation
+
+{ TConexaoCliente }
+
+procedure TConexaoCliente.ConexaoRestCliente;
+var
+ArquivoIni : TIniFile;
+begin
+  ArquivoIni := TIniFile.Create('C:\MaxSystemConfig\ConfiguracaoRemotaServidor.ini');
+  try
+
+    RESTDWDataBase1.Close;
+    RESTDWDataBase1.PoolerService := ArquivoIni.ReadString('config','Host','');
+    RESTDWDataBase1.PoolerPort := StrToInt(ArquivoIni.ReadString('config','Port',''));
+    RESTDWDataBase1.Login := ArquivoIni.ReadString('config','User','');
+    RESTDWDataBase1.Password := ArquivoIni.ReadString('config','Password','');
+    RESTDWDataBase1.TypeRequest := TTypeRequest.trHttp;
+    RESTDWDataBase1.Open;
+    PoolerConexaoCliente;
+    ShowMessage('Conectado : Seguro');
+
+  finally
+    ArquivoIni.Free;
+  end;
+end;
+
+
+procedure TConexaoCliente.Consulta;
+begin
+
+  FTest.RESTDWClientSQL1.DataBase := RESTDWDataBase1;
+  FTest.RESTDWClientSQL1.Close;
+  FTest.RESTDWClientSQL1.SQL.Clear;
+  FTest.RESTDWClientSQL1.SQL.Add('SELECT * FROM PRODUTO');
+//  RESTDWClientSQL1.SQL.Add('WHERE IDPRODUTO IS NOT NULL');
+//  RESTDWClientSQL1.SQL.Add('AND IDPRODUTO =:IDPRODUTO');
+//  RESTDWClientSQL1.ParamByName('IDPRODUTO').AsString := Trim(FIDCLI);
+  FTest.RESTDWClientSQL1.Active := True;
+//  FCliente.DataSource1.DataSet := FTest.RESTDWClientSQL1;
+  ShowMessage('+++'+Trim(FTest.RESTDWClientSQL1.FieldByName('NOMEPRODUTO').AsString));
+  ShowMessage('+++'+Trim(FTest.RESTDWClientSQL1.FieldByName('DESCRICAOPRODUTO').AsString));
+  ShowMessage('+++'+Trim(FTest.RESTDWClientSQL1.FieldByName('MARCA').AsString));
+end;
+
+constructor TConexaoCliente.Create;
+begin
+  RESTDWDataBase1   := TRESTDWDataBase.Create(nil);
+  RESTDWPoolerList1 := TRESTDWPoolerList.Create(nil);
+  DataSource1 := TDataSource.Create(nil);
+end;
+
+destructor TConexaoCliente.Destroy;
+begin
+  RESTDWDataBase1.Free;
+  DataSource1.Free;
+  RESTDWPoolerList1.Free;
+  inherited;
+end;
+
+procedure TConexaoCliente.Insert;
+var
+verror : string;
+begin
+
+  FCliente.RESTDWClientSQL1.DataBase := RESTDWDataBase1;
+  FCliente.RESTDWClientSQL1.Close;
+  FCliente.RESTDWClientSQL1.SQL.Clear;
+  FCliente.RESTDWClientSQL1.SQL.Add('UPDATE PLANOCONTAS SET');
+  FCliente.RESTDWClientSQL1.SQL.Add('SEQUENCIA =:SEQUENCIA,PLANOCONTASDESCRICAO =:PLANOCONTASDESCRICAO,CATEGORIA_IDCATEGORIA =:CATEGORIA_IDCATEGORIA,ATIVO =:ATIVO,DTALTERACAOPLANOCONTAS =:DTALTERACAOPLANOCONTAS,VALOR =:VALOR');
+  FCliente.RESTDWClientSQL1.SQL.Add('WHERE IDPLANOCONTAS = :IDPLANOCONTAS');
+  FCliente.RESTDWClientSQL1.ParamByName('IDPLANOCONTAS').AsInteger := 1;
+  FCliente.RESTDWClientSQL1.ParamByName('SEQUENCIA').AsString := 'CONSORCIO';
+  FCliente.RESTDWClientSQL1.ParamByName('PLANOCONTASDESCRICAO').AsString:= 'CONSORCIO';
+  FCliente.RESTDWClientSQL1.ParamByName('CATEGORIA_IDCATEGORIA').AsInteger:= 3;
+  FCliente.RESTDWClientSQL1.ParamByName('ATIVO').AsString:= 'ATIVO';
+  FCliente.RESTDWClientSQL1.ParamByName('VALOR').AsFloat:= 700;
+  FCliente.RESTDWClientSQL1.ParamByName('DTALTERACAOPLANOCONTAS').AsDateTime := StrToDateTime(FormatDateTime('dd/mm/yyyy',Now));
+  FCliente.RESTDWClientSQL1.ExecSQL(verror);
+  ShowMessage('Editado Com Sucesso! ');
+
+//    FCliente.RESTDWClientSQL1.DataBase := RESTDWDataBase1;
+//    FCliente.RESTDWClientSQL1.Close;
+//    FCliente.RESTDWClientSQL1.SQL.Clear;
+//    FCliente.RESTDWClientSQL1.SQL.Add('INSERT INTO PLANOCONTAS');
+//    FCliente.RESTDWClientSQL1.SQL.Add('( SEQUENCIA , PLANOCONTASDESCRICAO , CATEGORIA_IDCATEGORIA , ATIVO , DTCADASTROPLANOCONTAS , VALOR ) VALUES( :SEQUENCIA , :PLANOCONTASDESCRICAO , :CATEGORIA_IDCATEGORIA , :ATIVO , :DTCADASTROPLANOCONTAS , :VALOR )');
+//    FCliente.RESTDWClientSQL1.ParamByName('SEQUENCIA').AsString := '1';
+//    FCliente.RESTDWClientSQL1.ParamByName('PLANOCONTASDESCRICAO').AsString:= 'tEST1';
+//    FCliente.RESTDWClientSQL1.ParamByName('CATEGORIA_IDCATEGORIA').AsInteger:= 3;
+//    FCliente.RESTDWClientSQL1.ParamByName('ATIVO').AsString:= 'ATIVO';
+//    FCliente.RESTDWClientSQL1.ParamByName('VALOR').AsFloat:= 2000.00;
+//    FCliente.RESTDWClientSQL1.ParamByName('DTCADASTROPLANOCONTAS').AsDateTime := StrToDateTime(FormatDateTime('dd/mm/yyyy',Now));
+//    FCliente.RESTDWClientSQL1.ExecSQL(verror);
+//    ShowMessage('Gravado Com Sucesso! ');
+
+
+end;
+
+procedure TConexaoCliente.PoolerConexaoCliente;
+var
+arquivoIni : TIniFile;
+begin
+
+  if FileExists('C:\MaxSystemConfig\ConfiguracaoRemota.ini') then
+  begin
+    arquivoIni := TIniFile.Create('C:\MaxSystemConfig\ConfiguracaoRemotaServidor.ini');
+    RESTDWPoolerList1.Active        := False;
+    RESTDWPoolerList1.PoolerService := arquivoIni.ReadString('config','Host','');
+    RESTDWPoolerList1.PoolerPort    := StrToInt(arquivoIni.ReadString('config','Port',''));
+    RESTDWPoolerList1.Login         := arquivoIni.ReadString('config','User','');
+    RESTDWPoolerList1.Password      := arquivoIni.ReadString('config','Password','');
+    RESTDWPoolerList1.Active        := True;
+
+    if RESTDWPoolerList1.Active then
+    begin
+
+      if RESTDWPoolerList1.Poolers <> NIL then
+      begin
+        if RESTDWPoolerList1.Poolers.Count > 0 then
+        begin
+          RESTDWDataBase1.PoolerName := Trim(RESTDWPoolerList1.Poolers.Text);
+        end;
+
+      end;
+    end;
+  end;
+
+end;
+
+
+
+procedure TConexaoCliente.SetIDCLI(const Value: String);
+begin
+  FIDCLI := Value;
+end;
+
+end.

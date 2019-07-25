@@ -1,0 +1,25 @@
+unit Configuracoes;
+
+interface
+type
+  TConfiguracoesServer = Class
+
+    public
+
+      FPortaServ : String;
+      FUsuarioServ : String;
+      FSenhaServ : String;
+
+      FPortBD : String;
+      FUsuarioBD : STring;
+      FPasswordBD : String;
+      FCaminhoBD : String;
+      FHostBD : String;
+
+    private
+
+  End;
+
+implementation
+
+end.

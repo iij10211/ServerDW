@@ -1,0 +1,67 @@
+unit UBuscaJson;
+
+interface
+uses Vcl.Dialogs,URESTDWDataBase1ConexaoArquivo,uRESTDWPoolerDB, System.SysUtils;
+type
+TBuscaJson = class
+
+  private
+    FrestSql: TRESTDWClientSQL;
+    FrestDataBase: TURESTDWDataBaseConection;
+
+    FTabela: string;
+    FidTabela: string;
+    procedure SetTabela(const Value: string);
+    procedure SetidTabela(const Value: string);
+
+  public
+    property Tabela : string read FTabela write SetTabela;
+    property idTabela : string read FidTabela write SetidTabela;
+    procedure Busca;
+    constructor Create;
+end;
+
+
+implementation
+
+{ TBuscaJson }
+
+procedure TBuscaJson.Busca;
+begin
+  try
+    FrestSql.Close;
+    FrestSql.SQL.Clear;
+    FrestSql.SQL.Add('SELECT * FROM ' + Ftabela);
+//    FrestSql.SQL.Add('WHERE ' + FidTabela + ' =:ID');
+    FrestSql.Active := True;
+    if FrestSql.RecordCount <= 0 then
+    begin
+      raise Exception.Create(' Usuario Não Encontrado!');
+    end
+    else
+      ShowMessage('Usuario Encontrado!');
+
+  except on E: Exception do
+    raise Exception.Create(' Erro ao Localizar Usuario ' + E.Message);
+  end;
+end;
+
+constructor TBuscaJson.Create;
+begin
+  FrestSql   := TRESTDWClientSQL.Create(nil);
+  FrestDataBase := TURESTDWDataBaseConection.Create;
+  FrestDataBase.ConetaServidor;
+  FrestSql.DataBase := FrestDataBase.RESTDWDataBase1;
+end;
+
+procedure TBuscaJson.SetidTabela(const Value: string);
+begin
+  FidTabela := Value;
+end;
+
+procedure TBuscaJson.SetTabela(const Value: string);
+begin
+  FTabela := Value;
+end;
+
+end.
