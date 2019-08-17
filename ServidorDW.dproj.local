@@ -12,8 +12,8 @@
     <Transaction>2018/09/22 20:48:00.000.370,=C:\Users\iij\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
     <Transaction>2018/09/23 12:43:18.000.411,=C:\Users\iij\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
     <Transaction>2018/09/23 15:59:55.000.485,=C:\Users\iij\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
-    <Transaction>2018/09/23 16:01:24.000.638,C:\Users\iij\Documents\Embarcadero\Studio\Projects\Unit1.dfm=E:\Delphi Projetos\Projects\Delphi Servidor RestDataWare\UServidorRest.dfm</Transaction>
     <Transaction>2018/09/23 16:01:24.000.638,C:\Users\iij\Documents\Embarcadero\Studio\Projects\Unit1.pas=E:\Delphi Projetos\Projects\Delphi Servidor RestDataWare\UServidorRest.pas</Transaction>
+    <Transaction>2018/09/23 16:01:24.000.638,C:\Users\iij\Documents\Embarcadero\Studio\Projects\Unit1.dfm=E:\Delphi Projetos\Projects\Delphi Servidor RestDataWare\UServidorRest.dfm</Transaction>
     <Transaction>2018/09/23 16:20:59.000.415,=C:\Users\iij\Documents\Embarcadero\Studio\Projects\Unit2.pas</Transaction>
     <Transaction>2018/09/23 16:21:16.000.886,C:\Users\iij\Documents\Embarcadero\Studio\Projects\Unit2.dfm=E:\Delphi Projetos\Projects\Delphi Servidor RestDataWare\UCliente.dfm</Transaction>
     <Transaction>2018/09/23 16:21:16.000.886,C:\Users\iij\Documents\Embarcadero\Studio\Projects\Unit2.pas=E:\Delphi Projetos\Projects\Delphi Servidor RestDataWare\UCliente.pas</Transaction>
@@ -52,18 +52,32 @@
     <Transaction>2019/05/26 15:47:12.000.423,E:\Delphi Projetos\Projects\Delphi Servidor RestDataWare\UTest.dfm=E:\Delphi Projetos\Projects\Delphi Servidor RestDataWare\Unit1.dfm</Transaction>
     <Transaction>2019/05/26 16:00:42.000.806,E:\Delphi Projetos\Projects\Delphi Servidor RestDataWare\UTest.pas=</Transaction>
     <Transaction>2019/05/26 16:02:48.000.398,E:\Delphi Projetos\Projects\Delphi Servidor RestDataWare\UBuscaJson.pas=</Transaction>
-    <Transaction>2019/05/28 22:08:42.000.470,=C:\Servidor RestDataWare\URecurso.pas</Transaction>
     <Transaction>2019/05/28 22:08:42.000.493,=C:\Servidor RestDataWare\URESTDWDataBase1ConexaoArquivo.pas</Transaction>
+    <Transaction>2019/05/28 22:08:42.000.470,=C:\Servidor RestDataWare\URecurso.pas</Transaction>
     <Transaction>2019/07/24 16:42:08.000.089,=D:\Servidor RestDataWare\Unit1.pas</Transaction>
     <Transaction>2019/07/24 16:42:20.000.302,D:\Servidor RestDataWare\Configuracoes.pas=D:\Servidor RestDataWare\Unit1.pas</Transaction>
+    <Transaction>2019/08/08 13:55:20.000.743,=D:\Servidor RestDataWare\ServerDW\Unit1.pas</Transaction>
+    <Transaction>2019/08/08 13:55:43.000.207,D:\Servidor RestDataWare\ServerDW\UJsonObjeto.pas=D:\Servidor RestDataWare\ServerDW\Unit1.pas</Transaction>
+    <Transaction>2019/08/08 14:00:51.000.005,D:\Servidor RestDataWare\ServerDW\UJsonObjeto.pas=</Transaction>
+    <Transaction>2019/08/08 18:31:29.000.685,=D:\MaxSystem Test\MaxSystemERP\maxsystem\Control\UCliente.pas</Transaction>
+    <Transaction>2019/08/09 08:16:13.000.953,=D:\MaxSystem Test\MaxSystemERP\maxsystem\Control\UCCategoria.pas</Transaction>
+    <Transaction>2019/08/09 08:16:44.000.427,D:\MaxSystem Test\MaxSystemERP\maxsystem\Control\UCCategoria.pas=</Transaction>
+    <Transaction>2019/08/09 08:30:00.000.244,=D:\MaxSystem Test\MaxSystemERP\maxsystem\Control\UCCategoria.pas</Transaction>
+    <Transaction>2019/08/12 14:53:23.000.132,D:\Servidor RestDataWare\ServerDW\Configuracoes.pas=</Transaction>
   </Transactions>
 	<ProjectSortOrder AutoSort="0" SortType="0">
+    <File Path="D:"/>
+    <File Path="D:\MaxSystem Test"/>
+    <File Path="D:\MaxSystem Test\MaxSystemERP"/>
+    <File Path="D:\MaxSystem Test\MaxSystemERP\maxsystem"/>
+    <File Path="D:\MaxSystem Test\MaxSystemERP\maxsystem\Control"/>
+    <File Path="D:\MaxSystem Test\MaxSystemERP\maxsystem\Control\UCliente.pas"/>
+    <File Path="D:\MaxSystem Test\MaxSystemERP\maxsystem\Control\UCCategoria.pas"/>
     <File Path="UServidorRest.pas"/>
     <File Path="UServidorRest.dfm"/>
     <File Path="UDataModuloServidorRest.pas"/>
     <File Path="UDataModuloServidorRest.dfm"/>
     <File Path="URecurso.pas"/>
     <File Path="URESTDWDataBase1ConexaoArquivo.pas"/>
-    <File Path="Configuracoes.pas"/>
   </ProjectSortOrder>
 </BorlandProject>

@@ -11,7 +11,8 @@ uses
   FireDAC.Comp.Client, uDWDatamodule, IniFiles, Dialogs, uRESTDWServerEvents,
   uDWJSONObject, uDWJSONTools, FireDAC.Stan.Param, FireDAC.DatS,
   FireDAC.DApt.Intf, FireDAC.Comp.DataSet, uDWConstsData, FireDAC.DApt,
-  FireDAC.Phys.IB, FireDAC.Phys.IBDef, FireDAC.Stan.StorageBin;
+  FireDAC.Phys.IB, FireDAC.Phys.IBDef, FireDAC.Stan.StorageBin,System.JSON,
+  uDWConsts, uRESTDWServerContext;
 
 type
 
@@ -28,12 +29,20 @@ type
     procedure ArquivoConfiguracao;
     procedure ConfigurarConexao;
     procedure LerArquivo;
+
     procedure ServerMethodDataModuleCreate(Sender: TObject);
     procedure DWServerEvents1EventssomarReplyEvent(var Params: TDWParams; var Result: string);
     procedure DWServerEvents1EventsbuscaReplyEvent(var Params: TDWParams; var Result: string);
-    procedure DWServerEvents1EventsusuarioReplyEvent(var Params: TDWParams;
-      var Result: string);
-
+    procedure DWServerEvents1EventsusuarioReplyEvent(var Params: TDWParams; var Result: string);
+    procedure DWServerEvents1EventsclienteReplyEventByType(
+      var Params: TDWParams; var Result: string;
+      const RequestType: TRequestType; var StatusCode: Integer;
+      RequestHeader: TStringList);
+    procedure DWServerEvents1EventscategoriaReplyEventByType(
+      var Params: TDWParams; var Result: string;
+      const RequestType: TRequestType; var StatusCode: Integer;
+      RequestHeader: TStringList);
+   
   private
 
     FFCaminhoBD: string;
@@ -73,7 +82,7 @@ var
   DataModuleServidorRestFull: TDataModuleServidorRestFull;
 
 implementation
-uses UServidorRest,Configuracoes;
+uses UServidorRest,UCliente,UCCategoria;
 
 {%CLASSGROUP 'Vcl.Controls.TControl'}
 {$R *.dfm}
@@ -139,17 +148,17 @@ end;
 procedure TDataModuleServidorRestFull.DWServerEvents1EventsbuscaReplyEvent
   (var Params: TDWParams; var Result: string);
 var
-VjsonValue: TJSONValue;
+VjsonValue: uDWJSONObject.TJSONValue;
 begin
   if (Params.ItemsString['tabela'].AsString) <> '' then
   begin
-    VjsonValue := TJSONValue.Create;
+    VjsonValue := uDWJSONObject.TJSONValue.Create;
     try
       VQuery.Close;
       VQuery.SQL.Clear;
       VQuery.SQL.Add('SELECT * FROM ' + Params.ItemsString['tabela'].AsString);
       VQuery.Open();
-      VjsonValue.LoadFromDataset(Params.ItemsString['tabela'].AsString, VQuery, VjsonValue.Encoded,Params.JsonMode);
+      VjsonValue.LoadFromDataset('', VQuery, VjsonValue.Encoded,Params.JsonMode);
       Result := VjsonValue.ToJSON;
     finally
       if VQuery.Active then
@@ -161,6 +170,140 @@ begin
   end
   else
     Result := '{"reply":"Não Existe!:"}';
+end;
+
+procedure TDataModuleServidorRestFull.DWServerEvents1EventscategoriaReplyEventByType(
+  var Params: TDWParams; var Result: string; const RequestType: TRequestType;
+  var StatusCode: Integer; RequestHeader: TStringList);
+var
+Vjsonobjeto : TJSONObject;
+categoria   : TCategoria;
+VjsonValue: uDWJSONObject.TJSONValue;
+begin
+  case RequestType of
+    rtGet:
+    begin
+    VjsonValue := uDWJSONObject.TJSONValue.Create;
+    try
+      VQuery.Close;
+      VQuery.SQL.Clear;
+      VQuery.SQL.Add('SELECT * FROM CATEGORIA');
+      VQuery.SQL.Add('WHERE IDCATEGORIA IS NOT NULL');
+      VQuery.SQL.Add('order by categoria.idcategoria');
+      VQuery.Open();
+      if VQuery.RecordCount > 0 then
+      begin
+        VjsonValue.LoadFromDataset('', VQuery, VjsonValue.Encoded,Params.JsonMode);
+        Result := VjsonValue.ToJSON;
+      end
+      except on E: Exception do
+        raise Exception.Create(' Não foi Possivel Localizar ' + E.Message);
+      end;
+    end;
+
+    rtPost:
+    begin
+      if Params.ItemsString['UNDEFINED'] <> nil then
+      begin
+        categoria := TCategoria.Create;
+        Vjsonobjeto := TJSONObject.ParseJSONValue(Params.ItemsString['UNDEFINED'].AsString) as TJSONObject;
+        try
+          try
+            if (Vjsonobjeto.GetValue<string>('tag') = 'NOVO') then
+            begin
+              categoria.NomeCategoria   := Vjsonobjeto.GetValue<string>('NOMECATEGORIA');
+              categoria.Descricao       := Vjsonobjeto.GetValue<string>('DESCRICAOCATEGORIA');
+              categoria.FOBSERVACAO     := Vjsonobjeto.GetValue<string>('CATEGORIA_OBSERVACAO');
+              categoria.Novo;
+              Result := '[{"Resposta":"Gravado Com Sucess"}]';
+            end;
+
+            if (Vjsonobjeto.GetValue<string>('tag') = 'EDITAR') then
+            begin
+              if Vjsonobjeto.GetValue<string>('IDCATEGORIA') <> '' then
+              begin
+                categoria.Id              := Vjsonobjeto.GetValue<string>('IDCATEGORIA');
+                categoria.NomeCategoria   := Vjsonobjeto.GetValue<string>('NOMECATEGORIA');
+                categoria.Descricao       := Vjsonobjeto.GetValue<string>('DESCRICAOCATEGORIA');
+                categoria.FOBSERVACAO     := Vjsonobjeto.GetValue<string>('CATEGORIA_OBSERVACAO');
+                categoria.Editar;
+                Result := '[{"Resposta":"Editado Com Sucess"}]';
+              end
+            end;
+
+            if (Vjsonobjeto.GetValue<string>('tag') = 'DELETAR') then
+            begin
+             if Vjsonobjeto.GetValue<string>('IDCATEGORIA') <> '' then
+              begin
+                categoria.Id              := Vjsonobjeto.GetValue<string>('IDCATEGORIA');
+                categoria.Deletar;
+                Result := '[{"Resposta":"Deletado Com Sucess"}]';
+              end;
+            end;
+
+          except on E: Exception do
+            raise Exception.Create('[{Erro Nesse item ' + E.Message + '}]');
+          end;
+        finally
+          categoria.Free;
+        end;
+      end;
+    end;
+
+    rtDelete:
+    begin
+
+    end;
+  end;
+end;
+
+procedure TDataModuleServidorRestFull.DWServerEvents1EventsclienteReplyEventByType(
+  var Params: TDWParams; var Result: string; const RequestType: TRequestType;
+  var StatusCode: Integer; RequestHeader: TStringList);
+  var
+  Vjsonobjeto : TJSONObject;
+  cliente : TCliente;
+begin
+   case RequestType of
+    rtGet:
+    begin
+
+    end;
+    rtPost:
+    begin
+      if Params.ItemsString['UNDEFINED'] <> nil then
+      begin
+        try
+          try
+            cliente := TCliente.Create;
+            Vjsonobjeto := TJSONObject.ParseJSONValue(Params.ItemsString['UNDEFINED'].AsString) as TJSONObject;
+            cliente.NOME              := Vjsonobjeto.GetValue<string>('nome');
+            cliente.tipopessoa        := Vjsonobjeto.GetValue<string>('tipopessoa');
+            cliente.telefone          := Vjsonobjeto.GetValue<string>('telefone');
+            cliente.cpf               := Vjsonobjeto.GetValue<string>('cpf');
+            cliente.cnpj              := Vjsonobjeto.GetValue<string>('cnpj');
+            cliente.email             := Vjsonobjeto.GetValue<string>('email');
+            cliente.datanascimento    := Vjsonobjeto.GetValue<string>('datanascimento');
+            cliente.CARGO_IDCARGO     := 1;
+            cliente.Novo;
+          except on E: Exception do
+            raise Exception.Create('Erro ao Inserir Dados' + E.Message);
+          end;
+          Result := '{"Sucess":"Gravado com Sucesso"}';
+        finally
+          cliente.Free;
+        end;
+      end;
+    end;
+    rtDelete:
+    begin
+
+    end;
+    rtPut:
+    begin
+
+    end;
+   end;
 end;
 
 procedure TDataModuleServidorRestFull.DWServerEvents1EventssomarReplyEvent
@@ -175,21 +318,21 @@ end;
 procedure TDataModuleServidorRestFull.DWServerEvents1EventsusuarioReplyEvent(
   var Params: TDWParams; var Result: string);
 var
-VjsonValue: TJSONValue;
+VjsonValue: uDWJSONObject.TJSONValue;
 user , password : String;
 resultado : string;
 begin
   user := '';
   password := '';
   resultado := '';
-  
+
   if ((Params.ItemsString['user'].AsString) <> '') and ((Params.ItemsString['password'].AsString) <> '') then
   begin
 
     user :=  Params.ItemsString['user'].AsString;
     password := Params.ItemsString['password'].AsString;
 
-    VjsonValue := TJSONValue.Create;
+    VjsonValue := uDWJSONObject.TJSONValue.Create;
     try
       VQuery.Close;
       VQuery.SQL.Clear;
@@ -202,8 +345,16 @@ begin
         VQuery.ParamByName('password').AsString := password;
       end;
       VQuery.Open();
-      VjsonValue.LoadFromDataset('usuario', VQuery, VjsonValue.Encoded,Params.JsonMode);
-      Result := VjsonValue.ToJSON;
+      if VQuery.RecordCount > 0 then
+      begin
+        Result := '[{"Resposta":"Sucess"}]';
+//        VjsonValue.LoadFromDataset('', VQuery, VjsonValue.Encoded,Params.JsonMode);
+//        Result := VjsonValue.ToJSON;
+      end
+      else
+      begin
+        Result := '[{"Resposta":"No Sucess"}]';
+      end;
     finally
       if VQuery.Active then
       begin

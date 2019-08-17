@@ -115,7 +115,8 @@
         </DCCReference>
         <DCCReference Include="URecurso.pas"/>
         <DCCReference Include="URESTDWDataBase1ConexaoArquivo.pas"/>
-        <DCCReference Include="Configuracoes.pas"/>
+        <DCCReference Include="D:\MaxSystem Test\MaxSystemERP\maxsystem\Control\UCliente.pas"/>
+        <DCCReference Include="D:\MaxSystem Test\MaxSystemERP\maxsystem\Control\UCCategoria.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

@@ -6,7 +6,8 @@ uses
   UDataModuloServidorRest in 'UDataModuloServidorRest.pas' {DataModuleServidorRestFull: TDataModule},
   URecurso in 'URecurso.pas',
   URESTDWDataBase1ConexaoArquivo in 'URESTDWDataBase1ConexaoArquivo.pas',
-  Configuracoes in 'Configuracoes.pas';
+  UCliente in 'D:\MaxSystem Test\MaxSystemERP\maxsystem\Control\UCliente.pas',
+  UCCategoria in 'D:\MaxSystem Test\MaxSystemERP\maxsystem\Control\UCCategoria.pas';
 
 {$R *.res}
 

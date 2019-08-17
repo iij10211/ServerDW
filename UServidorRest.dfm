@@ -6,7 +6,7 @@ object FServidor: TFServidor
   Caption = 'SERVIDOR'
   ClientHeight = 369
   ClientWidth = 512
-  Color = clWindow
+  Color = clWhite
   Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
@@ -919,7 +919,7 @@ object FServidor: TFServidor
     end
     object Edit4: TEdit
       Left = 5
-      Top = 61
+      Top = 59
       Width = 181
       Height = 23
       Font.Charset = ANSI_CHARSET
@@ -945,7 +945,7 @@ object FServidor: TFServidor
     end
     object Edit6: TEdit
       Left = 379
-      Top = 61
+      Top = 59
       Width = 126
       Height = 23
       Font.Charset = ANSI_CHARSET
@@ -1660,6 +1660,8 @@ object FServidor: TFServidor
     SSLVerifyMode = []
     SSLVerifyDepth = 0
     ForceWelcomeAccess = False
+    CriptOptions.Use = False
+    CriptOptions.Key = 'RDWBASEKEY256'
     Left = 432
     Top = 281
   end

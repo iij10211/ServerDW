@@ -1,0 +1,13 @@
+unit UJsonObjeto;
+
+interface
+uses System.JSON;
+type
+  TJsonObjeto = class(TJSONObject);
+    public
+
+    private
+  
+implementation
+
+end.
