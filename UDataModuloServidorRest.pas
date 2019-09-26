@@ -277,19 +277,22 @@ begin
           try
             cliente := TCliente.Create;
             Vjsonobjeto := TJSONObject.ParseJSONValue(Params.ItemsString['UNDEFINED'].AsString) as TJSONObject;
-            cliente.NOME              := Vjsonobjeto.GetValue<string>('nome');
-            cliente.tipopessoa        := Vjsonobjeto.GetValue<string>('tipopessoa');
-            cliente.telefone          := Vjsonobjeto.GetValue<string>('telefone');
-            cliente.cpf               := Vjsonobjeto.GetValue<string>('cpf');
-            cliente.cnpj              := Vjsonobjeto.GetValue<string>('cnpj');
-            cliente.email             := Vjsonobjeto.GetValue<string>('email');
-            cliente.datanascimento    := Vjsonobjeto.GetValue<string>('datanascimento');
-            cliente.CARGO_IDCARGO     := 1;
-            cliente.Novo;
+            if (Vjsonobjeto.GetValue<string>('tag') = 'NOVO') then
+            begin
+              cliente.NOME              := Vjsonobjeto.GetValue<string>('NOMECLIENTE');
+              cliente.tipopessoa        := Vjsonobjeto.GetValue<string>('TIPOPESSOA');
+              cliente.telefone          := Vjsonobjeto.GetValue<string>('TELEFONE');
+              cliente.cpf               := Vjsonobjeto.GetValue<string>('CPF');
+              cliente.cnpj              := Vjsonobjeto.GetValue<string>('CNPJ');
+              cliente.email             := Vjsonobjeto.GetValue<string>('EMAIL');
+              cliente.datanascimento    := Vjsonobjeto.GetValue<string>('DTNASCIMENTO');
+              cliente.CARGO_IDCARGO     := 1;
+              cliente.Novo;
+              Result := '[{"Resposta":"Gravado Com Sucess"}]';
+            end;
           except on E: Exception do
             raise Exception.Create('Erro ao Inserir Dados' + E.Message);
           end;
-          Result := '{"Sucess":"Gravado com Sucesso"}';
         finally
           cliente.Free;
         end;

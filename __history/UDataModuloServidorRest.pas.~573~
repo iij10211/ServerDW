@@ -189,6 +189,7 @@ begin
       VQuery.SQL.Clear;
       VQuery.SQL.Add('SELECT * FROM CATEGORIA');
       VQuery.SQL.Add('WHERE IDCATEGORIA IS NOT NULL');
+      VQuery.SQL.Add('order by categoria.idcategoria');
       VQuery.Open();
       if VQuery.RecordCount > 0 then
       begin
@@ -216,6 +217,7 @@ begin
               categoria.Novo;
               Result := '[{"Resposta":"Gravado Com Sucess"}]';
             end;
+
             if (Vjsonobjeto.GetValue<string>('tag') = 'EDITAR') then
             begin
               if Vjsonobjeto.GetValue<string>('IDCATEGORIA') <> '' then
@@ -228,7 +230,8 @@ begin
                 Result := '[{"Resposta":"Editado Com Sucess"}]';
               end
             end;
-            'DELETAR':
+
+            if (Vjsonobjeto.GetValue<string>('tag') = 'DELETAR') then
             begin
              if Vjsonobjeto.GetValue<string>('IDCATEGORIA') <> '' then
               begin
@@ -237,8 +240,9 @@ begin
                 Result := '[{"Resposta":"Deletado Com Sucess"}]';
               end;
             end;
+
           except on E: Exception do
-            raise Exception.Create('Erro ao Inserir Dados' + E.Message);
+            raise Exception.Create('[{Erro Nesse item ' + E.Message + '}]');
           end;
         finally
           categoria.Free;
