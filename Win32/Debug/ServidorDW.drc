@@ -2646,10 +2646,10 @@ BEGIN
 	System_SysConst_SAccessDenied,	L"File access denied"
 END
 
-/* d:\delphi 2019\embarcadero\studio\19.0\lib\Win32\release\Controls.res */
+/* k:\delphi\embarcadero\studio\19.0\lib\Win32\release\Controls.res */
 /* D:\RESTDATAWARE 2019\CORE\Source\DmDados\uDWDatamodule.dfm */
 /* D:\RESTDATAWARE 2019\CORE\Source\uAboutForm.dfm */
-/* d:\delphi 2019\embarcadero\studio\19.0\lib\Win32\release\Buttons.res */
+/* k:\delphi\embarcadero\studio\19.0\lib\Win32\release\Buttons.res */
 /* D:\Servidor RestDataWare\ServerDW\UDataModuloServidorRest.dfm */
 /* D:\Servidor RestDataWare\ServerDW\UServidorRest.dfm */
 /* D:\Servidor RestDataWare\ServerDW\ServidorDW.res */

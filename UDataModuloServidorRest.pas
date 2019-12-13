@@ -42,6 +42,17 @@ type
       var Params: TDWParams; var Result: string;
       const RequestType: TRequestType; var StatusCode: Integer;
       RequestHeader: TStringList);
+    procedure DWServerEvents1EventsmesasReplyEventByType(var Params: TDWParams;
+      var Result: string; const RequestType: TRequestType;
+      var StatusCode: Integer; RequestHeader: TStringList);
+    procedure DWServerEvents1Eventscategoria_restauranteReplyEventByType(
+      var Params: TDWParams; var Result: string;
+      const RequestType: TRequestType; var StatusCode: Integer;
+      RequestHeader: TStringList);
+    procedure DWServerEvents1Eventscomanda_produtosReplyEventByType(
+      var Params: TDWParams; var Result: string;
+      const RequestType: TRequestType; var StatusCode: Integer;
+      RequestHeader: TStringList);
    
   private
 
@@ -82,7 +93,7 @@ var
   DataModuleServidorRestFull: TDataModuleServidorRestFull;
 
 implementation
-uses UServidorRest,UCliente,UCCategoria;
+uses UServidorRest,UCliente,UCCategoria,UConfig;
 
 {%CLASSGROUP 'Vcl.Controls.TControl'}
 {$R *.dfm}
@@ -235,7 +246,7 @@ begin
             begin
              if Vjsonobjeto.GetValue<string>('IDCATEGORIA') <> '' then
               begin
-                categoria.Id              := Vjsonobjeto.GetValue<string>('IDCATEGORIA');
+                categoria.Id := Vjsonobjeto.GetValue<string>('IDCATEGORIA');
                 categoria.Deletar;
                 Result := '[{"Resposta":"Deletado Com Sucess"}]';
               end;
@@ -255,6 +266,45 @@ begin
 
     end;
   end;
+end;
+
+procedure TDataModuleServidorRestFull.DWServerEvents1Eventscategoria_restauranteReplyEventByType(
+  var Params: TDWParams; var Result: string; const RequestType: TRequestType;
+  var StatusCode: Integer; RequestHeader: TStringList);
+  var
+  Vjsonobjeto : TJSONObject;
+  cliente : TCliente;
+  categoria   : TCategoria;
+  VjsonValue: uDWJSONObject.TJSONValue;
+begin
+  case RequestType of
+    rtGet:
+    begin
+      VjsonValue := uDWJSONObject.TJSONValue.Create;
+    try
+      if (Params.ItemsString['idcategoria_restaurant'].AsString) <> '' then
+      begin
+        VQuery.Close;
+        VQuery.SQL.Clear;
+        VQuery.SQL.Add('SELECT IDCATEGORIA,NOMECATEGORIA FROM CATEGORIA');
+        VQuery.SQL.Add('WHERE CATEGORIA.categoria_tipo_comanda  = :id');
+        VQuery.ParamByName('id').AsString := Params.ItemsString['idcategoria_restaurant'].AsString;
+        VQuery.Open();
+        if VQuery.RecordCount > 0 then
+        begin
+          VjsonValue.LoadFromDataset('', VQuery, VjsonValue.Encoded,Params.JsonMode);
+          Result := VjsonValue.ToJSON;
+        end
+      end;
+      except on E: Exception do
+        raise Exception.Create(' Não foi Possivel Localizar ' + E.Message);
+      end;
+    end;
+    rtPost:
+    begin
+
+    end;
+  end
 end;
 
 procedure TDataModuleServidorRestFull.DWServerEvents1EventsclienteReplyEventByType(
@@ -309,6 +359,70 @@ begin
    end;
 end;
 
+procedure TDataModuleServidorRestFull.DWServerEvents1Eventscomanda_produtosReplyEventByType(
+  var Params: TDWParams; var Result: string; const RequestType: TRequestType;
+  var StatusCode: Integer; RequestHeader: TStringList);
+  var
+  Vjsonobjeto : TJSONObject;
+  Config      : TConfig;
+  VjsonValue: uDWJSONObject.TJSONValue;
+begin
+  case RequestType of
+    rtGet:
+    begin
+      VjsonValue := uDWJSONObject.TJSONValue.Create;
+    try
+      if (Params.ItemsString['comanda_produtoid'].AsString) <> '' then
+      begin
+        VQuery.Close;
+        VQuery.SQL.Clear;
+        VQuery.SQL.Add('SELECT PRODUTO.* FROM PRODUTO');
+        VQuery.SQL.Add('LEFT JOIN CATEGORIA ON PRODUTO.categoria_idcategoria = categoria.idcategoria');
+        VQuery.SQL.Add('WHERE PRODUTO.categoria_idcategoria = :id');
+        VQuery.ParamByName('id').AsString := Params.ItemsString['comanda_produtoid'].AsString;
+        VQuery.Open();
+        if VQuery.RecordCount > 0 then
+        begin
+          VjsonValue.LoadFromDataset('', VQuery, VjsonValue.Encoded,Params.JsonMode);
+          Result := VjsonValue.ToJSON;
+        end
+      end;
+      except on E: Exception do
+        raise Exception.Create(' Não foi Possivel Localizar ' + E.Message);
+      end;
+    end;
+  end
+end;
+
+procedure TDataModuleServidorRestFull.DWServerEvents1EventsmesasReplyEventByType(
+  var Params: TDWParams; var Result: string; const RequestType: TRequestType;
+  var StatusCode: Integer; RequestHeader: TStringList);
+  var
+  Vjsonobjeto : TJSONObject;
+  Config      : TConfig;
+  VjsonValue: uDWJSONObject.TJSONValue;
+begin
+  case RequestType of
+    rtGet:
+    begin
+      try
+       VjsonValue := uDWJSONObject.TJSONValue.Create;
+       VQuery.Close;
+       VQuery.SQL.Clear;
+       VQuery.SQL.Add('SELECT * FROM MESA');
+       VQuery.Open();
+        if VQuery.RecordCount > 0 then
+        begin
+          VjsonValue.LoadFromDataset('', VQuery, VjsonValue.Encoded,Params.JsonMode);
+          Result := VjsonValue.ToJSON;
+        end
+       except on E: Exception do
+        raise Exception.Create(' Não foi Possivel Localizar! ' + E.Message);
+      end;
+    end;
+  end;
+end;
+
 procedure TDataModuleServidorRestFull.DWServerEvents1EventssomarReplyEvent
   (var Params: TDWParams; var Result: string);
 begin
@@ -350,9 +464,8 @@ begin
       VQuery.Open();
       if VQuery.RecordCount > 0 then
       begin
-        Result := '[{"Resposta":"Sucess"}]';
-//        VjsonValue.LoadFromDataset('', VQuery, VjsonValue.Encoded,Params.JsonMode);
-//        Result := VjsonValue.ToJSON;
+        VjsonValue.LoadFromDataset('', VQuery, VjsonValue.Encoded,Params.JsonMode);
+        Result := VjsonValue.ToJSON;
       end
       else
       begin

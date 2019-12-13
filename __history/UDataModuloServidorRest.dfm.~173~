@@ -18,6 +18,7 @@ object DataModuleServidorRestFull: TDataModuleServidorRestFull
       'Database=C:\BD\MAXSYSTEM.FDB'
       'User_Name=SYSDBA'
       'Password=masterkey'
+      'CharacterSet=UTF8'
       'DriverID=FB')
     LoginPrompt = False
     Left = 48
@@ -115,6 +116,20 @@ object DataModuleServidorRestFull: TDataModuleServidorRestFull
         JsonMode = jmPureJSON
         Name = 'mesas'
         OnReplyEventByType = DWServerEvents1EventsmesasReplyEventByType
+      end
+      item
+        Routes = [crAll]
+        DWParams = <
+          item
+            TypeObject = toParam
+            ObjectDirection = odINOUT
+            ObjectValue = ovString
+            ParamName = 'idcategoria_restaurant'
+            Encoded = True
+          end>
+        JsonMode = jmPureJSON
+        Name = 'categoria_restaurante'
+        OnReplyEventByType = DWServerEvents1Eventscategoria_restauranteReplyEventByType
       end>
     Left = 168
     Top = 168

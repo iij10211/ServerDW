@@ -2,8 +2,8 @@ object DataModuleServidorRestFull: TDataModuleServidorRestFull
   OldCreateOrder = False
   OnCreate = ServerMethodDataModuleCreate
   Encoding = esUtf8
-  Height = 240
-  Width = 376
+  Height = 241
+  Width = 386
   object FDGUIxWaitCursor1: TFDGUIxWaitCursor
     Provider = 'Forms'
     Left = 168
@@ -18,6 +18,7 @@ object DataModuleServidorRestFull: TDataModuleServidorRestFull
       'Database=C:\BD\MAXSYSTEM.FDB'
       'User_Name=SYSDBA'
       'Password=masterkey'
+      'CharacterSet=UTF8'
       'DriverID=FB')
     LoginPrompt = False
     Left = 48
@@ -108,6 +109,41 @@ object DataModuleServidorRestFull: TDataModuleServidorRestFull
         JsonMode = jmPureJSON
         Name = 'categoria'
         OnReplyEventByType = DWServerEvents1EventscategoriaReplyEventByType
+      end
+      item
+        Routes = [crAll]
+        DWParams = <>
+        JsonMode = jmPureJSON
+        Name = 'mesas'
+        OnReplyEventByType = DWServerEvents1EventsmesasReplyEventByType
+      end
+      item
+        Routes = [crAll]
+        DWParams = <
+          item
+            TypeObject = toParam
+            ObjectDirection = odINOUT
+            ObjectValue = ovString
+            ParamName = 'idcategoria_restaurant'
+            Encoded = True
+          end>
+        JsonMode = jmPureJSON
+        Name = 'categoria_restaurante'
+        OnReplyEventByType = DWServerEvents1Eventscategoria_restauranteReplyEventByType
+      end
+      item
+        Routes = [crAll]
+        DWParams = <
+          item
+            TypeObject = toParam
+            ObjectDirection = odINOUT
+            ObjectValue = ovString
+            ParamName = 'comanda_produtoid'
+            Encoded = False
+          end>
+        JsonMode = jmPureJSON
+        Name = 'comanda_produtos'
+        OnReplyEventByType = DWServerEvents1Eventscomanda_produtosReplyEventByType
       end>
     Left = 168
     Top = 168
