@@ -53,6 +53,14 @@ type
       var Params: TDWParams; var Result: string;
       const RequestType: TRequestType; var StatusCode: Integer;
       RequestHeader: TStringList);
+    procedure DWServerEvents1EventspedidosReplyEventByType(
+      var Params: TDWParams; var Result: string;
+      const RequestType: TRequestType; var StatusCode: Integer;
+      RequestHeader: TStringList);
+    procedure DWServerEvents1Eventsitens_pedidosReplyEventByType(
+      var Params: TDWParams; var Result: string;
+      const RequestType: TRequestType; var StatusCode: Integer;
+      RequestHeader: TStringList);
    
   private
 
@@ -93,7 +101,7 @@ var
   DataModuleServidorRestFull: TDataModuleServidorRestFull;
 
 implementation
-uses UServidorRest,UCliente,UCCategoria,UConfig;
+uses UServidorRest,UCliente,UCCategoria,UConfig,UPedidos;
 
 {%CLASSGROUP 'Vcl.Controls.TControl'}
 {$R *.dfm}
@@ -394,6 +402,44 @@ begin
   end
 end;
 
+procedure TDataModuleServidorRestFull.DWServerEvents1Eventsitens_pedidosReplyEventByType(
+  var Params: TDWParams; var Result: string; const RequestType: TRequestType;
+  var StatusCode: Integer; RequestHeader: TStringList);
+ var
+  Vjsonobjeto : TJSONObject;
+  pedido : TVenda;
+begin
+  case RequestType of
+    rtGet:
+    begin
+
+    end;
+    rtPost:
+    begin
+      if Params.ItemsString['UNDEFINED'] <> nil then
+      begin
+        pedido := TVenda.Create;
+        Vjsonobjeto := TJSONObject.ParseJSONValue(Params.ItemsString['UNDEFINED'].AsString) as TJSONObject;
+        try
+          try
+            pedido.FIDPRODUTO  :=  Vjsonobjeto.GetValue<Integer>('IDPRODUTO');
+            pedido.FQUANTIDADE :=  Vjsonobjeto.GetValue<Integer>('QUANTIDADE_PRODUTO');
+            pedido.FITENS_MESA :=  Vjsonobjeto.GetValue<Integer>('IDMESA');
+            pedido.ItensVenda;
+            pedido.Movimentacoes;
+            Result := '[{"Resposta":" Pedido Gravado Com Sucess"}]';
+
+          except on E: Exception do
+            raise Exception.Create(' Erro ao Inserir os Dados! ' + E.Message);
+          end;
+        finally
+          pedido.Free;
+        end;
+      end;
+    end;
+  end;
+end;
+
 procedure TDataModuleServidorRestFull.DWServerEvents1EventsmesasReplyEventByType(
   var Params: TDWParams; var Result: string; const RequestType: TRequestType;
   var StatusCode: Integer; RequestHeader: TStringList);
@@ -421,6 +467,46 @@ begin
       end;
     end;
   end;
+end;
+
+procedure TDataModuleServidorRestFull.DWServerEvents1EventspedidosReplyEventByType(
+  var Params: TDWParams; var Result: string; const RequestType: TRequestType;
+  var StatusCode: Integer; RequestHeader: TStringList);
+  var
+  Vjsonobjeto : TJSONObject;
+  pedido : TVenda;
+begin
+  case RequestType of
+    rtGet:
+    begin
+
+    end;
+    rtPost:
+    begin
+      if Params.ItemsString['UNDEFINED'] <> nil then
+      begin
+        pedido := TVenda.Create;
+        Vjsonobjeto := TJSONObject.ParseJSONValue(Params.ItemsString['UNDEFINED'].AsString) as TJSONObject;
+        try
+          try
+
+            pedido.VALORVENDA :=  Vjsonobjeto.GetValue<Double>('VENDAS_VALOR_VENDA');
+            pedido.DATAVENDA  := StrToDateTime(FormatDateTime('dd/mm/yyyy', Now));
+            pedido.DESCRICAOVENDA := Vjsonobjeto.GetValue<String>('DESCRICAOVENDA');
+            pedido.FORMAPAGAMENTO := ' DINHEIRO ';
+            pedido.Venda;
+            Result := '[{"Resposta":" Pedido Gravado Com Sucess"}]';
+
+          except on E: Exception do
+            raise Exception.Create(' Erro ao Inserir os Dados! ' + E.Message);
+          end;
+        finally
+          pedido.Free;
+        end;
+      end;
+    end;
+  end;
+
 end;
 
 procedure TDataModuleServidorRestFull.DWServerEvents1EventssomarReplyEvent

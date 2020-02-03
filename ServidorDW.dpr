@@ -8,7 +8,8 @@ uses
   URESTDWDataBase1ConexaoArquivo in 'URESTDWDataBase1ConexaoArquivo.pas',
   UCliente in 'D:\MaxSystem Test\MaxSystemERP\maxsystem\Control\UCliente.pas',
   UCCategoria in 'D:\MaxSystem Test\MaxSystemERP\maxsystem\Control\UCCategoria.pas',
-  UConfig in 'D:\MaxSystem Test\MaxSystemERP\maxsystem\Control\UConfig.pas';
+  UConfig in 'D:\MaxSystem Test\MaxSystemERP\maxsystem\Control\UConfig.pas',
+  UPedidos in 'UPedidos.pas';
 
 {$R *.res}
 

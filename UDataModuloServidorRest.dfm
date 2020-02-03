@@ -144,6 +144,20 @@ object DataModuleServidorRestFull: TDataModuleServidorRestFull
         JsonMode = jmPureJSON
         Name = 'comanda_produtos'
         OnReplyEventByType = DWServerEvents1Eventscomanda_produtosReplyEventByType
+      end
+      item
+        Routes = [crAll]
+        DWParams = <>
+        JsonMode = jmPureJSON
+        Name = 'pedidos'
+        OnReplyEventByType = DWServerEvents1EventspedidosReplyEventByType
+      end
+      item
+        Routes = [crAll]
+        DWParams = <>
+        JsonMode = jmPureJSON
+        Name = 'itens_pedidos'
+        OnReplyEventByType = DWServerEvents1Eventsitens_pedidosReplyEventByType
       end>
     Left = 168
     Top = 168
