@@ -787,6 +787,14 @@ object FServidor: TFServidor
       Font.Style = []
       ParentFont = False
     end
+    object idcaixa: TLabel
+      Left = 192
+      Top = 8
+      Width = 34
+      Height = 14
+      Caption = 'idcaixa'
+      Visible = False
+    end
     object Button1: TButton
       Left = 331
       Top = 6
@@ -998,7 +1006,7 @@ object FServidor: TFServidor
       'roject.dproj.local'
     Filter = 'FDB'
     Left = 344
-    Top = 280
+    Top = 232
   end
   object TrayIcon1: TTrayIcon
     Animate = True
@@ -1633,12 +1641,12 @@ object FServidor: TFServidor
       888888884819F92F5291599D2B1A990A0000000049454E44AE426082}
     PopupMenu = PopupMenu1
     OnDblClick = TrayIcon1DblClick
-    Left = 280
-    Top = 280
+    Left = 272
+    Top = 248
   end
   object PopupMenu1: TPopupMenu
     Left = 200
-    Top = 280
+    Top = 248
     object Sair1: TMenuItem
       Caption = 'Sair'
       OnClick = Sair1Click
@@ -1662,13 +1670,13 @@ object FServidor: TFServidor
     ForceWelcomeAccess = False
     CriptOptions.Use = False
     CriptOptions.Key = 'RDWBASEKEY256'
-    Left = 432
-    Top = 281
+    Left = 440
+    Top = 257
   end
   object RESTDWServiceNotification1: TRESTDWServiceNotification
     GarbageTime = 60000
     QueueNotifications = 50
-    Left = 80
-    Top = 281
+    Left = 88
+    Top = 241
   end
 end

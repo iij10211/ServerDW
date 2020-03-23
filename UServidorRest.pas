@@ -42,6 +42,7 @@ type
     Button3: TButton;
     RESTServicePooler1: TRESTServicePooler;
     RESTDWServiceNotification1: TRESTDWServiceNotification;
+    idcaixa: TLabel;
 
     procedure Button1Click(Sender: TObject);
     procedure IniciarServidor;

@@ -12,7 +12,7 @@ uses
   uDWJSONObject, uDWJSONTools, FireDAC.Stan.Param, FireDAC.DatS,
   FireDAC.DApt.Intf, FireDAC.Comp.DataSet, uDWConstsData, FireDAC.DApt,
   FireDAC.Phys.IB, FireDAC.Phys.IBDef, FireDAC.Stan.StorageBin,System.JSON,
-  uDWConsts, uRESTDWServerContext;
+  uDWConsts, uRESTDWServerContext, Datasnap.DBClient;
 
 type
 
@@ -25,6 +25,9 @@ type
     RESTDWPoolerDB1: TRESTDWPoolerDB;
     RESTDWDriverFD1: TRESTDWDriverFD;
     FDStanStorageBinLink1: TFDStanStorageBinLink;
+    ClientDataSetApp: TClientDataSet;
+    ClientDataSetAppIDVENDA: TIntegerField;
+    ClientDataSetAppIDCAIXA: TIntegerField;
 
     procedure ArquivoConfiguracao;
     procedure ConfigurarConexao;
@@ -93,6 +96,8 @@ type
     property FPortaServ: string read FFPortaServ write SetFPortaServ;
     property FUsuarioServ: string read FFUsuarioServ write SetFUsuarioServ;
     property FSenhaServ: string read FFSenhaServ write SetFSenhaServ;
+
+
 
     { Public declarations }
   end;

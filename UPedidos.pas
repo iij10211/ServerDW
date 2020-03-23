@@ -37,7 +37,7 @@ type
     procedure SetFIDCAIXA(const Value: Integer);
     procedure SetVENDA_IDTIPOCOBRANCA(const Value: string);
     procedure SetFITENS_MESA(const Value: Integer);
-
+ 
   public
 
     property FIDCAIXA: Integer read FFIDCAIXA write SetFIDCAIXA;
@@ -60,8 +60,9 @@ type
 
 implementation
 
-
 { TVenda }
+
+uses UServidorRest,UDataModuloServidorRest;
 
 constructor TVenda.Create;
 begin
@@ -81,31 +82,25 @@ begin
 
     FrestSql.Close;
     FrestSql.SQL.Clear;
-    FrestSql.SQL.Add('SELECT MAX(vendas.IDVENDAS) AS ID FROM VENDAS');
+    FrestSql.SQL.Add('select gen_id(gen_vendas_id, 0) from rdb$database');
     FrestSql.Active := True;
-    FIDVENDA := FrestSql.FieldByName('ID').AsInteger;
+    FIDVENDA := FrestSql.Fields[0].AsInteger;
 
     FrestSql.Close;
     FrestSql.SQL.Clear;
     FrestSql.SQL.Add('INSERT INTO ITENS_VENDA');
     FrestSql.SQL.Add('( VENDAS_IDVENDAS , ITENS_IDPRODUTO , ITENS_VENDA_QUANTIDADE , ITENS_VENDA_IDMESA )');
     FrestSql.SQL.Add('VALUES( :VENDAS_IDVENDAS , :ITENS_IDPRODUTO , :ITENS_VENDA_QUANTIDADE , :ITENS_VENDA_IDMESA)');
-
-    if IntToStr(FIDVENDA) <> '' then
-    begin
-      FrestSql.ParamByName('VENDAS_IDVENDAS').AsInteger := FIDVENDA;
-      FrestSql.ParamByName('ITENS_IDPRODUTO').AsInteger := FFIDPRODUTO;
-      FrestSql.ParamByName('ITENS_VENDA_QUANTIDADE').AsInteger := FQUANTIDADE;
-      FrestSql.ParamByName('ITENS_VENDA_IDMESA').AsInteger := FITENS_MESA;
-      FrestSql.ExecSQL(verror);
-    end;
+    FrestSql.ParamByName('VENDAS_IDVENDAS').AsInteger := FIDVENDA;
+    FrestSql.ParamByName('ITENS_IDPRODUTO').AsInteger := FFIDPRODUTO;
+    FrestSql.ParamByName('ITENS_VENDA_QUANTIDADE').AsInteger := FQUANTIDADE;
+    FrestSql.ParamByName('ITENS_VENDA_IDMESA').AsInteger := FITENS_MESA;
 
     FrestSql.Close;
     FrestSql.SQL.Clear;
     FrestSql.SQL.Add('UPDATE MESA SET MESA.MESA_STATUS =:STATUS WHERE MESA.IDMESA = :IDMESA');
     FrestSql.ParamByName('IDMESA').AsInteger := FITENS_MESA;
     FrestSql.ParamByName('STATUS').AsInteger := 1;
-    FrestSql.ExecSQL(verror);
 
     FrestSql.Close;
     FrestSql.SQL.Clear;
@@ -179,9 +174,9 @@ begin
 
     FrestSql.Close;
     FrestSql.SQL.Clear;
-    FrestSql.SQL.Add('SELECT MAX(CAIXA.idcaixa) AS ID FROM CAIXA');
+    FrestSql.SQL.Add('select gen_id(gen_caixa_id, 0) from rdb$database');
     FrestSql.Active := True;
-    FIDCAIXA := FrestSql.FieldByName('ID').AsInteger;
+    FIDCAIXA := FrestSql.Fields[0].AsInteger;
 
     FrestSql.Close;
     FrestSql.SQL.Clear;
@@ -189,18 +184,15 @@ begin
     FrestSql.SQL.Add('( ENTRADA_MOVIMENTACOES , MOVIMENTACOES_IDVENDAS , MOVIMENTACOES_IDCAIXA , DATA_MOVIMENTACOES)');
     FrestSql.SQL.Add('VALUES(:ENTRADA_MOVIMENTACOES , :MOVIMENTACOES_IDVENDAS , :MOVIMENTACOES_IDCAIXA , :DATA_MOVIMENTACOES)');
 
-    if (IntToStr(FIDVENDA) <> '') AND (IntToStr(FIDCAIXA) <> '') then
-    begin
-      FrestSql.ParamByName('MOVIMENTACOES_IDVENDAS').AsInteger := FIDVENDA;
-      FrestSql.ParamByName('MOVIMENTACOES_IDCAIXA').AsInteger  := FIDCAIXA;
-      FrestSql.ParamByName('ENTRADA_MOVIMENTACOES').AsString := 'E';
-      FrestSql.ParamByName('DATA_MOVIMENTACOES').AsDateTime := StrToDateTime(FormatDateTime('DD/MM/YYYY', Now));
-      FrestSql.ExecSQL(verror);
-    end;
+    FrestSql.ParamByName('MOVIMENTACOES_IDVENDAS').AsInteger := FIDVENDA;
+    FrestSql.ParamByName('MOVIMENTACOES_IDCAIXA').AsInteger  := FIDCAIXA;
+    FrestSql.ParamByName('ENTRADA_MOVIMENTACOES').AsString := 'E';
+    FrestSql.ParamByName('DATA_MOVIMENTACOES').AsDateTime := StrToDateTime(FormatDateTime('DD/MM/YYYY', Now));
+    FrestSql.ExecSQL(verror);
 
   except
     on E: Exception do
-      raise Exception.Create(' Error no Cadastro de Movimentacoes! ');
+      raise Exception.Create(' Error no Inserir os Dados de Movimentacoes! ');
   end;
 end;
 
@@ -208,7 +200,9 @@ procedure TVenda.Venda;
 var
   verror: string;
 begin
+
   try
+
     FrestSql.Close;
     FrestSql.SQL.Clear;
     FrestSql.SQL.Add('INSERT INTO VENDAS');
@@ -219,6 +213,7 @@ begin
     FrestSql.ParamByName('DESCRICAOVENDA').AsString :=FDESCRICAOVENDA;
     FrestSql.ParamByName('VENDAFORMAPAGAMENTO').AsString:= FdFORMAPAGAMENTO;
     FrestSql.ExecSQL(verror);
+
  except on E: Exception do
     raise Exception.Create(' Error no Cadastro de Vendas! ');
   end;
