@@ -2,7 +2,7 @@ object DataModuleServidorRestFull: TDataModuleServidorRestFull
   OldCreateOrder = False
   OnCreate = ServerMethodDataModuleCreate
   Encoding = esUtf8
-  Height = 352
+  Height = 242
   Width = 377
   object FDGUIxWaitCursor1: TFDGUIxWaitCursor
     Provider = 'Forms'
@@ -189,21 +189,5 @@ object DataModuleServidorRestFull: TDataModuleServidorRestFull
   object FDStanStorageBinLink1: TFDStanStorageBinLink
     Left = 296
     Top = 80
-  end
-  object ClientDataSetApp: TClientDataSet
-    PersistDataPacket.Data = {
-      3A0000009619E0BD0100000018000000020000000000030000003A0007494456
-      454E44410400010000000000074944434149584104000100000000000000}
-    Active = True
-    Aggregates = <>
-    Params = <>
-    Left = 112
-    Top = 280
-    object ClientDataSetAppIDVENDA: TIntegerField
-      FieldName = 'IDVENDA'
-    end
-    object ClientDataSetAppIDCAIXA: TIntegerField
-      FieldName = 'IDCAIXA'
-    end
   end
 end

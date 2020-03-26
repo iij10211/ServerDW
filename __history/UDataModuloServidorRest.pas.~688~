@@ -500,16 +500,6 @@ begin
             pedido.DESCRICAOVENDA := Vjsonobjeto.GetValue<String>('DESCRICAOVENDA');
             pedido.FORMAPAGAMENTO := ' DINHEIRO ';
             pedido.Venda;
-
-            VQuery.Close;
-            VQuery.SQL.Clear;
-            VQuery.SQL.Add('select gen_id(gen_vendas_id, 0) from rdb$database');
-            VQuery.Active := True;
-            ShowMessage('ID'+IntToStr(VQuery.Fields[0].AsInteger));
-            ClientDataSetApp.Insert;
-            ClientDataSetApp.FieldByName('IDVENDA').AsInteger :=
-                                     //    IDCAIXA
-
             Result := '[{"Resposta":" Pedido Gravado Com Sucess"}]';
 
           except on E: Exception do

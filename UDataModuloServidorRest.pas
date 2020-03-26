@@ -25,9 +25,6 @@ type
     RESTDWPoolerDB1: TRESTDWPoolerDB;
     RESTDWDriverFD1: TRESTDWDriverFD;
     FDStanStorageBinLink1: TFDStanStorageBinLink;
-    ClientDataSetApp: TClientDataSet;
-    ClientDataSetAppIDVENDA: TIntegerField;
-    ClientDataSetAppIDCAIXA: TIntegerField;
 
     procedure ArquivoConfiguracao;
     procedure ConfigurarConexao;

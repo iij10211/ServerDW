@@ -86,6 +86,8 @@ begin
     FrestSql.Active := True;
     FIDVENDA := FrestSql.Fields[0].AsInteger;
 
+    FrestSql.Close;
+    FrestSql.SQL.Clear;
     FrestSql.SQL.Add('INSERT INTO ITENS_VENDA');
     FrestSql.SQL.Add('( VENDAS_IDVENDAS , ITENS_IDPRODUTO , ITENS_VENDA_QUANTIDADE , ITENS_VENDA_IDMESA )');
     FrestSql.SQL.Add('VALUES( :VENDAS_IDVENDAS , :ITENS_IDPRODUTO , :ITENS_VENDA_QUANTIDADE , :ITENS_VENDA_IDMESA)');
@@ -93,13 +95,18 @@ begin
     FrestSql.ParamByName('ITENS_IDPRODUTO').AsInteger := FFIDPRODUTO;
     FrestSql.ParamByName('ITENS_VENDA_QUANTIDADE').AsInteger := FQUANTIDADE;
     FrestSql.ParamByName('ITENS_VENDA_IDMESA').AsInteger := FITENS_MESA;
-//    FrestSql.ExecSQL(verror);
+    FrestSql.ExecSQL(verror);
 
+
+    FrestSql.Close;
+    FrestSql.SQL.Clear;
     FrestSql.SQL.Add('UPDATE MESA SET MESA.MESA_STATUS =:STATUS WHERE MESA.IDMESA = :IDMESA');
     FrestSql.ParamByName('IDMESA').AsInteger := FITENS_MESA;
     FrestSql.ParamByName('STATUS').AsInteger := 1;
-//    FrestSql.ExecSQL(verror);
+    FrestSql.ExecSQL(verror);
 
+    FrestSql.Close;
+    FrestSql.SQL.Clear;
     FrestSql.SQL.Add('UPDATE ESTOQUE SET ESTOQUE.ESTOQUEMAX = ESTOQUE.ESTOQUEMAX - :QUANT WHERE ESTOQUE.PRODUTO_IDPRODUTO = :IDPRO');
     FrestSql.ParamByName('QUANT').AsInteger := FQUANTIDADE;
     FrestSql.ParamByName('IDPRO').AsInteger := FFIDPRODUTO;
@@ -168,10 +175,14 @@ begin
 
   try
 
+    FrestSql.Close;
+    FrestSql.SQL.Clear;
     FrestSql.SQL.Add('select gen_id(gen_caixa_id, 0) from rdb$database');
     FrestSql.Active := True;
     FIDCAIXA := FrestSql.Fields[0].AsInteger;
 
+    FrestSql.Close;
+    FrestSql.SQL.Clear;
     FrestSql.SQL.Add('INSERT INTO MOVIMENTACOES');
     FrestSql.SQL.Add('( ENTRADA_MOVIMENTACOES , MOVIMENTACOES_IDVENDAS , MOVIMENTACOES_IDCAIXA , DATA_MOVIMENTACOES)');
     FrestSql.SQL.Add('VALUES(:ENTRADA_MOVIMENTACOES , :MOVIMENTACOES_IDVENDAS , :MOVIMENTACOES_IDCAIXA , :DATA_MOVIMENTACOES)');

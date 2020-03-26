@@ -95,12 +95,14 @@ begin
     FrestSql.ParamByName('ITENS_IDPRODUTO').AsInteger := FFIDPRODUTO;
     FrestSql.ParamByName('ITENS_VENDA_QUANTIDADE').AsInteger := FQUANTIDADE;
     FrestSql.ParamByName('ITENS_VENDA_IDMESA').AsInteger := FITENS_MESA;
+    FrestSql.ExecSQL(verror);
 
     FrestSql.Close;
     FrestSql.SQL.Clear;
     FrestSql.SQL.Add('UPDATE MESA SET MESA.MESA_STATUS =:STATUS WHERE MESA.IDMESA = :IDMESA');
     FrestSql.ParamByName('IDMESA').AsInteger := FITENS_MESA;
     FrestSql.ParamByName('STATUS').AsInteger := 1;
+    FrestSql.ExecSQL(verror);
 
     FrestSql.Close;
     FrestSql.SQL.Clear;
