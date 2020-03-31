@@ -7,31 +7,31 @@ uses
   System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, uDWAbout, uRESTDWBase,
   Vcl.ExtCtrls, Vcl.Buttons, Vcl.Menus, System.ImageList, Vcl.ImgList,
-  Vcl.Imaging.GIFImg,Configuracoes;
+  Vcl.Imaging.GIFImg,Configuracoes, UConfigIni;
 
 type
   TFServidor = class(TForm)
     Button1: TButton;
-    Edit1: TEdit;
-    Edit2: TEdit;
-    Edit3: TEdit;
+    edt_PortaDW: TEdit;
+    edt_UserDW: TEdit;
+    edt_PasswordDW: TEdit;
     Button2: TButton;
     Label1: TLabel;
     Label2: TLabel;
     Label3: TLabel;
     labConexao: TLabel;
     labDBConfig: TLabel;
-    Edit4: TEdit;
-    Edit5: TEdit;
-    Edit6: TEdit;
+    edt_PortaDB: TEdit;
+    edt_UsuarioDB: TEdit;
+    edt_PasswordDB: TEdit;
     Label4: TLabel;
     Label5: TLabel;
     Label6: TLabel;
-    Edit7: TEdit;
+    edt_Database: TEdit;
     Label7: TLabel;
     lSeguro: TLabel;
     OpenDialog1: TOpenDialog;
-    Edit8: TEdit;
+    edt_HostDB: TEdit;
     Label8: TLabel;
     TrayIcon1: TTrayIcon;
     PopupMenu1: TPopupMenu;
@@ -56,6 +56,9 @@ type
     procedure Button3Click(Sender: TObject);
 
   private
+    FConfigIni: TConfigIni;
+    procedure GetParametros;
+    procedure SetParametros;
     { Private declarations }
   public
     { Public declarations }
@@ -105,7 +108,7 @@ begin
   if OpenDialog1.Execute then
   begin
     bdcaminho := OpenDialog1.FileName;
-    Edit7.Text := Trim(bdcaminho);
+    edt_Database.Text := Trim(bdcaminho);
   end;
 end;
 
@@ -115,54 +118,39 @@ begin
 end;
 
 procedure TFServidor.FormCreate(Sender: TObject);
-var
-  servidor: TDataModuleServidorRestFull;
 begin
-  servidor := TDataModuleServidorRestFull.Create(nil);
-  try
-    servidor.LerArquivo;
-    Edit1.Text := servidor.FPortaServ;
-    Edit2.Text := servidor.FUsuarioServ;
-    Edit3.Text := servidor.FSenhaServ;
+  RESTServicePooler1.ServerMethodClass := TDataModuleServidorRestFull;
 
-    Edit4.Text := IntToStr(servidor.FPortBD);
-    Edit5.Text := servidor.FUsuarioBD;
-    Edit6.Text := servidor.FPasswordBD;
-    Edit7.Text := Trim(servidor.FCaminhoBD);
-    Edit8.Text := servidor.FHostBD;
-  finally
-    servidor.Free;
-  end;
+  FConfigIni := TConfigIni.Create;
+  FConfigIni.ReadIni;
+  GetParametros;
+end;
+
+procedure TFServidor.SetParametros;
+begin
+  FConfigIni.PortaServ   := Trim(edt_PortaDW.Text);
+  FConfigIni.UsuarioServ := Trim(edt_UserDW.Text);
+  FConfigIni.SenhaServ   := Trim(edt_PasswordDW.Text);
+  FConfigIni.PortBD      := StrToInt(edt_PortaDB.Text);
+  FConfigIni.UsuarioBD   := Trim(edt_UsuarioDB.Text);
+  FConfigIni.PasswordBD  := Trim(edt_PasswordDB.Text);
+  FConfigIni.CaminhoBD   := Trim(edt_Database.Text);
+  FConfigIni.HostBD      := Trim(edt_HostDB.Text);
+
+  FConfigIni.WriteIni;
 end;
 
 procedure TFServidor.IniciarServidor;
-var
-  servidor: TDataModuleServidorRestFull;
 begin
-  servidor := TDataModuleServidorRestFull.Create(nil);
-  try
-    servidor.FPortaServ := Trim(Edit1.Text);
-    servidor.FUsuarioServ := Trim(Edit2.Text);
-    servidor.FSenhaServ := Trim(Edit3.Text);
-    servidor.FPortBD := StrToInt(Edit4.Text);
-    servidor.FUsuarioBD := Trim(Edit5.Text);
-    servidor.FPasswordBD := Trim(Edit6.Text);
-    servidor.FCaminhoBD := Trim(Edit7.Text);
-    servidor.FHostBD := Trim(Edit8.Text);
-    servidor.ArquivoConfiguracao;
-    servidor.ServerMethodDataModuleCreate(Self);
-  finally
-    servidor.Free;
-  end;
-
-  RESTServicePooler1.ServerMethodClass := TDataModuleServidorRestFull;
+  SetParametros;
 
   if Not RESTServicePooler1.Active then
   begin
-    RESTServicePooler1.ServerParams.UserName := Trim(Edit2.Text);
-    RESTServicePooler1.ServerParams.Password := Trim(Edit3.Text);
-    RESTServicePooler1.ServicePort := StrToInt(Edit1.Text);
-    RESTServicePooler1.Active := True;
+    RESTServicePooler1.ServerParams.UserName := Trim(edt_UserDW.Text);
+    RESTServicePooler1.ServerParams.Password := Trim(edt_PasswordDW.Text);
+    RESTServicePooler1.ServicePort           := StrToInt(edt_PortaDW.Text);
+    RESTServicePooler1.Active                := True;
+
     if RESTServicePooler1.Active = True then
     begin
       lSeguro.Caption := ' SERVIDOR CONECTADO! ';
@@ -200,6 +188,19 @@ end;
 procedure TFServidor.Sair1Click(Sender: TObject);
 begin
   FServidor := nil;
+end;
+
+procedure TFServidor.GetParametros;
+begin
+  edt_PortaDW.Text    := FConfigIni.PortaServ;
+  edt_UserDW.Text     := FConfigIni.UsuarioServ;
+  edt_PasswordDW.Text := FConfigIni.SenhaServ;
+
+  edt_PortaDB.Text    := IntToStr(FConfigIni.PortBD);
+  edt_UsuarioDB.Text  := FConfigIni.UsuarioBD;
+  edt_PasswordDB.Text := FConfigIni.PasswordBD;
+  edt_Database.Text   := Trim(FConfigIni.CaminhoBD);
+  edt_HostDB.Text     := FConfigIni.HostBD;
 end;
 
 procedure TFServidor.TrayIcon1DblClick(Sender: TObject);

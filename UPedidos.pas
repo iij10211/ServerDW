@@ -3,16 +3,13 @@ unit UPedidos;
 interface
 
 uses
-  Data.DB, SysUtils, Forms, Vcl.Dialogs, uRESTDWPoolerDB,
-  URESTDWDataBase1ConexaoArquivo;
+  Data.DB, SysUtils, Forms, Vcl.Dialogs, FireDAC.Comp.Client;
 
 type
   TVenda = class
-
   private
+    FQry: TFDQuery;
 
-    FrestSql: TRESTDWClientSQL;
-    FrestDataBase: TURESTDWDataBaseConection;
     FDATAVENDA: TDateTime;
     FdFORMAPAGAMENTO: string;
     FVALORVENDA: Double;
@@ -37,8 +34,9 @@ type
     procedure SetFIDCAIXA(const Value: Integer);
     procedure SetVENDA_IDTIPOCOBRANCA(const Value: string);
     procedure SetFITENS_MESA(const Value: Integer);
- 
+
   public
+    constructor Create(aQry: TFDQuery);
 
     property FIDCAIXA: Integer read FFIDCAIXA write SetFIDCAIXA;
     property FIDVENDA: Integer read FFIDVENDA write SetFIDVENDA;
@@ -54,63 +52,50 @@ type
     procedure Venda;
     procedure ItensVenda;
     procedure Movimentacoes;
-    constructor Create;
-
   end;
 
 implementation
 
 { TVenda }
 
-uses UServidorRest,UDataModuloServidorRest;
-
-constructor TVenda.Create;
+constructor TVenda.Create(aQry: TFDQuery);
 begin
-  FrestSql := TRESTDWClientSQL.Create(nil);
-  FrestDataBase := TURESTDWDataBaseConection.Create;
-  FrestDataBase.ConetaServidor;
-  FrestSql.BinaryRequest := True;
-  FrestSql.DataBase := FrestDataBase.RESTDWDataBase1;
+  FQry := aQry;
 end;
 
 procedure TVenda.ItensVenda;
-var
-  verror: string;
 begin
-
   try
+    FQry.Close;
+    FQry.SQL.Clear;
+    FQry.SQL.Add('select gen_id(gen_vendas_id, 0) from rdb$database');
+    FQry.Active := True;
+    FIDVENDA := FQry.Fields[0].AsInteger;
 
-    FrestSql.Close;
-    FrestSql.SQL.Clear;
-    FrestSql.SQL.Add('select gen_id(gen_vendas_id, 0) from rdb$database');
-    FrestSql.Active := True;
-    FIDVENDA := FrestSql.Fields[0].AsInteger;
+    FQry.Close;
+    FQry.SQL.Clear;
+    FQry.SQL.Add('INSERT INTO ITENS_VENDA');
+    FQry.SQL.Add('( VENDAS_IDVENDAS , ITENS_IDPRODUTO , ITENS_VENDA_QUANTIDADE , ITENS_VENDA_IDMESA )');
+    FQry.SQL.Add('VALUES( :VENDAS_IDVENDAS , :ITENS_IDPRODUTO , :ITENS_VENDA_QUANTIDADE , :ITENS_VENDA_IDMESA)');
+    FQry.ParamByName('VENDAS_IDVENDAS').AsInteger := FIDVENDA;
+    FQry.ParamByName('ITENS_IDPRODUTO').AsInteger := FFIDPRODUTO;
+    FQry.ParamByName('ITENS_VENDA_QUANTIDADE').AsInteger := FQUANTIDADE;
+    FQry.ParamByName('ITENS_VENDA_IDMESA').AsInteger := FITENS_MESA;
+    FQry.ExecSQL;
 
-    FrestSql.Close;
-    FrestSql.SQL.Clear;
-    FrestSql.SQL.Add('INSERT INTO ITENS_VENDA');
-    FrestSql.SQL.Add('( VENDAS_IDVENDAS , ITENS_IDPRODUTO , ITENS_VENDA_QUANTIDADE , ITENS_VENDA_IDMESA )');
-    FrestSql.SQL.Add('VALUES( :VENDAS_IDVENDAS , :ITENS_IDPRODUTO , :ITENS_VENDA_QUANTIDADE , :ITENS_VENDA_IDMESA)');
-    FrestSql.ParamByName('VENDAS_IDVENDAS').AsInteger := FIDVENDA;
-    FrestSql.ParamByName('ITENS_IDPRODUTO').AsInteger := FFIDPRODUTO;
-    FrestSql.ParamByName('ITENS_VENDA_QUANTIDADE').AsInteger := FQUANTIDADE;
-    FrestSql.ParamByName('ITENS_VENDA_IDMESA').AsInteger := FITENS_MESA;
-    FrestSql.ExecSQL(verror);
+    FQry.Close;
+    FQry.SQL.Clear;
+    FQry.SQL.Add('UPDATE MESA SET MESA.MESA_STATUS =:STATUS WHERE MESA.IDMESA = :IDMESA');
+    FQry.ParamByName('IDMESA').AsInteger := FITENS_MESA;
+    FQry.ParamByName('STATUS').AsInteger := 1;
+    FQry.ExecSQL;
 
-    FrestSql.Close;
-    FrestSql.SQL.Clear;
-    FrestSql.SQL.Add('UPDATE MESA SET MESA.MESA_STATUS =:STATUS WHERE MESA.IDMESA = :IDMESA');
-    FrestSql.ParamByName('IDMESA').AsInteger := FITENS_MESA;
-    FrestSql.ParamByName('STATUS').AsInteger := 1;
-    FrestSql.ExecSQL(verror);
-
-    FrestSql.Close;
-    FrestSql.SQL.Clear;
-    FrestSql.SQL.Add('UPDATE ESTOQUE SET ESTOQUE.ESTOQUEMAX = ESTOQUE.ESTOQUEMAX - :QUANT WHERE ESTOQUE.PRODUTO_IDPRODUTO = :IDPRO');
-    FrestSql.ParamByName('QUANT').AsInteger := FQUANTIDADE;
-    FrestSql.ParamByName('IDPRO').AsInteger := FFIDPRODUTO;
-    FrestSql.ExecSQL(verror);
-
+    FQry.Close;
+    FQry.SQL.Clear;
+    FQry.SQL.Add('UPDATE ESTOQUE SET ESTOQUE.ESTOQUEMAX = ESTOQUE.ESTOQUEMAX - :QUANT WHERE ESTOQUE.PRODUTO_IDPRODUTO = :IDPRO');
+    FQry.ParamByName('QUANT').AsInteger := FQUANTIDADE;
+    FQry.ParamByName('IDPRO').AsInteger := FFIDPRODUTO;
+    FQry.ExecSQL;
   except
     on E: Exception do
       raise Exception.Create(' Error no Cadastro de Itens Vendas! ');
@@ -168,30 +153,25 @@ begin
 end;
 
 procedure TVenda.Movimentacoes;
-var
-  verror: string;
 begin
-
   try
+    FQry.Close;
+    FQry.SQL.Clear;
+    FQry.SQL.Add('select gen_id(gen_caixa_id, 0) from rdb$database');
+    FQry.Active := True;
+    FIDCAIXA := FQry.Fields[0].AsInteger;
 
-    FrestSql.Close;
-    FrestSql.SQL.Clear;
-    FrestSql.SQL.Add('select gen_id(gen_caixa_id, 0) from rdb$database');
-    FrestSql.Active := True;
-    FIDCAIXA := FrestSql.Fields[0].AsInteger;
+    FQry.Close;
+    FQry.SQL.Clear;
+    FQry.SQL.Add('INSERT INTO MOVIMENTACOES');
+    FQry.SQL.Add('( ENTRADA_MOVIMENTACOES , MOVIMENTACOES_IDVENDAS , MOVIMENTACOES_IDCAIXA , DATA_MOVIMENTACOES)');
+    FQry.SQL.Add('VALUES(:ENTRADA_MOVIMENTACOES , :MOVIMENTACOES_IDVENDAS , :MOVIMENTACOES_IDCAIXA , :DATA_MOVIMENTACOES)');
 
-    FrestSql.Close;
-    FrestSql.SQL.Clear;
-    FrestSql.SQL.Add('INSERT INTO MOVIMENTACOES');
-    FrestSql.SQL.Add('( ENTRADA_MOVIMENTACOES , MOVIMENTACOES_IDVENDAS , MOVIMENTACOES_IDCAIXA , DATA_MOVIMENTACOES)');
-    FrestSql.SQL.Add('VALUES(:ENTRADA_MOVIMENTACOES , :MOVIMENTACOES_IDVENDAS , :MOVIMENTACOES_IDCAIXA , :DATA_MOVIMENTACOES)');
-
-    FrestSql.ParamByName('MOVIMENTACOES_IDVENDAS').AsInteger := FIDVENDA;
-    FrestSql.ParamByName('MOVIMENTACOES_IDCAIXA').AsInteger  := FIDCAIXA;
-    FrestSql.ParamByName('ENTRADA_MOVIMENTACOES').AsString := 'E';
-    FrestSql.ParamByName('DATA_MOVIMENTACOES').AsDateTime := StrToDateTime(FormatDateTime('DD/MM/YYYY', Now));
-    FrestSql.ExecSQL(verror);
-
+    FQry.ParamByName('MOVIMENTACOES_IDVENDAS').AsInteger := FIDVENDA;
+    FQry.ParamByName('MOVIMENTACOES_IDCAIXA').AsInteger  := FIDCAIXA;
+    FQry.ParamByName('ENTRADA_MOVIMENTACOES').AsString := 'E';
+    FQry.ParamByName('DATA_MOVIMENTACOES').AsDateTime := StrToDateTime(FormatDateTime('DD/MM/YYYY', Now));
+    FQry.ExecSQL;
   except
     on E: Exception do
       raise Exception.Create(' Error no Inserir os Dados de Movimentacoes! ');
@@ -199,23 +179,20 @@ begin
 end;
 
 procedure TVenda.Venda;
-var
-  verror: string;
 begin
-
   try
+    FQry.Close;
+    FQry.SQL.Clear;
 
-    FrestSql.Close;
-    FrestSql.SQL.Clear;
-    FrestSql.SQL.Add('INSERT INTO VENDAS');
-    FrestSql.SQL.Add('( VENDAS_VALOR_VENDA , DATAVENDA , DESCRICAOVENDA , VENDAFORMAPAGAMENTO)');
-    FrestSql.SQL.Add('VALUES( :VENDAS_VALOR_VENDA , :DATAVENDA , :DESCRICAOVENDA , :VENDAFORMAPAGAMENTO)');
-    FrestSql.ParamByName('VENDAS_VALOR_VENDA').AsFloat :=FVALORVENDA;
-    FrestSql.ParamByName('DATAVENDA').AsDateTime :=StrToDateTime(FormatDateTime('dd/mm/yyyy', Now));
-    FrestSql.ParamByName('DESCRICAOVENDA').AsString :=FDESCRICAOVENDA;
-    FrestSql.ParamByName('VENDAFORMAPAGAMENTO').AsString:= FdFORMAPAGAMENTO;
-    FrestSql.ExecSQL(verror);
+    FQry.SQL.Add('INSERT INTO VENDAS');
+    FQry.SQL.Add('( VENDAS_VALOR_VENDA , DATAVENDA , DESCRICAOVENDA , VENDAFORMAPAGAMENTO)');
+    FQry.SQL.Add('VALUES( :VENDAS_VALOR_VENDA , :DATAVENDA , :DESCRICAOVENDA , :VENDAFORMAPAGAMENTO)');
 
+    FQry.ParamByName('VENDAS_VALOR_VENDA').AsFloat := FVALORVENDA;
+    FQry.ParamByName('DATAVENDA').AsDateTime := StrToDateTime(FormatDateTime('dd/mm/yyyy', Now));
+    FQry.ParamByName('DESCRICAOVENDA').AsString := FDESCRICAOVENDA;
+    FQry.ParamByName('VENDAFORMAPAGAMENTO').AsString:= FdFORMAPAGAMENTO;
+    FQry.ExecSQL;
  except on E: Exception do
     raise Exception.Create(' Error no Cadastro de Vendas! ');
   end;

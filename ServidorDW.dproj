@@ -119,6 +119,7 @@
         <DCCReference Include="D:\MaxSystem Test\MaxSystemERP\maxsystem\Control\UCCategoria.pas"/>
         <DCCReference Include="D:\MaxSystem Test\MaxSystemERP\maxsystem\Control\UConfig.pas"/>
         <DCCReference Include="UPedidos.pas"/>
+        <DCCReference Include="UConfigIni.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -136,10 +137,7 @@
         <Borland.ProjectType>Application</Borland.ProjectType>
         <BorlandProject>
             <Delphi.Personality>
-                <Excluded_Packages>
-                    <Excluded_Packages Name="$(BDSBIN)\dcloffice2k250.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
-                    <Excluded_Packages Name="$(BDSBIN)\dclofficexp250.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
-                </Excluded_Packages>
+                <Excluded_Packages/>
                 <Source>
                     <Source Name="MainSource">ServidorDW.dpr</Source>
                 </Source>

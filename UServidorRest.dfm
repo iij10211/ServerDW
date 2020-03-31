@@ -719,7 +719,7 @@ object FServidor: TFServidor
       Font.Style = [fsBold]
       ParentFont = False
     end
-    object Edit1: TEdit
+    object edt_PortaDW: TEdit
       Left = 5
       Top = 64
       Width = 181
@@ -732,7 +732,7 @@ object FServidor: TFServidor
       ParentFont = False
       TabOrder = 0
     end
-    object Edit2: TEdit
+    object edt_UserDW: TEdit
       Left = 192
       Top = 64
       Width = 181
@@ -745,7 +745,7 @@ object FServidor: TFServidor
       ParentFont = False
       TabOrder = 1
     end
-    object Edit3: TEdit
+    object edt_PasswordDW: TEdit
       Left = 379
       Top = 64
       Width = 126
@@ -925,7 +925,7 @@ object FServidor: TFServidor
       Layout = tlCenter
       ExplicitWidth = 845
     end
-    object Edit4: TEdit
+    object edt_PortaDB: TEdit
       Left = 5
       Top = 59
       Width = 181
@@ -938,7 +938,7 @@ object FServidor: TFServidor
       ParentFont = False
       TabOrder = 0
     end
-    object Edit5: TEdit
+    object edt_UsuarioDB: TEdit
       Left = 192
       Top = 59
       Width = 181
@@ -951,7 +951,7 @@ object FServidor: TFServidor
       ParentFont = False
       TabOrder = 1
     end
-    object Edit6: TEdit
+    object edt_PasswordDB: TEdit
       Left = 379
       Top = 59
       Width = 126
@@ -965,7 +965,7 @@ object FServidor: TFServidor
       PasswordChar = '*'
       TabOrder = 2
     end
-    object Edit7: TEdit
+    object edt_Database: TEdit
       Left = 192
       Top = 108
       Width = 181
@@ -978,7 +978,7 @@ object FServidor: TFServidor
       ParentFont = False
       TabOrder = 4
     end
-    object Edit8: TEdit
+    object edt_HostDB: TEdit
       Left = 5
       Top = 108
       Width = 181
@@ -1655,8 +1655,21 @@ object FServidor: TFServidor
   object RESTServicePooler1: TRESTServicePooler
     Active = False
     CORS = False
+    CORS_CustomHeaders.Strings = (
+      'Access-Control-Allow-Origin=*'
+      
+        'Access-Control-Allow-Methods=GET, POST, PATCH, PUT, DELETE, OPTI' +
+        'ONS'
+      
+        'Access-Control-Allow-Headers=Content-Type, Origin, Accept, Autho' +
+        'rization, X-CUSTOM-HEADER')
+    RequestTimeout = -1
     ServicePort = 8082
     ProxyOptions.Port = 8888
+    TokenOptions.Active = False
+    TokenOptions.ServerRequest = 'RESTDWServer01'
+    TokenOptions.TokenHash = 'RDWTS_HASH'
+    TokenOptions.LifeCycle = 30
     ServerParams.HasAuthentication = True
     ServerParams.UserName = 'testserver'
     ServerParams.Password = 'testserver'
@@ -1670,6 +1683,7 @@ object FServidor: TFServidor
     ForceWelcomeAccess = False
     CriptOptions.Use = False
     CriptOptions.Key = 'RDWBASEKEY256'
+    MultiCORE = False
     Left = 440
     Top = 257
   end

@@ -1,13 +1,14 @@
 object DataModuleServidorRestFull: TDataModuleServidorRestFull
   OldCreateOrder = False
   OnCreate = ServerMethodDataModuleCreate
+  OnDestroy = ServerMethodDataModuleDestroy
   Encoding = esUtf8
   Height = 242
-  Width = 377
+  Width = 487
   object FDGUIxWaitCursor1: TFDGUIxWaitCursor
     Provider = 'Forms'
-    Left = 168
-    Top = 8
+    Left = 360
+    Top = 24
   end
   object FDPhysFBDriverLink1: TFDPhysFBDriverLink
     Left = 168
@@ -15,11 +16,12 @@ object DataModuleServidorRestFull: TDataModuleServidorRestFull
   end
   object FDConnection1: TFDConnection
     Params.Strings = (
-      'Database=C:\BD\MAXSYSTEM.FDB'
+      'Database=D:\MaxSystem Test\BD\MAXSYSTEM.FDB'
       'User_Name=SYSDBA'
       'Password=masterkey'
       'CharacterSet=UTF8'
       'DriverID=FB')
+    ConnectedStoredUsage = []
     LoginPrompt = False
     Left = 48
     Top = 8
@@ -160,12 +162,12 @@ object DataModuleServidorRestFull: TDataModuleServidorRestFull
         OnReplyEventByType = DWServerEvents1Eventsitens_pedidosReplyEventByType
       end>
     Left = 168
-    Top = 168
+    Top = 152
   end
-  object VQuery: TFDQuery
+  object qrGeral: TFDQuery
     Connection = FDConnection1
-    Left = 296
-    Top = 168
+    Left = 160
+    Top = 16
   end
   object RESTDWPoolerDB1: TRESTDWPoolerDB
     RESTDriver = RESTDWDriverFD1
@@ -178,16 +180,21 @@ object DataModuleServidorRestFull: TDataModuleServidorRestFull
     PoolerOffMessage = 'RESTPooler not active.'
     ParamCreate = True
     Left = 48
-    Top = 88
+    Top = 152
   end
   object RESTDWDriverFD1: TRESTDWDriverFD
     CommitRecords = 100
     Connection = FDConnection1
     Left = 48
-    Top = 168
+    Top = 72
   end
   object FDStanStorageBinLink1: TFDStanStorageBinLink
-    Left = 296
-    Top = 80
+    Left = 360
+    Top = 88
+  end
+  object VQuery: TFDQuery
+    Connection = FDConnection1
+    Left = 224
+    Top = 16
   end
 end

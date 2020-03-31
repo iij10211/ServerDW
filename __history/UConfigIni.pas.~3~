@@ -1,0 +1,104 @@
+unit UConfigIni;
+
+interface
+
+uses
+  System.SysUtils;
+
+type
+  TConfigIni = class
+  private
+    FFCaminhoBD: string;
+    FFPortBD: Integer;
+    FFPasswordBD: string;
+    FFSenhaServ: string;
+    FFHostBD: string;
+    FFUsuarioBD: string;
+    FFUsuarioServ: string;
+    FFPortaServ: string;
+  public
+    constructor Create;
+    destructor Destroy; override;
+
+    procedure WriteIni;
+    procedure ReadIni;
+
+    property FCaminhoBD: string read FFCaminhoBD write FFCaminhoBD;
+    property FUsuarioBD: string read FFUsuarioBD write FFUsuarioBD;
+    property FPasswordBD: string read FFPasswordBD write FFPasswordBD;
+    property FHostBD: string read FFHostBD write FFHostBD;
+    property FPortBD: Integer read FFPortBD write FFPortBD;
+    property FPortaServ: string read FFPortaServ write FFPortaServ;
+    property FUsuarioServ: string read FFUsuarioServ write FFUsuarioServ;
+    property FSenhaServ: string read FFSenhaServ write FFSenhaServ;
+  end;
+
+implementation
+
+uses
+  System.IniFiles;
+
+{ TConfigIni }
+
+procedure TConfigIni.WriteIni;
+var
+  arquivoIni: TIniFile;
+begin
+  if not DirectoryExists('C:\MaxSystemConfig') then
+  begin
+    ForceDirectories('C:\MaxSystemConfig');
+  end;
+  if not FileExists('C:\MaxSystemConfig\ConfiguracaoRemota.ini') then
+  begin
+    arquivoIni := TIniFile.Create('C:\MaxSystemConfig\ConfiguracaoRemota.ini');
+    try
+      arquivoIni.WriteString('config', 'Driver', 'FB');
+      arquivoIni.WriteString('config', 'Caminho', Trim(FFCaminhoBD));
+      arquivoIni.WriteString('config', 'User', FUsuarioBD);
+      arquivoIni.WriteString('config', 'Key', FFPasswordBD);
+      arquivoIni.WriteString('config', 'Server', FHostBD);
+      arquivoIni.WriteString('config', 'Port', IntToStr(FPortBD));
+      arquivoIni.WriteString('config', 'UserSv', FUsuarioServ);
+      arquivoIni.WriteString('config', 'KeySv', FSenhaServ);
+      arquivoIni.WriteString('config', 'PortSv', FPortaServ);
+    finally
+      arquivoIni.Free;
+    end;
+  end;
+end;
+
+constructor TConfigIni.Create;
+begin
+
+end;
+
+destructor TConfigIni.Destroy;
+begin
+
+  inherited;
+end;
+
+procedure TConfigIni.ReadIni;
+var
+  arquivoIni: TIniFile;
+begin
+  if FileExists('C:\MaxSystemConfig\ConfiguracaoRemota.ini') then
+  begin
+    arquivoIni := TIniFile.Create('C:\MaxSystemConfig\ConfiguracaoRemota.ini');
+    try
+      FFCaminhoBD := arquivoIni.ReadString('config', 'Caminho', '');
+      FUsuarioBD  := arquivoIni.ReadString('config', 'User', '');
+      FPasswordBD := arquivoIni.ReadString('config', 'Key', '');
+      FFHostBD    := arquivoIni.ReadString('config', 'Server', '');
+
+      FPortaServ  := arquivoIni.ReadString('config', 'Port', '');
+      FUsuarioServ:= arquivoIni.ReadString('config', 'UserSv', '');
+      FSenhaServ  := arquivoIni.ReadString('config', 'KeySv', '');
+      FPortaServ  := arquivoIni.ReadString('config', 'PortSv', '');
+    finally
+      arquivoIni.Free;
+    end;
+  end;
+end;
+
+end.

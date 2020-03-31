@@ -9,7 +9,8 @@ uses
   UCliente in 'D:\MaxSystem Test\MaxSystemERP\maxsystem\Control\UCliente.pas',
   UCCategoria in 'D:\MaxSystem Test\MaxSystemERP\maxsystem\Control\UCCategoria.pas',
   UConfig in 'D:\MaxSystem Test\MaxSystemERP\maxsystem\Control\UConfig.pas',
-  UPedidos in 'UPedidos.pas';
+  UPedidos in 'UPedidos.pas',
+  UConfigIni in 'UConfigIni.pas';
 
 {$R *.res}
 
