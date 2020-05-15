@@ -58,6 +58,10 @@ type
       const RequestType: TRequestType; var StatusCode: Integer;
       RequestHeader: TStringList);
     procedure ServerMethodDataModuleDestroy(Sender: TObject);
+    procedure DWServerEvents1EventscomplementosReplyEventByType(
+      var Params: TDWParams; var Result: string;
+      const RequestType: TRequestType; var StatusCode: Integer;
+      RequestHeader: TStringList);
 
   private
     FConfigIni: TConfigIni;
@@ -316,6 +320,41 @@ begin
   end
 end;
 
+procedure TDataModuleServidorRestFull.DWServerEvents1EventscomplementosReplyEventByType(
+  var Params: TDWParams; var Result: string; const RequestType: TRequestType;
+  var StatusCode: Integer; RequestHeader: TStringList);
+  var
+  Vjsonobjeto : TJSONObject;
+  VjsonValue: uDWJSONObject.TJSONValue;
+
+begin
+  case RequestType of
+    rtGet:
+    begin
+      VjsonValue := uDWJSONObject.TJSONValue.Create;
+      try
+        if (Params.ItemsString['idcomplementos'].AsString <> '') then
+        begin
+          VQuery.Close;
+          VQuery.SQL.Clear;
+          VQuery.SQL.Add('SELECT COMPLEMENTOS.* FROM COMPLEMENTOS');
+          VQuery.SQL.Add('LEFT JOIN CATEGORIA ON complementos.complementos_idcategoria = CATEGORIA.idcategoria');
+          VQuery.SQL.Add('WHERE COMPLEMENTOS.complementos_idcategoria =:ID ');
+          VQuery.ParamByName('ID').AsString := Params.ItemsString['idcomplementos'].AsString;
+           VQuery.Open();
+          if VQuery.RecordCount > 0 then
+          begin
+            VjsonValue.LoadFromDataset('', VQuery, VjsonValue.Encoded,Params.JsonMode);
+            Result := VjsonValue.ToJSON;
+          end;
+        end;
+      except on E: Exception do
+        raise Exception.Create(' Não foi Possivel Localizar ' + E.Message);
+      end;
+    end;
+  end;
+end;
+
 procedure TDataModuleServidorRestFull.DWServerEvents1Eventsitens_pedidosReplyEventByType(
   var Params: TDWParams; var Result: string; const RequestType: TRequestType;
   var StatusCode: Integer; RequestHeader: TStringList);
@@ -340,7 +379,7 @@ begin
             pedido.FIDPRODUTO  :=  Vjsonobjeto.GetValue<Integer>('IDPRODUTO');
             pedido.FQUANTIDADE :=  Vjsonobjeto.GetValue<Integer>('QUANTIDADE_PRODUTO');
             pedido.FITENS_MESA :=  Vjsonobjeto.GetValue<Integer>('IDMESA');
-
+            pedido.ITENS_VENDA_IDCOMPLEMENTO := Vjsonobjeto.GetValue<Integer>('ITENS_VENDA_IDCOMPLEMENTO');
             pedido.ItensVenda;
             pedido.Movimentacoes;
             Result := '[{"Resposta":" Pedido Gravado Com Sucess"}]';
@@ -422,7 +461,6 @@ begin
       end;
     end;
   end;
-
 end;
 
 procedure TDataModuleServidorRestFull.DWServerEvents1EventssomarReplyEvent

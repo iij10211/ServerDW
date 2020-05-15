@@ -160,13 +160,20 @@ object DataModuleServidorRestFull: TDataModuleServidorRestFull
         JsonMode = jmPureJSON
         Name = 'itens_pedidos'
         OnReplyEventByType = DWServerEvents1Eventsitens_pedidosReplyEventByType
+      end
+      item
+        Routes = [crAll]
+        DWParams = <>
+        JsonMode = jmPureJSON
+        Name = 'complementos'
+        OnReplyEventByType = DWServerEvents1EventscomplementosReplyEventByType
       end>
     Left = 168
     Top = 152
   end
   object qrGeral: TFDQuery
     Connection = FDConnection1
-    Left = 160
+    Left = 168
     Top = 16
   end
   object RESTDWPoolerDB1: TRESTDWPoolerDB
@@ -190,11 +197,11 @@ object DataModuleServidorRestFull: TDataModuleServidorRestFull
   end
   object FDStanStorageBinLink1: TFDStanStorageBinLink
     Left = 360
-    Top = 88
+    Top = 144
   end
   object VQuery: TFDQuery
     Connection = FDConnection1
-    Left = 224
+    Left = 248
     Top = 16
   end
 end

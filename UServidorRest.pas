@@ -128,6 +128,7 @@ end;
 
 procedure TFServidor.SetParametros;
 begin
+
   FConfigIni.PortaServ   := Trim(edt_PortaDW.Text);
   FConfigIni.UsuarioServ := Trim(edt_UserDW.Text);
   FConfigIni.SenhaServ   := Trim(edt_PasswordDW.Text);

@@ -22,6 +22,7 @@ type
     FFIDCAIXA: Integer;
     FVENDA_IDTIPOCOBRANCA: string;
     FFITENS_MESA: Integer;
+    FFITENS_VENDA_IDCOMPLEMENTO: Integer;
     // itens venda
 
     procedure SetDATAVENDA(const Value: TDateTime);
@@ -34,11 +35,13 @@ type
     procedure SetFIDCAIXA(const Value: Integer);
     procedure SetVENDA_IDTIPOCOBRANCA(const Value: string);
     procedure SetFITENS_MESA(const Value: Integer);
+    procedure SetFITENS_VENDA_IDCOMPLEMENTO(const Value: Integer);
 
   public
     constructor Create(aQry: TFDQuery);
 
     property FIDCAIXA: Integer read FFIDCAIXA write SetFIDCAIXA;
+    property ITENS_VENDA_IDCOMPLEMENTO : Integer read FFITENS_VENDA_IDCOMPLEMENTO write SetFITENS_VENDA_IDCOMPLEMENTO;
     property FIDVENDA: Integer read FFIDVENDA write SetFIDVENDA;
     property FQUANTIDADE: Integer read FFQUANTIDADE write SetFQUANTIDADE;
     property FIDPRODUTO: Integer read FFIDPRODUTO write SetFIDPRODUTO;
@@ -48,10 +51,11 @@ type
     property FORMAPAGAMENTO: string read FdFORMAPAGAMENTO write SetFORMAPAGAMENTO;
     property VENDA_IDTIPOCOBRANCA: string read FVENDA_IDTIPOCOBRANCA write SetVENDA_IDTIPOCOBRANCA;
     property FITENS_MESA : Integer read FFITENS_MESA write SetFITENS_MESA;
-
+  
     procedure Venda;
     procedure ItensVenda;
     procedure Movimentacoes;
+
   end;
 
 implementation
@@ -75,12 +79,13 @@ begin
     FQry.Close;
     FQry.SQL.Clear;
     FQry.SQL.Add('INSERT INTO ITENS_VENDA');
-    FQry.SQL.Add('( VENDAS_IDVENDAS , ITENS_IDPRODUTO , ITENS_VENDA_QUANTIDADE , ITENS_VENDA_IDMESA )');
-    FQry.SQL.Add('VALUES( :VENDAS_IDVENDAS , :ITENS_IDPRODUTO , :ITENS_VENDA_QUANTIDADE , :ITENS_VENDA_IDMESA)');
+    FQry.SQL.Add('( VENDAS_IDVENDAS , ITENS_IDPRODUTO , ITENS_VENDA_QUANTIDADE , ITENS_VENDA_IDMESA , ITENS_VENDA_IDCOMPLEMENTO)');
+    FQry.SQL.Add('VALUES( :VENDAS_IDVENDAS , :ITENS_IDPRODUTO , :ITENS_VENDA_QUANTIDADE , :ITENS_VENDA_IDMESA , :ITENS_VENDA_IDCOMPLEMENTO)'); //ITENS_VENDA_IDCOMPLEMENTO
     FQry.ParamByName('VENDAS_IDVENDAS').AsInteger := FIDVENDA;
     FQry.ParamByName('ITENS_IDPRODUTO').AsInteger := FFIDPRODUTO;
     FQry.ParamByName('ITENS_VENDA_QUANTIDADE').AsInteger := FQUANTIDADE;
     FQry.ParamByName('ITENS_VENDA_IDMESA').AsInteger := FITENS_MESA;
+    FQry.ParamByName('ITENS_VENDA_IDCOMPLEMENTO').AsInteger := FFITENS_VENDA_IDCOMPLEMENTO;
     FQry.ExecSQL;
 
     FQry.Close;
@@ -130,6 +135,11 @@ end;
 procedure TVenda.SetFITENS_MESA(const Value: Integer);
 begin
   FFITENS_MESA := Value;
+end;
+
+procedure TVenda.SetFITENS_VENDA_IDCOMPLEMENTO(const Value: Integer);
+begin
+  FFITENS_VENDA_IDCOMPLEMENTO := Value;
 end;
 
 procedure TVenda.SetFORMAPAGAMENTO(const Value: string);

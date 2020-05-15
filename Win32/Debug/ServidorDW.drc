@@ -8,187 +8,186 @@
   resources were bound to the produced executable.
 */
 
-#define System_JSONConsts_SJSONPathEndedOpenBracket 64208
-#define System_JSONConsts_SJSONPathEndedOpenString 64209
-#define System_JSONConsts_SJSONPathInvalidArrayIndex 64210
-#define System_JSONConsts_SJSONPathUnexpectedIndexedChar 64211
-#define System_JSONConsts_SJSONPathDotsEmptyName 64212
-#define System_JSONConsts_SUnexpectedTokenDate 64224
-#define System_JSONConsts_SUnexpectedTokenDateConstructorExpEnd 64225
-#define System_JSONConsts_SUnexpectedTokenDateConstructorExpInt 64226
-#define System_JSONConsts_SUnexpectedTokenDouble 64227
-#define System_JSONConsts_SUnexpectedTokenInteger 64228
-#define System_JSONConsts_SUnexpectedTokenReadBytes 64229
-#define System_JSONConsts_SUnexpectedTokenString 64230
-#define System_JSONConsts_SUnexpectedTypeOnEnd 64231
-#define System_JSONConsts_SUnexpectedUnicodeCharEnd 64232
-#define System_JSONConsts_SUnexpectedUnquotedPropertyEnd 64233
-#define System_JSONConsts_SUnknowContainerType 64234
-#define System_JSONConsts_SUnsupportedType 64235
-#define System_JSONConsts_SUnterminatedString 64236
-#define System_JSONConsts_SWhitespaceOnly 64237
-#define System_JSONConsts_SUnexpectedExtJSONToken 64238
-#define System_JSONConsts_SJSONPathUnexpectedRootChar 64239
-#define System_JSONConsts_SParseErrorPositiveInfinity 64240
-#define System_JSONConsts_SParseErrorUndefined 64241
-#define System_JSONConsts_SReaderAdditionalText 64242
-#define System_JSONConsts_SReaderMaxDepthExceeded 64243
-#define System_JSONConsts_STokenInStateInvalid 64244
-#define System_JSONConsts_SUnexpecteCharAfterValue 64245
-#define System_JSONConsts_SUnexpectedBytesEnd 64246
-#define System_JSONConsts_SUnexpectedCharConstructor 64247
-#define System_JSONConsts_SUnexpectedCharNumber 64248
-#define System_JSONConsts_SUnexpectedCharValue 64249
-#define System_JSONConsts_SUnexpectedCommentEnd 64250
-#define System_JSONConsts_SUnexpectedConstructorEnd 64251
-#define System_JSONConsts_SUnexpectedEnd 64252
-#define System_JSONConsts_SUnexpectedEndConstructorDate 64253
-#define System_JSONConsts_SUnexpectedJsonContent 64254
-#define System_JSONConsts_SUnexpectedState 64255
-#define System_JSONConsts_SInvalidCharacterAfterProperty 64256
-#define System_JSONConsts_SInvalidCloseToken 64257
-#define System_JSONConsts_SInvalidJavascriptProperty 64258
-#define System_JSONConsts_SInvalidJavascriptQuote 64259
-#define System_JSONConsts_SInvalidJsonToken 64260
-#define System_JSONConsts_SInvalidObjectId 64261
-#define System_JSONConsts_SInvalidPropertyCharacter 64262
-#define System_JSONConsts_SInvalidState 64263
-#define System_JSONConsts_SInvalidTokenForContainer 64264
-#define System_JSONConsts_SNoTokenForType 64265
-#define System_JSONConsts_SNoTokenToClose 64266
-#define System_JSONConsts_SParseErrorBoolean 64267
-#define System_JSONConsts_SParseErrorComment 64268
-#define System_JSONConsts_SParseErrorNan 64269
-#define System_JSONConsts_SParseErrorNegativeInfinity 64270
-#define System_JSONConsts_SParseErrorNull 64271
-#define Data_DBXCommonResStrs_sWriterNotSupported 64272
-#define System_JSONConsts_SUTF8Start 64273
-#define System_JSONConsts_SUTF8UnexpectedByte 64274
-#define System_JSONConsts_SUTF8InvalidHeaderByte 64275
-#define System_JSONConsts_SValueNotFound 64276
-#define System_JSONConsts_SCannotConvertJSONValueToType 64277
-#define System_JSONConsts_SBadEscapeSequence 64278
-#define System_JSONConsts_SErrorConvertStringToDatetime 64279
-#define System_JSONConsts_SErrorConvertStringToDouble 64280
-#define System_JSONConsts_SErrorConvertStringToInteger 64281
-#define System_JSONConsts_SFormatMessageLinePos 64282
-#define System_JSONConsts_SFormatMessagePath 64283
-#define System_JSONConsts_SIdentationGreaterThanZero 64284
-#define System_JSONConsts_SInputInvalidDouble 64285
-#define System_JSONConsts_SInputInvalidInteger 64286
-#define System_JSONConsts_SInputInvalidNumber 64287
-#define Data_DBXCommonResStrs_SDBXErrOptimisticLockFailed 64288
-#define Data_DBXCommonResStrs_SDBXErrInvalidReference 64289
-#define Data_DBXCommonResStrs_SDBXErrNoTable 64290
-#define Data_DBXCommonResStrs_SDBXErrMissingParameterMarker 64291
-#define Data_DBXCommonResStrs_SDBXErrNotImplemented 64292
-#define Data_DBXCommonResStrs_SDBXErrDriverIncompatible 64293
-#define Data_DBXCommonResStrs_SDBXErrInvalidArgument 64294
-#define Data_DBXCommonResStrs_SDBXErrNoData 64295
-#define Data_DBXCommonResStrs_SDBXErrVendorError 64296
-#define Data_DBXCommonResStrs_SDBXErrUnrecognizedCommandType 64297
-#define Data_DBXCommonResStrs_SDBXErrSchemaNameUnspecified 64298
-#define Data_DBXCommonResStrs_SDBXErrDatabaseUnspecified 64299
-#define Data_DBXCommonResStrs_SDBXErrLibraryNameUnspecified 64300
-#define Data_DBXCommonResStrs_SDBXErrGetDriverFuncUnspecified 64301
-#define Data_DBXCommonResStrs_SDBXErrVendorLibUnspecified 64302
-#define Data_DBXCommonResStrs_sReaderNotSupported 64303
-#define Data_DBXCommonResStrs_SDBXErrInvalidType 64304
-#define Data_DBXCommonResStrs_SDBXErrInvalidOrdinal 64305
-#define Data_DBXCommonResStrs_SDBXErrInvalidParameter 64306
-#define Data_DBXCommonResStrs_SDBXErrEOF 64307
-#define Data_DBXCommonResStrs_SDBXErrParameterNotSet 64308
-#define Data_DBXCommonResStrs_SDBXErrInvalidUserOrPassword 64309
-#define Data_DBXCommonResStrs_SDBXErrInvalidPrecision 64310
-#define Data_DBXCommonResStrs_SDBXErrInvalidLength 64311
-#define Data_DBXCommonResStrs_SDBXErrInvalidIsolationLevel 64312
-#define Data_DBXCommonResStrs_SDBXErrInvalidTransactionId 64313
-#define Data_DBXCommonResStrs_SDBXErrDuplicateTransactionId 64314
-#define Data_DBXCommonResStrs_SDBXErrDriverRestricted 64315
-#define Data_DBXCommonResStrs_SDBXErrTransactionActive 64316
-#define Data_DBXCommonResStrs_SDBXErrMultipleTransactionNotEnabled 64317
-#define Data_DBXCommonResStrs_SDBXErrConnectionFailed 64318
-#define Data_DBXCommonResStrs_SDBXErrDriverInitFailed 64319
-#define Data_DBXCommonResStrs_SAlreadyPrepared 64320
-#define Data_DBXCommonResStrs_SInvalidTypeAccess 64321
-#define Data_DBXCommonResStrs_SConnectionClosed 64322
-#define Data_DBXCommonResStrs_SMetaDataLoadError 64323
-#define Data_DBXCommonResStrs_SJSONByteStream 64324
-#define Data_DBXCommonResStrs_SNoStatementToExecute 64325
-#define Data_DBXCommonResStrs_SUnexpectedDataType 64326
-#define Data_DBXCommonResStrs_SDriverAlreadyRegistered 64327
-#define Data_DBXCommonResStrs_SNotDefinedIn 64328
-#define Data_DBXCommonResStrs_SDBXErrNone 64329
-#define Data_DBXCommonResStrs_SDBXErrWarning 64330
-#define Data_DBXCommonResStrs_SDBXErrNoMemory 64331
-#define Data_DBXCommonResStrs_SDBXErrUnsupportedFieldType 64332
-#define Data_DBXCommonResStrs_SDBXErrInvalidHandle 64333
-#define Data_DBXCommonResStrs_SDBXErrNotSupported 64334
-#define Data_DBXCommonResStrs_SDBXErrInvalidTime 64335
-#define Data_DBXCommonResStrs_SInvalidClassRegister 64336
-#define Data_DBXCommonResStrs_SCannotFreeClassRegistry 64337
-#define Data_DBXCommonResStrs_SUnknownDriver 64338
-#define Data_DBXCommonResStrs_SInvalidArgument 64339
-#define Data_DBXCommonResStrs_SInvalidTransaction 64340
-#define Data_DBXCommonResStrs_SNotImplemented 64341
-#define Data_DBXCommonResStrs_SRequiredProperty 64342
-#define Data_DBXCommonResStrs_SReaderNew 64343
-#define Data_DBXCommonResStrs_SReaderClosed 64344
-#define Data_DBXCommonResStrs_SReadOnlyType 64345
-#define Data_DBXCommonResStrs_SSetSingletonOnce 64346
-#define Data_DBXCommonResStrs_SConnectionFactoryInitFailed 64347
-#define Data_DBXCommonResStrs_SInvalidDelegationDepth 64348
-#define Data_DBXCommonResStrs_SInvalidOrdinal 64349
-#define Data_DBXCommonResStrs_SDefaultErrorMessage 64350
-#define Data_DBXCommonResStrs_SErrorCode 64351
-#define Vcl_Imaging_GIFConsts_sInvalidColor 64352
-#define Vcl_Imaging_GIFConsts_sInvalidBitSize 64353
-#define Vcl_Imaging_GIFConsts_sEmptyColorMap 64354
-#define Vcl_Imaging_GIFConsts_sEmptyImage 64355
-#define Vcl_Imaging_GIFConsts_sMultipleGCE 64356
-#define Vcl_Imaging_GIFConsts_sNoPalette 64357
-#define Vcl_Imaging_GIFConsts_sGIFImageFile 64358
-#define Vcl_Imaging_GIFConsts_sProgressLoading 64359
-#define Vcl_Imaging_GIFConsts_sProgressSaving 64360
-#define Vcl_Imaging_GIFConsts_sProgressConverting 64361
-#define Vcl_Imaging_GIFConsts_sProgressRendering 64362
-#define Vcl_Imaging_GIFConsts_sProgressCopying 64363
-#define Vcl_Imaging_GIFConsts_sProgressOptimizing 64364
-#define Data_DBXCommonResStrs_SBadVariantType 64365
-#define Data_DBXCommonResStrs_SAlreadyRegistered 64366
-#define Data_DBXCommonResStrs_SNotRegistered 64367
-#define Vcl_Imaging_GIFConsts_sDecodeTooFewBits 64368
-#define Vcl_Imaging_GIFConsts_sDecodeCircular 64369
-#define Vcl_Imaging_GIFConsts_sBadTrailer 64370
-#define Vcl_Imaging_GIFConsts_sBadExtensionInstance 64371
-#define Vcl_Imaging_GIFConsts_sBadBlockSize 64372
-#define Vcl_Imaging_GIFConsts_sBadBlock 64373
-#define Vcl_Imaging_GIFConsts_sUnsupportedClass 64374
-#define Vcl_Imaging_GIFConsts_sInvalidData 64375
-#define Vcl_Imaging_GIFConsts_sBadSize 64376
-#define Vcl_Imaging_GIFConsts_sScreenSizeExceeded 64377
-#define Vcl_Imaging_GIFConsts_sNoColorTable 64378
-#define Vcl_Imaging_GIFConsts_sBadPixelCoordinates 64379
-#define Vcl_Imaging_GIFConsts_sInvalidPixelFormat 64380
-#define Vcl_Imaging_GIFConsts_sBadDimension 64381
-#define Vcl_Imaging_GIFConsts_sNoDIB 64382
-#define Vcl_Imaging_GIFConsts_sInvalidStream 64383
-#define uDWDataset_SBookmarkDNotFound 64384
-#define uDWDataset_SUnsupportedTypeField 64385
-#define uDWDataset_SInitFieldsDefsNoType 64386
-#define uDWDataset_SInitFieldsDefsNoName 64387
-#define uDWDataset_SLengthOutOfBounds 64388
-#define Vcl_Imaging_GIFConsts_sOutOfData 64389
-#define Vcl_Imaging_GIFConsts_sTooManyColors 64390
-#define Vcl_Imaging_GIFConsts_sBadColorIndex 64391
-#define Vcl_Imaging_GIFConsts_sBadColorIndexFixed 64392
-#define Vcl_Imaging_GIFConsts_sGIFErrorSaveEmpty 64393
-#define Vcl_Imaging_GIFConsts_sBadSignature 64394
-#define Vcl_Imaging_GIFConsts_sScreenBadColorSize 64395
-#define Vcl_Imaging_GIFConsts_sImageBadColorSize 64396
-#define Vcl_Imaging_GIFConsts_sUnknownExtension 64397
-#define Vcl_Imaging_GIFConsts_sBadExtensionLabel 64398
-#define Vcl_Imaging_GIFConsts_sOutOfMemDIB 64399
+#define System_JSONConsts_SJSONPathEndedOpenString 64208
+#define System_JSONConsts_SJSONPathInvalidArrayIndex 64209
+#define System_JSONConsts_SJSONPathUnexpectedIndexedChar 64210
+#define System_JSONConsts_SJSONPathDotsEmptyName 64211
+#define System_JSONConsts_SUnexpectedTokenDateConstructorExpEnd 64224
+#define System_JSONConsts_SUnexpectedTokenDateConstructorExpInt 64225
+#define System_JSONConsts_SUnexpectedTokenDouble 64226
+#define System_JSONConsts_SUnexpectedTokenInteger 64227
+#define System_JSONConsts_SUnexpectedTokenReadBytes 64228
+#define System_JSONConsts_SUnexpectedTokenString 64229
+#define System_JSONConsts_SUnexpectedTypeOnEnd 64230
+#define System_JSONConsts_SUnexpectedUnicodeCharEnd 64231
+#define System_JSONConsts_SUnexpectedUnquotedPropertyEnd 64232
+#define System_JSONConsts_SUnknowContainerType 64233
+#define System_JSONConsts_SUnsupportedType 64234
+#define System_JSONConsts_SUnterminatedString 64235
+#define System_JSONConsts_SWhitespaceOnly 64236
+#define System_JSONConsts_SUnexpectedExtJSONToken 64237
+#define System_JSONConsts_SJSONPathUnexpectedRootChar 64238
+#define System_JSONConsts_SJSONPathEndedOpenBracket 64239
+#define System_JSONConsts_SParseErrorUndefined 64240
+#define System_JSONConsts_SReaderAdditionalText 64241
+#define System_JSONConsts_SReaderMaxDepthExceeded 64242
+#define System_JSONConsts_STokenInStateInvalid 64243
+#define System_JSONConsts_SUnexpecteCharAfterValue 64244
+#define System_JSONConsts_SUnexpectedBytesEnd 64245
+#define System_JSONConsts_SUnexpectedCharConstructor 64246
+#define System_JSONConsts_SUnexpectedCharNumber 64247
+#define System_JSONConsts_SUnexpectedCharValue 64248
+#define System_JSONConsts_SUnexpectedCommentEnd 64249
+#define System_JSONConsts_SUnexpectedConstructorEnd 64250
+#define System_JSONConsts_SUnexpectedEnd 64251
+#define System_JSONConsts_SUnexpectedEndConstructorDate 64252
+#define System_JSONConsts_SUnexpectedJsonContent 64253
+#define System_JSONConsts_SUnexpectedState 64254
+#define System_JSONConsts_SUnexpectedTokenDate 64255
+#define System_JSONConsts_SInvalidCloseToken 64256
+#define System_JSONConsts_SInvalidJavascriptProperty 64257
+#define System_JSONConsts_SInvalidJavascriptQuote 64258
+#define System_JSONConsts_SInvalidJsonToken 64259
+#define System_JSONConsts_SInvalidObjectId 64260
+#define System_JSONConsts_SInvalidPropertyCharacter 64261
+#define System_JSONConsts_SInvalidState 64262
+#define System_JSONConsts_SInvalidTokenForContainer 64263
+#define System_JSONConsts_SNoTokenForType 64264
+#define System_JSONConsts_SNoTokenToClose 64265
+#define System_JSONConsts_SParseErrorBoolean 64266
+#define System_JSONConsts_SParseErrorComment 64267
+#define System_JSONConsts_SParseErrorNan 64268
+#define System_JSONConsts_SParseErrorNegativeInfinity 64269
+#define System_JSONConsts_SParseErrorNull 64270
+#define System_JSONConsts_SParseErrorPositiveInfinity 64271
+#define System_JSONConsts_SUTF8Start 64272
+#define System_JSONConsts_SUTF8UnexpectedByte 64273
+#define System_JSONConsts_SUTF8InvalidHeaderByte 64274
+#define System_JSONConsts_SValueNotFound 64275
+#define System_JSONConsts_SCannotConvertJSONValueToType 64276
+#define System_JSONConsts_SBadEscapeSequence 64277
+#define System_JSONConsts_SErrorConvertStringToDatetime 64278
+#define System_JSONConsts_SErrorConvertStringToDouble 64279
+#define System_JSONConsts_SErrorConvertStringToInteger 64280
+#define System_JSONConsts_SFormatMessageLinePos 64281
+#define System_JSONConsts_SFormatMessagePath 64282
+#define System_JSONConsts_SIdentationGreaterThanZero 64283
+#define System_JSONConsts_SInputInvalidDouble 64284
+#define System_JSONConsts_SInputInvalidInteger 64285
+#define System_JSONConsts_SInputInvalidNumber 64286
+#define System_JSONConsts_SInvalidCharacterAfterProperty 64287
+#define Data_DBXCommonResStrs_SDBXErrInvalidReference 64288
+#define Data_DBXCommonResStrs_SDBXErrNoTable 64289
+#define Data_DBXCommonResStrs_SDBXErrMissingParameterMarker 64290
+#define Data_DBXCommonResStrs_SDBXErrNotImplemented 64291
+#define Data_DBXCommonResStrs_SDBXErrDriverIncompatible 64292
+#define Data_DBXCommonResStrs_SDBXErrInvalidArgument 64293
+#define Data_DBXCommonResStrs_SDBXErrNoData 64294
+#define Data_DBXCommonResStrs_SDBXErrVendorError 64295
+#define Data_DBXCommonResStrs_SDBXErrUnrecognizedCommandType 64296
+#define Data_DBXCommonResStrs_SDBXErrSchemaNameUnspecified 64297
+#define Data_DBXCommonResStrs_SDBXErrDatabaseUnspecified 64298
+#define Data_DBXCommonResStrs_SDBXErrLibraryNameUnspecified 64299
+#define Data_DBXCommonResStrs_SDBXErrGetDriverFuncUnspecified 64300
+#define Data_DBXCommonResStrs_SDBXErrVendorLibUnspecified 64301
+#define Data_DBXCommonResStrs_sReaderNotSupported 64302
+#define Data_DBXCommonResStrs_sWriterNotSupported 64303
+#define Data_DBXCommonResStrs_SDBXErrInvalidOrdinal 64304
+#define Data_DBXCommonResStrs_SDBXErrInvalidParameter 64305
+#define Data_DBXCommonResStrs_SDBXErrEOF 64306
+#define Data_DBXCommonResStrs_SDBXErrParameterNotSet 64307
+#define Data_DBXCommonResStrs_SDBXErrInvalidUserOrPassword 64308
+#define Data_DBXCommonResStrs_SDBXErrInvalidPrecision 64309
+#define Data_DBXCommonResStrs_SDBXErrInvalidLength 64310
+#define Data_DBXCommonResStrs_SDBXErrInvalidIsolationLevel 64311
+#define Data_DBXCommonResStrs_SDBXErrInvalidTransactionId 64312
+#define Data_DBXCommonResStrs_SDBXErrDuplicateTransactionId 64313
+#define Data_DBXCommonResStrs_SDBXErrDriverRestricted 64314
+#define Data_DBXCommonResStrs_SDBXErrTransactionActive 64315
+#define Data_DBXCommonResStrs_SDBXErrMultipleTransactionNotEnabled 64316
+#define Data_DBXCommonResStrs_SDBXErrConnectionFailed 64317
+#define Data_DBXCommonResStrs_SDBXErrDriverInitFailed 64318
+#define Data_DBXCommonResStrs_SDBXErrOptimisticLockFailed 64319
+#define Data_DBXCommonResStrs_SInvalidTypeAccess 64320
+#define Data_DBXCommonResStrs_SConnectionClosed 64321
+#define Data_DBXCommonResStrs_SMetaDataLoadError 64322
+#define Data_DBXCommonResStrs_SJSONByteStream 64323
+#define Data_DBXCommonResStrs_SNoStatementToExecute 64324
+#define Data_DBXCommonResStrs_SUnexpectedDataType 64325
+#define Data_DBXCommonResStrs_SDriverAlreadyRegistered 64326
+#define Data_DBXCommonResStrs_SNotDefinedIn 64327
+#define Data_DBXCommonResStrs_SDBXErrNone 64328
+#define Data_DBXCommonResStrs_SDBXErrWarning 64329
+#define Data_DBXCommonResStrs_SDBXErrNoMemory 64330
+#define Data_DBXCommonResStrs_SDBXErrUnsupportedFieldType 64331
+#define Data_DBXCommonResStrs_SDBXErrInvalidHandle 64332
+#define Data_DBXCommonResStrs_SDBXErrNotSupported 64333
+#define Data_DBXCommonResStrs_SDBXErrInvalidTime 64334
+#define Data_DBXCommonResStrs_SDBXErrInvalidType 64335
+#define Data_DBXCommonResStrs_SCannotFreeClassRegistry 64336
+#define Data_DBXCommonResStrs_SUnknownDriver 64337
+#define Data_DBXCommonResStrs_SInvalidArgument 64338
+#define Data_DBXCommonResStrs_SInvalidTransaction 64339
+#define Data_DBXCommonResStrs_SNotImplemented 64340
+#define Data_DBXCommonResStrs_SRequiredProperty 64341
+#define Data_DBXCommonResStrs_SReaderNew 64342
+#define Data_DBXCommonResStrs_SReaderClosed 64343
+#define Data_DBXCommonResStrs_SReadOnlyType 64344
+#define Data_DBXCommonResStrs_SSetSingletonOnce 64345
+#define Data_DBXCommonResStrs_SConnectionFactoryInitFailed 64346
+#define Data_DBXCommonResStrs_SInvalidDelegationDepth 64347
+#define Data_DBXCommonResStrs_SInvalidOrdinal 64348
+#define Data_DBXCommonResStrs_SDefaultErrorMessage 64349
+#define Data_DBXCommonResStrs_SErrorCode 64350
+#define Data_DBXCommonResStrs_SAlreadyPrepared 64351
+#define Vcl_Imaging_GIFConsts_sInvalidBitSize 64352
+#define Vcl_Imaging_GIFConsts_sEmptyColorMap 64353
+#define Vcl_Imaging_GIFConsts_sEmptyImage 64354
+#define Vcl_Imaging_GIFConsts_sMultipleGCE 64355
+#define Vcl_Imaging_GIFConsts_sNoPalette 64356
+#define Vcl_Imaging_GIFConsts_sGIFImageFile 64357
+#define Vcl_Imaging_GIFConsts_sProgressLoading 64358
+#define Vcl_Imaging_GIFConsts_sProgressSaving 64359
+#define Vcl_Imaging_GIFConsts_sProgressConverting 64360
+#define Vcl_Imaging_GIFConsts_sProgressRendering 64361
+#define Vcl_Imaging_GIFConsts_sProgressCopying 64362
+#define Vcl_Imaging_GIFConsts_sProgressOptimizing 64363
+#define Data_DBXCommonResStrs_SBadVariantType 64364
+#define Data_DBXCommonResStrs_SAlreadyRegistered 64365
+#define Data_DBXCommonResStrs_SNotRegistered 64366
+#define Data_DBXCommonResStrs_SInvalidClassRegister 64367
+#define Vcl_Imaging_GIFConsts_sDecodeCircular 64368
+#define Vcl_Imaging_GIFConsts_sBadTrailer 64369
+#define Vcl_Imaging_GIFConsts_sBadExtensionInstance 64370
+#define Vcl_Imaging_GIFConsts_sBadBlockSize 64371
+#define Vcl_Imaging_GIFConsts_sBadBlock 64372
+#define Vcl_Imaging_GIFConsts_sUnsupportedClass 64373
+#define Vcl_Imaging_GIFConsts_sInvalidData 64374
+#define Vcl_Imaging_GIFConsts_sBadSize 64375
+#define Vcl_Imaging_GIFConsts_sScreenSizeExceeded 64376
+#define Vcl_Imaging_GIFConsts_sNoColorTable 64377
+#define Vcl_Imaging_GIFConsts_sBadPixelCoordinates 64378
+#define Vcl_Imaging_GIFConsts_sInvalidPixelFormat 64379
+#define Vcl_Imaging_GIFConsts_sBadDimension 64380
+#define Vcl_Imaging_GIFConsts_sNoDIB 64381
+#define Vcl_Imaging_GIFConsts_sInvalidStream 64382
+#define Vcl_Imaging_GIFConsts_sInvalidColor 64383
+#define uDWDataset_SUnsupportedTypeField 64384
+#define uDWDataset_SInitFieldsDefsNoType 64385
+#define uDWDataset_SInitFieldsDefsNoName 64386
+#define uDWDataset_SLengthOutOfBounds 64387
+#define Vcl_Imaging_GIFConsts_sOutOfData 64388
+#define Vcl_Imaging_GIFConsts_sTooManyColors 64389
+#define Vcl_Imaging_GIFConsts_sBadColorIndex 64390
+#define Vcl_Imaging_GIFConsts_sBadColorIndexFixed 64391
+#define Vcl_Imaging_GIFConsts_sGIFErrorSaveEmpty 64392
+#define Vcl_Imaging_GIFConsts_sBadSignature 64393
+#define Vcl_Imaging_GIFConsts_sScreenBadColorSize 64394
+#define Vcl_Imaging_GIFConsts_sImageBadColorSize 64395
+#define Vcl_Imaging_GIFConsts_sUnknownExtension 64396
+#define Vcl_Imaging_GIFConsts_sBadExtensionLabel 64397
+#define Vcl_Imaging_GIFConsts_sOutOfMemDIB 64398
+#define Vcl_Imaging_GIFConsts_sDecodeTooFewBits 64399
 #define Datasnap_MidConst_SNoCircularConnection 64400
 #define Datasnap_MidConst_SClassNotAvailable 64401
 #define Datasnap_MidConst_SOutOfMemory 64402
@@ -200,11 +199,11 @@
 #define uDWDataset_SDuplicateFieldName 64408
 #define uDWDataset_SInvalidColor 64409
 #define uDWDataset_SIllegalFileVersion 64410
-#define uDWDataset_SCorruptedFileHeader 64411
-#define uDWDataset_SCorruptedDefinitions 64412
-#define uDWDataset_SWarnNextDefinitions 64413
-#define uDWDataset_SInvalidRecord 64414
-#define uDWDataset_SNotSupported 64415
+#define uDWDataset_SCorruptedDefinitions 64411
+#define uDWDataset_SWarnNextDefinitions 64412
+#define uDWDataset_SInvalidRecord 64413
+#define uDWDataset_SNotSupported 64414
+#define uDWDataset_SBookmarkDNotFound 64415
 #define Datasnap_MidConst_SMissingDataSet 64416
 #define Datasnap_MidConst_SConstraintFailed 64417
 #define Datasnap_MidConst_SField 64418
@@ -1327,12 +1326,10 @@
 #define System_SysConst_SAccessDenied 65535
 STRINGTABLE
 BEGIN
-	System_JSONConsts_SJSONPathEndedOpenBracket,	L"Path ended with an open bracket"
 	System_JSONConsts_SJSONPathEndedOpenString,	L"Path ended with an open string"
 	System_JSONConsts_SJSONPathInvalidArrayIndex,	L"Invalid index for array: %s"
 	System_JSONConsts_SJSONPathUnexpectedIndexedChar,	L"Unexpected character while parsing indexer: %s"
 	System_JSONConsts_SJSONPathDotsEmptyName,	L"Empty name not allowed in dot notation, use ['']"
-	System_JSONConsts_SUnexpectedTokenDate,	L"Error reading date. Unexpected token: %s"
 	System_JSONConsts_SUnexpectedTokenDateConstructorExpEnd,	L"Unexpected token when reading date constructor. Expected EndConstructor, got %s"
 	System_JSONConsts_SUnexpectedTokenDateConstructorExpInt,	L"Unexpected token when reading date constructor. Expected Integer, got %s"
 	System_JSONConsts_SUnexpectedTokenDouble,	L"Error reading double. Unexpected token: %s"
@@ -1348,7 +1345,7 @@ BEGIN
 	System_JSONConsts_SWhitespaceOnly,	L"Only white space characters should be used."
 	System_JSONConsts_SUnexpectedExtJSONToken,	L"Unexpected token when reading Extended JSON value %s. Expected token: %s"
 	System_JSONConsts_SJSONPathUnexpectedRootChar,	L"Unexpected char for root element: ."
-	System_JSONConsts_SParseErrorPositiveInfinity,	L"Cannot read -Infinity value"
+	System_JSONConsts_SJSONPathEndedOpenBracket,	L"Path ended with an open bracket"
 	System_JSONConsts_SParseErrorUndefined,	L"Error parsing undefined value"
 	System_JSONConsts_SReaderAdditionalText,	L"Additional text encountered after finished reading JSON content: %s."
 	System_JSONConsts_SReaderMaxDepthExceeded,	L"The reader's MaxDepth of %s has been exceeded."
@@ -1364,7 +1361,7 @@ BEGIN
 	System_JSONConsts_SUnexpectedEndConstructorDate,	L"Unexpected end when reading date constructor"
 	System_JSONConsts_SUnexpectedJsonContent,	L"Unexpected content while parsing JSON"
 	System_JSONConsts_SUnexpectedState,	L"Unexpected state: %s"
-	System_JSONConsts_SInvalidCharacterAfterProperty,	L"Invalid character after parsing property name. Expected ':' but got: %s"
+	System_JSONConsts_SUnexpectedTokenDate,	L"Error reading date. Unexpected token: %s"
 	System_JSONConsts_SInvalidCloseToken,	L"Not a valid close JsonToken: %s"
 	System_JSONConsts_SInvalidJavascriptProperty,	L"Invalid JavaScript property identifier character: %s."
 	System_JSONConsts_SInvalidJavascriptQuote,	L"Invalid JavaScript string quote character. Valid quote characters are ' and \""
@@ -1380,7 +1377,7 @@ BEGIN
 	System_JSONConsts_SParseErrorNan,	L"Cannot read NaN value."
 	System_JSONConsts_SParseErrorNegativeInfinity,	L"Cannot read Infinity value"
 	System_JSONConsts_SParseErrorNull,	L"Error parsing null value."
-	Data_DBXCommonResStrs_sWriterNotSupported,	L"Writer not available"
+	System_JSONConsts_SParseErrorPositiveInfinity,	L"Cannot read -Infinity value"
 	System_JSONConsts_SUTF8Start,	L"UTF8: A start byte not followed by enough continuation bytes in position %s"
 	System_JSONConsts_SUTF8UnexpectedByte,	L"UTF8: An unexpected continuation byte in %s-byte UTF8 in position %s"
 	System_JSONConsts_SUTF8InvalidHeaderByte,	L"UTF8: Type cannot be determined out of header byte at position %s"
@@ -1396,7 +1393,7 @@ BEGIN
 	System_JSONConsts_SInputInvalidDouble,	L"Input string %s is not a valid double"
 	System_JSONConsts_SInputInvalidInteger,	L"Input string %s is not a valid integer"
 	System_JSONConsts_SInputInvalidNumber,	L"Input string %s is not a valid number"
-	Data_DBXCommonResStrs_SDBXErrOptimisticLockFailed,	L"Optimistic lock failed"
+	System_JSONConsts_SInvalidCharacterAfterProperty,	L"Invalid character after parsing property name. Expected ':' but got: %s"
 	Data_DBXCommonResStrs_SDBXErrInvalidReference,	L"Invalid reference"
 	Data_DBXCommonResStrs_SDBXErrNoTable,	L"No table"
 	Data_DBXCommonResStrs_SDBXErrMissingParameterMarker,	L"Missing parameter marker"
@@ -1412,7 +1409,7 @@ BEGIN
 	Data_DBXCommonResStrs_SDBXErrGetDriverFuncUnspecified,	L"GetDriverFunc must be specified."
 	Data_DBXCommonResStrs_SDBXErrVendorLibUnspecified,	L"VendorLib must be specified"
 	Data_DBXCommonResStrs_sReaderNotSupported,	L"Reader not available"
-	Data_DBXCommonResStrs_SDBXErrInvalidType,	L"Invalid type"
+	Data_DBXCommonResStrs_sWriterNotSupported,	L"Writer not available"
 	Data_DBXCommonResStrs_SDBXErrInvalidOrdinal,	L"Invalid ordinal"
 	Data_DBXCommonResStrs_SDBXErrInvalidParameter,	L"Invalid parameter"
 	Data_DBXCommonResStrs_SDBXErrEOF,	L"No more rows"
@@ -1428,7 +1425,7 @@ BEGIN
 	Data_DBXCommonResStrs_SDBXErrMultipleTransactionNotEnabled,	L"Multiple transaction not enabled"
 	Data_DBXCommonResStrs_SDBXErrConnectionFailed,	L"Connection failed"
 	Data_DBXCommonResStrs_SDBXErrDriverInitFailed,	L"Driver could not be properly initialized.  Client library may be missing, not installed properly, of the wrong version, or the driver may be missing from the system path."
-	Data_DBXCommonResStrs_SAlreadyPrepared,	L"Command can only be prepared once"
+	Data_DBXCommonResStrs_SDBXErrOptimisticLockFailed,	L"Optimistic lock failed"
 	Data_DBXCommonResStrs_SInvalidTypeAccess,	L"%s value type cannot be accessed as %s value type"
 	Data_DBXCommonResStrs_SConnectionClosed,	L"Operation failed.  Connection was closed"
 	Data_DBXCommonResStrs_SMetaDataLoadError,	L"Could not find metadata: %s; package: %s. Add %s to your uses."
@@ -1444,7 +1441,7 @@ BEGIN
 	Data_DBXCommonResStrs_SDBXErrInvalidHandle,	L"Unexpected internal error. DBX Object such as a connection, command, or reader may already be closed."
 	Data_DBXCommonResStrs_SDBXErrNotSupported,	L"Not supported"
 	Data_DBXCommonResStrs_SDBXErrInvalidTime,	L"Invalid time"
-	Data_DBXCommonResStrs_SInvalidClassRegister,	L"%s class registered with a nil class reference"
+	Data_DBXCommonResStrs_SDBXErrInvalidType,	L"Invalid type"
 	Data_DBXCommonResStrs_SCannotFreeClassRegistry,	L"Cannot free TClassRegistry.ClassRegistry"
 	Data_DBXCommonResStrs_SUnknownDriver,	L"Unknown driver:  %s"
 	Data_DBXCommonResStrs_SInvalidArgument,	L"Invalid argument:  %s"
@@ -1460,7 +1457,7 @@ BEGIN
 	Data_DBXCommonResStrs_SInvalidOrdinal,	L"Invalid Ordinal:  %d"
 	Data_DBXCommonResStrs_SDefaultErrorMessage,	L"DBX Error:  %s"
 	Data_DBXCommonResStrs_SErrorCode,	L"Error Code:  "
-	Vcl_Imaging_GIFConsts_sInvalidColor,	L"Color not in color table"
+	Data_DBXCommonResStrs_SAlreadyPrepared,	L"Command can only be prepared once"
 	Vcl_Imaging_GIFConsts_sInvalidBitSize,	L"Invalid Bits Per Pixel value"
 	Vcl_Imaging_GIFConsts_sEmptyColorMap,	L"Color table is empty"
 	Vcl_Imaging_GIFConsts_sEmptyImage,	L"Image is empty"
@@ -1476,7 +1473,7 @@ BEGIN
 	Data_DBXCommonResStrs_SBadVariantType,	L"Unsupported variant type: %s"
 	Data_DBXCommonResStrs_SAlreadyRegistered,	L"%s class already registered"
 	Data_DBXCommonResStrs_SNotRegistered,	L"%s class is not registered"
-	Vcl_Imaging_GIFConsts_sDecodeTooFewBits,	L"Decoder bit buffer under-run"
+	Data_DBXCommonResStrs_SInvalidClassRegister,	L"%s class registered with a nil class reference"
 	Vcl_Imaging_GIFConsts_sDecodeCircular,	L"Circular decoder table entry"
 	Vcl_Imaging_GIFConsts_sBadTrailer,	L"Invalid Image trailer"
 	Vcl_Imaging_GIFConsts_sBadExtensionInstance,	L"Internal error: Extension Instance does not match Extension Label"
@@ -1492,7 +1489,7 @@ BEGIN
 	Vcl_Imaging_GIFConsts_sBadDimension,	L"Invalid image dimensions"
 	Vcl_Imaging_GIFConsts_sNoDIB,	L"Image has no DIB"
 	Vcl_Imaging_GIFConsts_sInvalidStream,	L"Invalid stream operation"
-	uDWDataset_SBookmarkDNotFound,	L"Bookmark %d not found"
+	Vcl_Imaging_GIFConsts_sInvalidColor,	L"Color not in color table"
 	uDWDataset_SUnsupportedTypeField,	L"%s: unsupported type of field %s"
 	uDWDataset_SInitFieldsDefsNoType,	L"InitFieldsDefs: No type for field %d"
 	uDWDataset_SInitFieldsDefsNoName,	L"InitFieldsDefs: No name for field %d"
@@ -1508,6 +1505,7 @@ BEGIN
 	Vcl_Imaging_GIFConsts_sUnknownExtension,	L"Unknown extension type"
 	Vcl_Imaging_GIFConsts_sBadExtensionLabel,	L"Invalid extension introducer"
 	Vcl_Imaging_GIFConsts_sOutOfMemDIB,	L"Failed to allocate memory for GIF DIB"
+	Vcl_Imaging_GIFConsts_sDecodeTooFewBits,	L"Decoder bit buffer under-run"
 	Datasnap_MidConst_SNoCircularConnection,	L"Circular reference to Connection not allowed"
 	Datasnap_MidConst_SClassNotAvailable,	L"Class not available"
 	Datasnap_MidConst_SOutOfMemory,	L"Out of memory"
@@ -1519,11 +1517,11 @@ BEGIN
 	uDWDataset_SDuplicateFieldName,	L"A field named '%s' already exists"
 	uDWDataset_SInvalidColor,	L"'%s' is not a valid color value"
 	uDWDataset_SIllegalFileVersion,	L"Illegal File Version"
-	uDWDataset_SCorruptedFileHeader,	L"Corrupted File Header"
 	uDWDataset_SCorruptedDefinitions,	L"Corrupted Table Definitions, or Illegal Login"
 	uDWDataset_SWarnNextDefinitions,	L"Warning! Next table definitions."
 	uDWDataset_SInvalidRecord,	L"GetRecord: Invalid record"
 	uDWDataset_SNotSupported,	L"AddRecord: not supported"
+	uDWDataset_SBookmarkDNotFound,	L"Bookmark %d not found"
 	Datasnap_MidConst_SMissingDataSet,	L"Missing DataSet property"
 	Datasnap_MidConst_SConstraintFailed,	L"Record or field constraint failed."
 	Datasnap_MidConst_SField,	L"Field"
@@ -2646,10 +2644,10 @@ BEGIN
 	System_SysConst_SAccessDenied,	L"File access denied"
 END
 
-/* k:\delphi tokyo\embarcadero\studio\19.0\lib\Win32\release\Controls.res */
+/* k:\delphi\embarcadero\studio\19.0\lib\Win32\release\Controls.res */
 /* D:\RESTDATAWARE 2019\CORE\Source\DmDados\uDWDatamodule.dfm */
 /* D:\RESTDATAWARE 2019\CORE\Source\uAboutForm.dfm */
-/* k:\delphi tokyo\embarcadero\studio\19.0\lib\Win32\release\Buttons.res */
+/* k:\delphi\embarcadero\studio\19.0\lib\Win32\release\Buttons.res */
 /* D:\Servidor RestDataWare\ServerDW\UDataModuloServidorRest.dfm */
 /* D:\Servidor RestDataWare\ServerDW\UServidorRest.dfm */
 /* D:\Servidor RestDataWare\ServerDW\ServidorDW.res */
