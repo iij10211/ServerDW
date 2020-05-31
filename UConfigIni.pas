@@ -58,7 +58,6 @@ begin
       if (FDriverID <> 'FB') then
         FDriverID := 'FB';
       arquivoIni.WriteString('config', 'Driver',  FDriverID);
-
       arquivoIni.WriteString('config', 'Caminho', Trim(FCaminhoBD));
       arquivoIni.WriteString('config', 'User',    FUsuarioBD);
       arquivoIni.WriteString('config', 'Key',     FPasswordBD);

@@ -77,7 +77,7 @@ var
 implementation
 
 uses
-  UServidorRest,UCliente,UCCategoria,UConfig,UPedidos;
+  UServidorRest,UCCategoria,UConfig,UPedidos,Usuario,Complementos;
 
 {%CLASSGROUP 'Vcl.Controls.TControl'}
 {$R *.dfm}
@@ -199,7 +199,7 @@ procedure TDataModuleServidorRestFull.DWServerEvents1Eventscategoria_restaurante
   var StatusCode: Integer; RequestHeader: TStringList);
   var
   Vjsonobjeto : TJSONObject;
-  cliente : TCliente;
+//  cliente : TCliente;
   categoria   : TCategoria;
   VjsonValue: uDWJSONObject.TJSONValue;
 begin
@@ -238,7 +238,7 @@ procedure TDataModuleServidorRestFull.DWServerEvents1EventsclienteReplyEventByTy
   var StatusCode: Integer; RequestHeader: TStringList);
   var
   Vjsonobjeto : TJSONObject;
-  cliente : TCliente;
+//  cliente : TCliente;
 begin
    case RequestType of
     rtGet:
@@ -251,26 +251,26 @@ begin
       begin
         try
           try
-            cliente := TCliente.Create;
+//            cliente := TCliente.Create;
             Vjsonobjeto := TJSONObject.ParseJSONValue(Params.ItemsString['UNDEFINED'].AsString) as TJSONObject;
             if (Vjsonobjeto.GetValue<string>('tag') = 'NOVO') then
             begin
-              cliente.NOME              := Vjsonobjeto.GetValue<string>('NOMECLIENTE');
-              cliente.tipopessoa        := Vjsonobjeto.GetValue<string>('TIPOPESSOA');
-              cliente.telefone          := Vjsonobjeto.GetValue<string>('TELEFONE');
-              cliente.cpf               := Vjsonobjeto.GetValue<string>('CPF');
-              cliente.cnpj              := Vjsonobjeto.GetValue<string>('CNPJ');
-              cliente.email             := Vjsonobjeto.GetValue<string>('EMAIL');
-              cliente.datanascimento    := Vjsonobjeto.GetValue<string>('DTNASCIMENTO');
-              cliente.CARGO_IDCARGO     := 1;
-              cliente.Novo;
+//              cliente.NOME              := Vjsonobjeto.GetValue<string>('NOMECLIENTE');
+//              cliente.tipopessoa        := Vjsonobjeto.GetValue<string>('TIPOPESSOA');
+//              cliente.telefone          := Vjsonobjeto.GetValue<string>('TELEFONE');
+//              cliente.cpf               := Vjsonobjeto.GetValue<string>('CPF');
+//              cliente.cnpj              := Vjsonobjeto.GetValue<string>('CNPJ');
+//              cliente.email             := Vjsonobjeto.GetValue<string>('EMAIL');
+//              cliente.datanascimento    := Vjsonobjeto.GetValue<string>('DTNASCIMENTO');
+//              cliente.CARGO_IDCARGO     := 1;
+//              cliente.Novo;
               Result := '[{"Resposta":"Gravado Com Sucess"}]';
             end;
           except on E: Exception do
             raise Exception.Create('Erro ao Inserir Dados' + E.Message);
           end;
         finally
-          cliente.Free;
+//          cliente.Free;
         end;
       end;
     end;
@@ -341,7 +341,7 @@ begin
           VQuery.SQL.Add('LEFT JOIN CATEGORIA ON complementos.complementos_idcategoria = CATEGORIA.idcategoria');
           VQuery.SQL.Add('WHERE COMPLEMENTOS.complementos_idcategoria =:ID ');
           VQuery.ParamByName('ID').AsString := Params.ItemsString['idcomplementos'].AsString;
-           VQuery.Open();
+          VQuery.Open();
           if VQuery.RecordCount > 0 then
           begin
             VjsonValue.LoadFromDataset('', VQuery, VjsonValue.Encoded,Params.JsonMode);
@@ -361,6 +361,7 @@ procedure TDataModuleServidorRestFull.DWServerEvents1Eventsitens_pedidosReplyEve
  var
   Vjsonobjeto : TJSONObject;
   pedido : TVenda;
+  complementos : TComplementos;
 begin
   case RequestType of
     rtGet:
@@ -371,15 +372,23 @@ begin
     begin
       if Params.ItemsString['UNDEFINED'] <> nil then
       begin
+
         pedido := TVenda.Create( qrGeral );
+        complementos := TComplementos.Create(qrGeral);
 
         Vjsonobjeto := TJSONObject.ParseJSONValue( Params.ItemsString['UNDEFINED'].AsString ) as TJSONObject;
         try
           try
+
+            complementos.ITENS_IDCOMPLEMENTOS := Vjsonobjeto.GetValue<Integer>('ITENS_VENDA_IDCOMPLEMENTO');
+            complementos.Gravar_ItensComplementos;
+
             pedido.FIDPRODUTO  :=  Vjsonobjeto.GetValue<Integer>('IDPRODUTO');
             pedido.FQUANTIDADE :=  Vjsonobjeto.GetValue<Integer>('QUANTIDADE_PRODUTO');
             pedido.FITENS_MESA :=  Vjsonobjeto.GetValue<Integer>('IDMESA');
-            pedido.ITENS_VENDA_IDCOMPLEMENTO := Vjsonobjeto.GetValue<Integer>('ITENS_VENDA_IDCOMPLEMENTO');
+            pedido.ITENS_VENDA_IDCOMPLEMENTO :=
+
+
             pedido.ItensVenda;
             pedido.Movimentacoes;
             Result := '[{"Resposta":" Pedido Gravado Com Sucess"}]';
@@ -478,7 +487,10 @@ var
 VjsonValue: uDWJSONObject.TJSONValue;
 user , password : String;
 resultado : string;
+usuario : TUsuario;
+
 begin
+
   user := '';
   password := '';
   resultado := '';
@@ -486,37 +498,21 @@ begin
   if ((Params.ItemsString['user'].AsString) <> '') and ((Params.ItemsString['password'].AsString) <> '') then
   begin
 
-    user :=  Params.ItemsString['user'].AsString;
+    user     :=  Params.ItemsString['user'].AsString;
     password := Params.ItemsString['password'].AsString;
-
     VjsonValue := uDWJSONObject.TJSONValue.Create;
+    usuario := TUsuario.Create(VQuery);
+
+
     try
-      VQuery.Close;
-      VQuery.SQL.Clear;
-      VQuery.SQL.Add('SELECT * FROM USUARIO');
-      VQuery.SQL.Add('WHERE IDUSUARIO IS NOT NULL');
-      if (user <> '') and (password <> '') then
-      begin
-        VQuery.SQL.Add('AND usuario.nomeusuario =:user And usuario.senhausuario =:password');
-        VQuery.ParamByName('user').AsString := user;
-        VQuery.ParamByName('password').AsString := password;
-      end;
-      VQuery.Open();
-      if VQuery.RecordCount > 0 then
-      begin
-        VjsonValue.LoadFromDataset('', VQuery, VjsonValue.Encoded,Params.JsonMode);
-        Result := VjsonValue.ToJSON;
-      end
-      else
-      begin
-        Result := '[{"Resposta":"No Sucess"}]';
-      end;
+      usuario.usuario := user;
+      usuario.senha   := password;
+      usuario.Login;
+
+      VjsonValue.LoadFromDataset('', usuario.GetResultado, VjsonValue.Encoded,Params.JsonMode);
+      Result := VjsonValue.ToJSON;
     finally
-      if VQuery.Active then
-      begin
-        VQuery.Close;
-        VjsonValue.Free;
-      end;
+      usuario.Free;
     end;
   end
   else

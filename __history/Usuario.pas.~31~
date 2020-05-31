@@ -1,0 +1,99 @@
+unit Usuario;
+
+interface
+uses FireDAC.Comp.Client,System.SysUtils,System.JSON,uDWJSONObject, uDWJSONTools;
+type
+  TUsuario = class
+
+    private
+
+      FQry : TFDQuery;
+      Femail: String;
+      Fsenha: String;
+      Fusuario: String;
+      Fidusuario: String;
+
+      procedure Setemail(const Value: String);
+      procedure Setsenha(const Value: String);
+      procedure Setusuario(const Value: String);
+      procedure Setidusuario(const Value: String);
+
+    public
+      constructor Create(aQry : TFDQuery);
+
+      function GetResultado : TFDQuery;
+
+      property usuario : String read Fusuario write Setusuario;
+      property senha   : String read Fsenha write Setsenha;
+      property email   : String read Femail write Setemail;
+      property idusuario : String read Fidusuario write Setidusuario;
+
+      procedure Login;
+      procedure Cadastro;
+
+  end;
+
+implementation
+
+{ TUsuario }
+
+procedure TUsuario.Cadastro;
+begin
+  //
+end;
+
+constructor TUsuario.Create(aQry: TFDQuery);
+begin
+  FQry := aQry;
+end;
+
+function TUsuario.GetResultado: String;
+begin
+  Result := FQry.ToString;
+end;
+
+procedure TUsuario.Login;
+begin
+
+  FQry.Close;
+  FQry.SQL.Clear;
+  FQry.SQL.Add('SELECT * FROM USUARIO');
+  FQry.SQL.Add('WHERE IDUSUARIO IS NOT NULL');
+
+  if(Fusuario <> '') AND (Fsenha <> '') then
+  begin
+    FQry.SQL.Add('AND NOMEUSUARIO =:NOME AND SENHAUSUARIO =:SENHA');
+    FQry.ParamByName('NOME').AsString  := Fusuario;
+    FQry.ParamByName('SENHA').AsString := Fsenha;
+  end;
+
+  FQry.Open();
+
+  if(FQry.RecordCount > 0 )then
+  begin
+    idusuario := FQry.FieldByName('IDUSUARIO').AsString;
+    //raise Exception.Create(' Usuario encontrado ');
+  end;
+end;
+
+procedure TUsuario.Setemail(const Value: String);
+begin
+  Femail := Value;
+end;
+
+procedure TUsuario.Setidusuario(const Value: String);
+begin
+  Fidusuario := Value;
+end;
+
+procedure TUsuario.Setsenha(const Value: String);
+begin
+  Fsenha := Value;
+end;
+
+procedure TUsuario.Setusuario(const Value: String);
+begin
+  Fusuario := Value;
+end;
+
+end.
