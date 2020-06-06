@@ -212,8 +212,8 @@ begin
       begin
         VQuery.Close;
         VQuery.SQL.Clear;
-        VQuery.SQL.Add('SELECT IDCATEGORIA,NOMECATEGORIA FROM CATEGORIA');
-        VQuery.SQL.Add('WHERE CATEGORIA.categoria_tipo_comanda  = :id');
+        VQuery.SQL.Add('SELECT IDGRUPO,GRUPO_DESCRICAO FROM GRUPO');
+        VQuery.SQL.Add('WHERE GRUPO.GRUPO_TIPO_COMANDA  = :id');
         VQuery.ParamByName('id').AsString := Params.ItemsString['idcategoria_restaurant'].AsString;
         VQuery.Open();
         if VQuery.RecordCount > 0 then
@@ -303,8 +303,8 @@ begin
         VQuery.Close;
         VQuery.SQL.Clear;
         VQuery.SQL.Add('SELECT PRODUTO.* FROM PRODUTO');
-        VQuery.SQL.Add('LEFT JOIN CATEGORIA ON PRODUTO.categoria_idcategoria = categoria.idcategoria');
-        VQuery.SQL.Add('WHERE PRODUTO.categoria_idcategoria = :id');
+        VQuery.SQL.Add('LEFT JOIN GRUPO ON PRODUTO.PRODUTO_IDGRUPO = GRUPO.IDGRUPO');
+        VQuery.SQL.Add('WHERE PRODUTO.PRODUTO_IDGRUPO = :id');
         VQuery.ParamByName('id').AsString := Params.ItemsString['comanda_produtoid'].AsString;
         VQuery.Open();
         if VQuery.RecordCount > 0 then
@@ -337,9 +337,9 @@ begin
         begin
           VQuery.Close;
           VQuery.SQL.Clear;
-          VQuery.SQL.Add('SELECT COMPLEMENTOS.* FROM COMPLEMENTOS');
-          VQuery.SQL.Add('LEFT JOIN CATEGORIA ON complementos.complementos_idcategoria = CATEGORIA.idcategoria');
-          VQuery.SQL.Add('WHERE COMPLEMENTOS.complementos_idcategoria =:ID ');
+          VQuery.SQL.Add('SELECT * FROM COMPLEMENTO');
+          VQuery.SQL.Add('LEFT JOIN GRUPO ON COMPLEMENTO.complemento_idgrupo = GRUPO.idgrupo');
+          VQuery.SQL.Add('where COMPLEMENTO.complemento_idgrupo =:ID ');
           VQuery.ParamByName('ID').AsString := Params.ItemsString['idcomplementos'].AsString;
           VQuery.Open();
           if VQuery.RecordCount > 0 then
@@ -380,17 +380,14 @@ begin
         try
           try
 
-            complementos.ITENS_IDCOMPLEMENTOS := Vjsonobjeto.GetValue<Integer>('ITENS_VENDA_IDCOMPLEMENTO');
-            complementos.Gravar_ItensComplementos;
-
+          //  complementos.ITENS_IDCOMPLEMENTOS := Vjsonobjeto.GetValue<Integer>('ITENS_VENDA_IDCOMPLEMENTO');
+//            complementos.Gravar_ItensComplementos;
             pedido.FIDPRODUTO  :=  Vjsonobjeto.GetValue<Integer>('IDPRODUTO');
             pedido.FQUANTIDADE :=  Vjsonobjeto.GetValue<Integer>('QUANTIDADE_PRODUTO');
             pedido.FITENS_MESA :=  Vjsonobjeto.GetValue<Integer>('IDMESA');
-            pedido.ITENS_VENDA_IDCOMPLEMENTO :=
-
-
+//            pedido.ITENS_VENDA_IDCOMPLEMENTO :=
             pedido.ItensVenda;
-            pedido.Movimentacoes;
+          //  pedido.Movimentacoes;
             Result := '[{"Resposta":" Pedido Gravado Com Sucess"}]';
 
           except on E: Exception do
@@ -419,7 +416,7 @@ begin
        VjsonValue := uDWJSONObject.TJSONValue.Create;
        VQuery.Close;
        VQuery.SQL.Clear;
-       VQuery.SQL.Add('SELECT * FROM MESA');
+       VQuery.SQL.Add('SELECT * FROM MESAS');
        VQuery.Open();
         if VQuery.RecordCount > 0 then
         begin
@@ -456,8 +453,8 @@ begin
 
             pedido.VALORVENDA :=  Vjsonobjeto.GetValue<Double>('VENDAS_VALOR_VENDA');
             pedido.DATAVENDA  := StrToDateTime(FormatDateTime('dd/mm/yyyy', Now));
-            pedido.DESCRICAOVENDA := Vjsonobjeto.GetValue<String>('DESCRICAOVENDA');
-            pedido.FORMAPAGAMENTO := ' DINHEIRO ';
+            pedido.DESCRICAOVENDA := Vjsonobjeto.GetValue<String>('VENDAS_DESCRICAO_VENDA');
+            pedido.FORMAPAGAMENTO := '1';
             pedido.Venda;
             Result := '[{"Resposta":" Pedido Gravado Com Sucess"}]';
 

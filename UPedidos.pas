@@ -91,7 +91,7 @@ begin
 
     FQry.Close;
     FQry.SQL.Clear;
-    FQry.SQL.Add('UPDATE MESA SET MESA.MESA_STATUS =:STATUS WHERE MESA.IDMESA = :IDMESA');
+    FQry.SQL.Add('UPDATE MESAS SET MESAS.MESAS_STATUS =:STATUS WHERE MESAS.IDMESAS = :IDMESA');
     FQry.ParamByName('IDMESA').AsInteger := FITENS_MESA;
     FQry.ParamByName('STATUS').AsInteger := 1;
     FQry.ExecSQL;
@@ -197,13 +197,13 @@ begin
     FQry.SQL.Clear;
 
     FQry.SQL.Add('INSERT INTO VENDAS');
-    FQry.SQL.Add('( VENDAS_VALOR_VENDA , DATAVENDA , DESCRICAOVENDA , VENDAFORMAPAGAMENTO)');
-    FQry.SQL.Add('VALUES( :VENDAS_VALOR_VENDA , :DATAVENDA , :DESCRICAOVENDA , :VENDAFORMAPAGAMENTO)');
+    FQry.SQL.Add('( VENDAS_VALOR_VENDA , VENDAS_DTVENDAS , VENDAS_DESCRICAO_VENDA , VENDAS_IDFORMA_PAGAMENTO)');
+    FQry.SQL.Add('VALUES( :VENDAS_VALOR_VENDA , :VENDAS_DTVENDAS , :VENDAS_DESCRICAO_VENDA , :VENDAS_IDFORMA_PAGAMENTO)');
 
     FQry.ParamByName('VENDAS_VALOR_VENDA').AsFloat := FVALORVENDA;
-    FQry.ParamByName('DATAVENDA').AsDateTime := StrToDateTime(FormatDateTime('dd/mm/yyyy', Now));
-    FQry.ParamByName('DESCRICAOVENDA').AsString := FDESCRICAOVENDA;
-    FQry.ParamByName('VENDAFORMAPAGAMENTO').AsString:= FdFORMAPAGAMENTO;
+    FQry.ParamByName('VENDAS_DTVENDAS').AsDateTime := StrToDateTime(FormatDateTime('dd/mm/yyyy', Now));
+    FQry.ParamByName('VENDAS_DESCRICAO_VENDA').AsString := FDESCRICAOVENDA;
+    FQry.ParamByName('VENDAS_IDFORMA_PAGAMENTO').AsString:= FdFORMAPAGAMENTO;
     FQry.ExecSQL;
  except on E: Exception do
     raise Exception.Create(' Error no Cadastro de Vendas! ');

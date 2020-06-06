@@ -8,7 +8,7 @@ object DataModuleServidorRestFull: TDataModuleServidorRestFull
   object FDGUIxWaitCursor1: TFDGUIxWaitCursor
     Provider = 'Forms'
     Left = 360
-    Top = 24
+    Top = 16
   end
   object FDPhysFBDriverLink1: TFDPhysFBDriverLink
     Left = 168

@@ -21,6 +21,8 @@ type
     public
       constructor Create(aQry : TFDQuery);
 
+      function GetResultado   : TFDQuery;
+
       property usuario : String read Fusuario write Setusuario;
       property senha   : String read Fsenha write Setsenha;
       property email   : String read Femail write Setemail;
@@ -28,10 +30,6 @@ type
 
       procedure Login;
       procedure Cadastro;
-
-      function GetResultado : String;
-
-
 
   end;
 
@@ -49,7 +47,7 @@ begin
   FQry := aQry;
 end;
 
-function TUsuario.GetResultado: String;
+function TUsuario.GetResultado: TFDQuery;
 begin
   Result := FQry;
 end;
@@ -71,11 +69,6 @@ begin
 
   FQry.Open();
 
-  if(FQry.RecordCount > 0 )then
-  begin
-    idusuario := FQry.FieldByName('IDUSUARIO').AsString;
-    //raise Exception.Create(' Usuario encontrado ');
-  end;
 end;
 
 procedure TUsuario.Setemail(const Value: String);

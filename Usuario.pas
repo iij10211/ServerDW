@@ -62,7 +62,7 @@ begin
 
   if(Fusuario <> '') AND (Fsenha <> '') then
   begin
-    FQry.SQL.Add('AND NOMEUSUARIO =:NOME AND SENHAUSUARIO =:SENHA');
+    FQry.SQL.Add('AND USUARIO_NOME =:NOME AND USUARIO_SENHA =:SENHA');
     FQry.ParamByName('NOME').AsString  := Fusuario;
     FQry.ParamByName('SENHA').AsString := Fsenha;
   end;

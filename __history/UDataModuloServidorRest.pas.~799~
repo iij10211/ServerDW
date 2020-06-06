@@ -77,7 +77,7 @@ var
 implementation
 
 uses
-  UServidorRest,UCCategoria,UConfig,UPedidos,Usuario;
+  UServidorRest,UCCategoria,UConfig,UPedidos,Usuario,Complementos;
 
 {%CLASSGROUP 'Vcl.Controls.TControl'}
 {$R *.dfm}
@@ -361,6 +361,7 @@ procedure TDataModuleServidorRestFull.DWServerEvents1Eventsitens_pedidosReplyEve
  var
   Vjsonobjeto : TJSONObject;
   pedido : TVenda;
+  complementos : TComplementos;
 begin
   case RequestType of
     rtGet:
@@ -371,15 +372,20 @@ begin
     begin
       if Params.ItemsString['UNDEFINED'] <> nil then
       begin
+
         pedido := TVenda.Create( qrGeral );
+        complementos := TComplementos.Create(qrGeral);
 
         Vjsonobjeto := TJSONObject.ParseJSONValue( Params.ItemsString['UNDEFINED'].AsString ) as TJSONObject;
         try
           try
+
+            complementos.ITENS_IDCOMPLEMENTOS := Vjsonobjeto.GetValue<Integer>('ITENS_VENDA_IDCOMPLEMENTO');
+            complementos.Gravar_ItensComplementos;
             pedido.FIDPRODUTO  :=  Vjsonobjeto.GetValue<Integer>('IDPRODUTO');
             pedido.FQUANTIDADE :=  Vjsonobjeto.GetValue<Integer>('QUANTIDADE_PRODUTO');
             pedido.FITENS_MESA :=  Vjsonobjeto.GetValue<Integer>('IDMESA');
-            pedido.ITENS_VENDA_IDCOMPLEMENTO := Vjsonobjeto.GetValue<Integer>('ITENS_VENDA_IDCOMPLEMENTO');
+//            pedido.ITENS_VENDA_IDCOMPLEMENTO :=
             pedido.ItensVenda;
             pedido.Movimentacoes;
             Result := '[{"Resposta":" Pedido Gravado Com Sucess"}]';
@@ -479,7 +485,9 @@ VjsonValue: uDWJSONObject.TJSONValue;
 user , password : String;
 resultado : string;
 usuario : TUsuario;
+
 begin
+
   user := '';
   password := '';
   resultado := '';
@@ -489,13 +497,15 @@ begin
 
     user     :=  Params.ItemsString['user'].AsString;
     password := Params.ItemsString['password'].AsString;
-
     VjsonValue := uDWJSONObject.TJSONValue.Create;
     usuario := TUsuario.Create(VQuery);
+
+
     try
       usuario.usuario := user;
       usuario.senha   := password;
       usuario.Login;
+
       VjsonValue.LoadFromDataset('', usuario.GetResultado, VjsonValue.Encoded,Params.JsonMode);
       Result := VjsonValue.ToJSON;
     finally

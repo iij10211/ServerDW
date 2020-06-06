@@ -70,6 +70,7 @@ end;
 procedure TVenda.ItensVenda;
 begin
   try
+
     FQry.Close;
     FQry.SQL.Clear;
     FQry.SQL.Add('select gen_id(gen_vendas_id, 0) from rdb$database');
@@ -79,13 +80,13 @@ begin
     FQry.Close;
     FQry.SQL.Clear;
     FQry.SQL.Add('INSERT INTO ITENS_VENDA');
-    FQry.SQL.Add('( VENDAS_IDVENDAS , ITENS_IDPRODUTO , ITENS_VENDA_QUANTIDADE , ITENS_VENDA_IDMESA )');
-    FQry.SQL.Add('VALUES( :VENDAS_IDVENDAS , :ITENS_IDPRODUTO , :ITENS_VENDA_QUANTIDADE , :ITENS_VENDA_IDMESA )'); //ITENS_VENDA_IDCOMPLEMENTO
+    FQry.SQL.Add('( VENDAS_IDVENDAS , ITENS_IDPRODUTO , ITENS_VENDA_QUANTIDADE , ITENS_VENDA_IDMESA  )');
+    FQry.SQL.Add('VALUES( :VENDAS_IDVENDAS , :ITENS_IDPRODUTO , :ITENS_VENDA_QUANTIDADE , :ITENS_VENDA_IDMESA  )'); //ITENS_VENDA_IDCOMPLEMENTO
+
     FQry.ParamByName('VENDAS_IDVENDAS').AsInteger := FIDVENDA;
     FQry.ParamByName('ITENS_IDPRODUTO').AsInteger := FFIDPRODUTO;
     FQry.ParamByName('ITENS_VENDA_QUANTIDADE').AsInteger := FQUANTIDADE;
     FQry.ParamByName('ITENS_VENDA_IDMESA').AsInteger := FITENS_MESA;
-//    FQry.ParamByName('ITENS_VENDA_IDCOMPLEMENTO').AsInteger := FFITENS_VENDA_IDCOMPLEMENTO;
     FQry.ExecSQL;
 
     FQry.Close;
@@ -101,6 +102,7 @@ begin
     FQry.ParamByName('QUANT').AsInteger := FQUANTIDADE;
     FQry.ParamByName('IDPRO').AsInteger := FFIDPRODUTO;
     FQry.ExecSQL;
+
   except
     on E: Exception do
       raise Exception.Create(' Error no Cadastro de Itens Vendas! ');
