@@ -167,6 +167,48 @@ object DataModuleServidorRestFull: TDataModuleServidorRestFull
         JsonMode = jmPureJSON
         Name = 'complementos'
         OnReplyEventByType = DWServerEvents1EventscomplementosReplyEventByType
+      end
+      item
+        Routes = [crAll]
+        DWParams = <>
+        JsonMode = jmPureJSON
+        Name = 'vendas'
+        OnReplyEventByType = DWServerEvents1EventsvendasReplyEventByType
+      end
+      item
+        Routes = [crAll]
+        DWParams = <
+          item
+            TypeObject = toParam
+            ObjectDirection = odINOUT
+            ObjectValue = ovString
+            ParamName = 'idmesas'
+            Encoded = True
+          end
+          item
+            TypeObject = toParam
+            ObjectDirection = odINOUT
+            ObjectValue = ovString
+            ParamName = 'status_mesa'
+            Encoded = True
+          end>
+        JsonMode = jmPureJSON
+        Name = 'itens_mesa'
+        OnReplyEventByType = DWServerEvents1Eventsitens_mesaReplyEventByType
+      end
+      item
+        Routes = [crAll]
+        DWParams = <
+          item
+            TypeObject = toParam
+            ObjectDirection = odINOUT
+            ObjectValue = ovString
+            ParamName = 'idmesas'
+            Encoded = True
+          end>
+        JsonMode = jmPureJSON
+        Name = 'itens_mesa_complemento'
+        OnReplyEventByType = DWServerEvents1Eventsitens_mesa_complementoReplyEventByType
       end>
     Left = 168
     Top = 152

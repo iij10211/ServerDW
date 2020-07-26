@@ -62,6 +62,17 @@ type
       var Params: TDWParams; var Result: string;
       const RequestType: TRequestType; var StatusCode: Integer;
       RequestHeader: TStringList);
+    procedure DWServerEvents1EventsvendasReplyEventByType(var Params: TDWParams;
+      var Result: string; const RequestType: TRequestType;
+      var StatusCode: Integer; RequestHeader: TStringList);
+    procedure DWServerEvents1Eventsitens_mesaReplyEventByType(
+      var Params: TDWParams; var Result: string;
+      const RequestType: TRequestType; var StatusCode: Integer;
+      RequestHeader: TStringList);
+    procedure DWServerEvents1Eventsitens_mesa_complementoReplyEventByType(
+      var Params: TDWParams; var Result: string;
+      const RequestType: TRequestType; var StatusCode: Integer;
+      RequestHeader: TStringList);
 
   private
     FConfigIni: TConfigIni;
@@ -326,7 +337,7 @@ procedure TDataModuleServidorRestFull.DWServerEvents1EventscomplementosReplyEven
   var
   Vjsonobjeto : TJSONObject;
   VjsonValue: uDWJSONObject.TJSONValue;
-
+  complemento : TComplementos;
 begin
   case RequestType of
     rtGet:
@@ -352,7 +363,95 @@ begin
         raise Exception.Create(' Não foi Possivel Localizar ' + E.Message);
       end;
     end;
+    rtPost:
+    begin
+      if (Params.ItemsString['UNDEFINED'] <> nil) then
+      begin
+        complemento := TComplementos.Create(qrGeral);
+        Vjsonobjeto := TJSONObject.ParseJSONValue( Params.ItemsString['UNDEFINED'].AsString ) as TJSONObject;
+        complemento.ITENS_IDCOMPLEMENTOS := Vjsonobjeto.GetValue<Integer>('ITENS_IDCOMPLEMENTO');
+        complemento.ITENS_IDPEDIDOS := Vjsonobjeto.GetValue<Integer>('ITENS_IDPEDIDOS');
+        complemento.Gravar_ItensComplementos;
+        Result := '[{"Resposta":" Pedido Gravado Com Sucess"}]';
+      end;
+    end;
   end;
+end;
+
+procedure TDataModuleServidorRestFull.DWServerEvents1Eventsitens_mesaReplyEventByType(
+  var Params: TDWParams; var Result: string; const RequestType: TRequestType;
+  var StatusCode: Integer; RequestHeader: TStringList);
+  var
+  Vjsonobjeto : TJSONObject;
+  VjsonValue: uDWJSONObject.TJSONValue;
+begin
+   case RequestType of
+    rtGet:
+    begin
+      VjsonValue := uDWJSONObject.TJSONValue.Create;
+      try
+        if (Params.ItemsString['idmesas'].AsString <> '') then
+        begin
+          VQuery.Close;
+          VQuery.SQL.Clear;
+          VQuery.SQL.Add('SELECT iditens_venda,descricao_produto,itens_venda_quantidade,precovenda_produto,VENDAS_VALOR_VENDA FROM itens_venda');
+          VQuery.SQL.Add('LEFT join produto ON idproduto = itens_idproduto');
+          VQuery.SQL.Add('LEFT JOIN pedidos ON idpedidos = itens_idpedido');
+          VQuery.SQL.Add('LEFT join vendas  on vendas_idvendas = idvendas');
+          VQuery.SQL.Add('WHERE itens_venda_idmesa =:ID');
+          VQuery.SQL.Add('AND pedidos_status =:status');
+          VQuery.ParamByName('ID').AsString := Params.ItemsString['idmesas'].AsString;
+          VQuery.ParamByName('status').AsString := 'ABERTO';
+          VQuery.Open();
+          if(VQuery.RecordCount > 0) then
+          begin
+            VjsonValue.LoadFromDataset('', VQuery, VjsonValue.Encoded,Params.JsonMode);
+            Result := VjsonValue.ToJSON;
+          end;
+        end;
+      except on E: Exception do
+        raise Exception.Create(' Não foi Possivel Localizar Mesa! ' + E.Message);
+      end;
+    end;
+   end;
+end;
+
+procedure TDataModuleServidorRestFull.DWServerEvents1Eventsitens_mesa_complementoReplyEventByType(
+  var Params: TDWParams; var Result: string; const RequestType: TRequestType;
+  var StatusCode: Integer; RequestHeader: TStringList);
+  var
+  Vjsonobjeto : TJSONObject;
+  VjsonValue: uDWJSONObject.TJSONValue;
+begin
+   case RequestType of
+    rtGet:
+    begin
+      VjsonValue := uDWJSONObject.TJSONValue.Create;
+      try
+        if (Params.ItemsString['idmesas'].AsString <> '') then
+        begin
+          VQuery.Close;
+          VQuery.SQL.Clear;
+          VQuery.SQL.Add('SELECT DISTINCT iditens_complemento,itens_idpedidos,itens_idcomplemento,complemento_descricao,complemento_valor FROM itens_complemento');
+          VQuery.SQL.Add('INNER JOIN complemento ON idcomplemento = itens_idcomplemento');
+          VQuery.SQL.Add('INNER JOIN pedidos ON itens_idpedidos = idpedidos');
+          VQuery.SQL.Add('INNER JOIN ITENS_VENDA on itens_idpedido = itens_idpedidos');
+          VQuery.SQL.Add('WHERE pedidos_idmesa =:ID');
+          VQuery.SQL.Add('AND pedidos_status =:status');
+          VQuery.ParamByName('ID').AsString := Params.ItemsString['idmesas'].AsString;
+          VQuery.ParamByName('status').AsString := 'ABERTO';
+          VQuery.Open();
+          if(VQuery.RecordCount > 0) then
+          begin
+            VjsonValue.LoadFromDataset('', VQuery, VjsonValue.Encoded,Params.JsonMode);
+            Result := VjsonValue.ToJSON;
+          end;
+        end;
+      except on E: Exception do
+        raise Exception.Create(' Não foi Possivel Localizar Complemento! ' + E.Message);
+      end;
+    end;
+   end;
 end;
 
 procedure TDataModuleServidorRestFull.DWServerEvents1Eventsitens_pedidosReplyEventByType(
@@ -380,14 +479,12 @@ begin
         try
           try
 
-          //  complementos.ITENS_IDCOMPLEMENTOS := Vjsonobjeto.GetValue<Integer>('ITENS_VENDA_IDCOMPLEMENTO');
-//            complementos.Gravar_ItensComplementos;
-            pedido.FIDPRODUTO  :=  Vjsonobjeto.GetValue<Integer>('IDPRODUTO');
-            pedido.FQUANTIDADE :=  Vjsonobjeto.GetValue<Integer>('QUANTIDADE_PRODUTO');
-            pedido.FITENS_MESA :=  Vjsonobjeto.GetValue<Integer>('IDMESA');
-//            pedido.ITENS_VENDA_IDCOMPLEMENTO :=
+            pedido.FIDPRODUTO     :=  Vjsonobjeto.GetValue<Integer>('IDPRODUTO');
+            pedido.FQUANTIDADE    :=  Vjsonobjeto.GetValue<Integer>('QUANTIDADE_PRODUTO');
+            pedido.FITENS_MESA    :=  Vjsonobjeto.GetValue<Integer>('IDMESA');
+            pedido.FITENS_IDGRUPO :=  Vjsonobjeto.GetValue<Integer>('ITENS_IDGRUPO');
+            pedido.IDPEDIDO       :=  Vjsonobjeto.GetValue<Integer>('ITENS_IDPEDIDO');
             pedido.ItensVenda;
-          //  pedido.Movimentacoes;
             Result := '[{"Resposta":" Pedido Gravado Com Sucess"}]';
 
           except on E: Exception do
@@ -434,29 +531,34 @@ procedure TDataModuleServidorRestFull.DWServerEvents1EventspedidosReplyEventByTy
   var Params: TDWParams; var Result: string; const RequestType: TRequestType;
   var StatusCode: Integer; RequestHeader: TStringList);
   var
+  VjsonValue: uDWJSONObject.TJSONValue;
   Vjsonobjeto : TJSONObject;
   pedido : TVenda;
 begin
+   pedido := TVenda.Create(qrGeral);
+   VjsonValue := uDWJSONObject.TJSONValue.Create;
   case RequestType of
     rtGet:
     begin
-
+      qrGeral.Close;
+      qrGeral.SQL.Clear;
+      qrGeral.SQL.Add('SELECT MAX(PEDIDOS.idpedidos) FROM PEDIDOS');       //MAX(PEDIDOS.idpedidos)
+      qrGeral.Active := True;
+      VjsonValue.LoadFromDataset('', qrGeral, VjsonValue.Encoded,Params.JsonMode);
+      Result := VjsonValue.ToJSON;
     end;
     rtPost:
     begin
       if Params.ItemsString['UNDEFINED'] <> nil then
       begin
-        pedido := TVenda.Create(qrGeral);
         Vjsonobjeto := TJSONObject.ParseJSONValue(Params.ItemsString['UNDEFINED'].AsString) as TJSONObject;
         try
           try
 
-            pedido.VALORVENDA :=  Vjsonobjeto.GetValue<Double>('VENDAS_VALOR_VENDA');
-            pedido.DATAVENDA  := StrToDateTime(FormatDateTime('dd/mm/yyyy', Now));
-            pedido.DESCRICAOVENDA := Vjsonobjeto.GetValue<String>('VENDAS_DESCRICAO_VENDA');
-            pedido.FORMAPAGAMENTO := '1';
-            pedido.Venda;
-            Result := '[{"Resposta":" Pedido Gravado Com Sucess"}]';
+            pedido.PEDIDOSTATUS   := Vjsonobjeto.GetValue<String>('PEDIDOS_STATUS');
+            pedido.PEDIDOPESSOAS  := Vjsonobjeto.GetValue<Integer>('PEDIDOS_PESSOAS');
+            pedido.PEDIDOS_IDMESA := Vjsonobjeto.GetValue<Integer>('PEDIDOS_IDMESA');
+            pedido.PedidosMesa;
 
           except on E: Exception do
             raise Exception.Create(' Erro ao Inserir os Dados! ' + E.Message);
@@ -514,6 +616,37 @@ begin
   end
   else
     Result := '{"reply":"Usuario Não Encontrado!:"}';
+end;
+
+procedure TDataModuleServidorRestFull.DWServerEvents1EventsvendasReplyEventByType(
+  var Params: TDWParams; var Result: string; const RequestType: TRequestType;
+  var StatusCode: Integer; RequestHeader: TStringList);
+  var
+  VjsonValue: uDWJSONObject.TJSONValue;
+  Vjsonobjeto : TJSONObject;
+  pedido : TVenda;
+begin
+   pedido := TVenda.Create(qrGeral);
+   VjsonValue := uDWJSONObject.TJSONValue.Create;
+   case RequestType of
+     rtPost:
+     begin
+      if Params.ItemsString['UNDEFINED'] <> nil then
+      begin
+        Vjsonobjeto := TJSONObject.ParseJSONValue(Params.ItemsString['UNDEFINED'].AsString) as TJSONObject;
+        try
+          pedido.VALORVENDA :=  Vjsonobjeto.GetValue<Double>('VENDAS_VALOR_VENDA');
+          pedido.DATAVENDA  := StrToDateTime(FormatDateTime('dd/mm/yyyy', Now));
+          pedido.DESCRICAOVENDA := Vjsonobjeto.GetValue<String>('VENDAS_DESCRICAO_VENDA');
+          pedido.FORMAPAGAMENTO := '1';
+          pedido.Venda;
+          Result := '[{"Resposta":" Pedido Gravado Com Sucess"}]';
+        finally
+          pedido.Free;
+        end;
+      end;
+     end;
+   end;
 end;
 
 procedure TDataModuleServidorRestFull.ServerMethodDataModuleCreate
