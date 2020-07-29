@@ -144,6 +144,10 @@ begin
         VjsonValue.LoadFromDataset('', VQuery, VjsonValue.Encoded,Params.JsonMode);
         Result := VjsonValue.ToJSON;
       end
+      else
+      begin
+        Result := '[{"Resposta":"Não Há Categorias"}]';
+      end;
       except on E: Exception do
         raise Exception.Create(' Não foi Possivel Localizar ' + E.Message);
       end;
@@ -232,6 +236,10 @@ begin
           VjsonValue.LoadFromDataset('', VQuery, VjsonValue.Encoded,Params.JsonMode);
           Result := VjsonValue.ToJSON;
         end
+        else
+        begin
+          Result := '[{"Resposta":"Não Há Categoria"}]';
+        end;
       end;
       except on E: Exception do
         raise Exception.Create(' Não foi Possivel Localizar ' + E.Message);
@@ -323,6 +331,10 @@ begin
           VjsonValue.LoadFromDataset('', VQuery, VjsonValue.Encoded,Params.JsonMode);
           Result := VjsonValue.ToJSON;
         end
+        else
+        begin
+          Result := '[{"Resposta":"Não Há Produtos"}]';
+        end;
       end;
       except on E: Exception do
         raise Exception.Create(' Não foi Possivel Localizar ' + E.Message);
@@ -357,6 +369,10 @@ begin
           begin
             VjsonValue.LoadFromDataset('', VQuery, VjsonValue.Encoded,Params.JsonMode);
             Result := VjsonValue.ToJSON;
+          end
+          else
+          begin
+            Result := '[{"Resposta":"Não Há Complementos"}]';
           end;
         end;
       except on E: Exception do
@@ -407,6 +423,10 @@ begin
           begin
             VjsonValue.LoadFromDataset('', VQuery, VjsonValue.Encoded,Params.JsonMode);
             Result := VjsonValue.ToJSON;
+          end
+          else
+          begin
+            Result := '[{"Resposta":"Não Há ItensMesa"}]';
           end;
         end;
       except on E: Exception do
@@ -445,6 +465,10 @@ begin
           begin
             VjsonValue.LoadFromDataset('', VQuery, VjsonValue.Encoded,Params.JsonMode);
             Result := VjsonValue.ToJSON;
+          end
+          else
+          begin
+            Result := '[{"Resposta":"Não Há ItensMesaComplemento"}]';
           end;
         end;
       except on E: Exception do
@@ -520,6 +544,10 @@ begin
           VjsonValue.LoadFromDataset('', VQuery, VjsonValue.Encoded,Params.JsonMode);
           Result := VjsonValue.ToJSON;
         end
+        else
+        begin
+          Result := '[{"Resposta":"Não Há Mesas"}]';
+        end;
        except on E: Exception do
         raise Exception.Create(' Não foi Possivel Localizar! ' + E.Message);
       end;

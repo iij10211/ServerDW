@@ -232,6 +232,10 @@ begin
           VjsonValue.LoadFromDataset('', VQuery, VjsonValue.Encoded,Params.JsonMode);
           Result := VjsonValue.ToJSON;
         end
+        else
+        begin
+          Result := '[{"Resposta":"Não Há Categoria"}]';
+        end;
       end;
       except on E: Exception do
         raise Exception.Create(' Não foi Possivel Localizar ' + E.Message);
@@ -323,6 +327,10 @@ begin
           VjsonValue.LoadFromDataset('', VQuery, VjsonValue.Encoded,Params.JsonMode);
           Result := VjsonValue.ToJSON;
         end
+        else
+        begin
+          Result := '[{"Resposta":"Não Há Produtos"}]';
+        end;
       end;
       except on E: Exception do
         raise Exception.Create(' Não foi Possivel Localizar ' + E.Message);
@@ -357,6 +365,10 @@ begin
           begin
             VjsonValue.LoadFromDataset('', VQuery, VjsonValue.Encoded,Params.JsonMode);
             Result := VjsonValue.ToJSON;
+          end
+          else
+          begin
+            Result := '[{"Resposta":"Não Há Complementos"}]';
           end;
         end;
       except on E: Exception do
@@ -394,13 +406,10 @@ begin
         begin
           VQuery.Close;
           VQuery.SQL.Clear;
-          VQuery.SQL.Add('SELECT descricao_produto,itens_venda_quantidade,precovenda_produto,complemento_descricao FROM itens_venda');
-          VQuery.SQL.Add('inner join produto ON idproduto = itens_idproduto');
-          VQuery.SQL.Add('inner join vendas  on vendas_idvendas = idvendas');
-          VQuery.SQL.Add('INNER JOIN pedidos ON idpedidos = itens_idpedido');
-          VQuery.SQL.Add('inner join vendas  on vendas_idvendas = idvendas');
-          VQuery.SQL.Add('inner join itens_complemento on itens_idpedido = itens_idpedidos');
-          VQuery.SQL.Add('inner join complemento on itens_idcomplemento = idcomplemento');
+          VQuery.SQL.Add('SELECT iditens_venda,descricao_produto,itens_venda_quantidade,precovenda_produto,VENDAS_VALOR_VENDA FROM itens_venda');
+          VQuery.SQL.Add('LEFT join produto ON idproduto = itens_idproduto');
+          VQuery.SQL.Add('LEFT JOIN pedidos ON idpedidos = itens_idpedido');
+          VQuery.SQL.Add('LEFT join vendas  on vendas_idvendas = idvendas');
           VQuery.SQL.Add('WHERE itens_venda_idmesa =:ID');
           VQuery.SQL.Add('AND pedidos_status =:status');
           VQuery.ParamByName('ID').AsString := Params.ItemsString['idmesas'].AsString;
@@ -410,6 +419,10 @@ begin
           begin
             VjsonValue.LoadFromDataset('', VQuery, VjsonValue.Encoded,Params.JsonMode);
             Result := VjsonValue.ToJSON;
+          end
+          else
+          begin
+            Result := '[{"Resposta":"Não Há ItensMesa"}]';
           end;
         end;
       except on E: Exception do
@@ -435,9 +448,10 @@ begin
         begin
           VQuery.Close;
           VQuery.SQL.Clear;
-          VQuery.SQL.Add('SELECT  complemento_descricao,complemento_valor FROM itens_complemento');
+          VQuery.SQL.Add('SELECT DISTINCT iditens_complemento,itens_idpedidos,itens_idcomplemento,complemento_descricao,complemento_valor FROM itens_complemento');
           VQuery.SQL.Add('INNER JOIN complemento ON idcomplemento = itens_idcomplemento');
           VQuery.SQL.Add('INNER JOIN pedidos ON itens_idpedidos = idpedidos');
+          VQuery.SQL.Add('INNER JOIN ITENS_VENDA on itens_idpedido = itens_idpedidos');
           VQuery.SQL.Add('WHERE pedidos_idmesa =:ID');
           VQuery.SQL.Add('AND pedidos_status =:status');
           VQuery.ParamByName('ID').AsString := Params.ItemsString['idmesas'].AsString;
@@ -447,6 +461,10 @@ begin
           begin
             VjsonValue.LoadFromDataset('', VQuery, VjsonValue.Encoded,Params.JsonMode);
             Result := VjsonValue.ToJSON;
+          end
+          else
+          begin
+            Result := '[{"Resposta":"Não Há ItensMesaComplemento"}]';
           end;
         end;
       except on E: Exception do
