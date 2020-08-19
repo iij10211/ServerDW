@@ -25,6 +25,7 @@ type
     RESTDWDriverFD1: TRESTDWDriverFD;
     FDStanStorageBinLink1: TFDStanStorageBinLink;
     VQuery: TFDQuery;
+    VQueryComplemento: TFDQuery;
 
     procedure ServerMethodDataModuleCreate(Sender: TObject);
     procedure DWServerEvents1EventssomarReplyEvent(var Params: TDWParams; var Result: string);
@@ -144,6 +145,10 @@ begin
         VjsonValue.LoadFromDataset('', VQuery, VjsonValue.Encoded,Params.JsonMode);
         Result := VjsonValue.ToJSON;
       end
+      else
+      begin
+        Result := '[{"Resposta":"Não Há Categorias"}]';
+      end;
       except on E: Exception do
         raise Exception.Create(' Não foi Possivel Localizar ' + E.Message);
       end;
@@ -232,6 +237,10 @@ begin
           VjsonValue.LoadFromDataset('', VQuery, VjsonValue.Encoded,Params.JsonMode);
           Result := VjsonValue.ToJSON;
         end
+        else
+        begin
+          Result := '[{"Resposta":"Não Há Categoria"}]';
+        end;
       end;
       except on E: Exception do
         raise Exception.Create(' Não foi Possivel Localizar ' + E.Message);
@@ -323,6 +332,10 @@ begin
           VjsonValue.LoadFromDataset('', VQuery, VjsonValue.Encoded,Params.JsonMode);
           Result := VjsonValue.ToJSON;
         end
+        else
+        begin
+          Result := '[{"Resposta":"Não Há Produtos"}]';
+        end;
       end;
       except on E: Exception do
         raise Exception.Create(' Não foi Possivel Localizar ' + E.Message);
@@ -357,6 +370,10 @@ begin
           begin
             VjsonValue.LoadFromDataset('', VQuery, VjsonValue.Encoded,Params.JsonMode);
             Result := VjsonValue.ToJSON;
+          end
+          else
+          begin
+            Result := '[{"Resposta":"Não Há Complementos"}]';
           end;
         end;
       except on E: Exception do
@@ -384,6 +401,9 @@ procedure TDataModuleServidorRestFull.DWServerEvents1Eventsitens_mesaReplyEventB
   var
   Vjsonobjeto : TJSONObject;
   VjsonValue: uDWJSONObject.TJSONValue;
+  jsonresposta : String;
+  valorjsonprato : String;
+  valorjsoncomplemento : String;
 begin
    case RequestType of
     rtGet:
@@ -392,21 +412,50 @@ begin
       try
         if (Params.ItemsString['idmesas'].AsString <> '') then
         begin
+
           VQuery.Close;
           VQuery.SQL.Clear;
           VQuery.SQL.Add('SELECT iditens_venda,descricao_produto,itens_venda_quantidade,precovenda_produto,VENDAS_VALOR_VENDA FROM itens_venda');
-          VQuery.SQL.Add('LEFT join produto ON idproduto = itens_idproduto');
+          VQuery.SQL.Add('LEFT JOIN produto ON idproduto = itens_idproduto');
           VQuery.SQL.Add('LEFT JOIN pedidos ON idpedidos = itens_idpedido');
-          VQuery.SQL.Add('LEFT join vendas  on vendas_idvendas = idvendas');
+          VQuery.SQL.Add('LEFT JOIN vendas  on vendas_idvendas = idvendas');
           VQuery.SQL.Add('WHERE itens_venda_idmesa =:ID');
           VQuery.SQL.Add('AND pedidos_status =:status');
           VQuery.ParamByName('ID').AsString := Params.ItemsString['idmesas'].AsString;
           VQuery.ParamByName('status').AsString := 'ABERTO';
           VQuery.Open();
+
           if(VQuery.RecordCount > 0) then
           begin
-            VjsonValue.LoadFromDataset('', VQuery, VjsonValue.Encoded,Params.JsonMode);
-            Result := VjsonValue.ToJSON;
+            VjsonValue.LoadFromDataset('pratos', VQuery, VjsonValue.Encoded,Params.JsonMode);
+            valorjsonprato := VjsonValue.ToJSON;
+            ShowMessage(valorjsonprato);
+//            Result := VjsonValue.ToJSON;
+          end;
+
+
+          VQueryComplemento.Close;
+          VQueryComplemento.SQL.Clear;
+          VQueryComplemento.SQL.Add('SELECT DISTINCT iditens_complemento,itens_idpedidos,itens_idcomplemento,complemento_descricao,complemento_valor FROM itens_complemento');
+          VQueryComplemento.SQL.Add('INNER JOIN complemento ON idcomplemento = itens_idcomplemento');
+          VQueryComplemento.SQL.Add('INNER JOIN pedidos ON itens_idpedidos = idpedidos');
+          VQueryComplemento.SQL.Add('INNER JOIN ITENS_VENDA on itens_idpedido = itens_idpedidos');
+          VQueryComplemento.SQL.Add('WHERE pedidos_idmesa =:ID');
+          VQueryComplemento.SQL.Add('AND pedidos_status =:status');
+          VQueryComplemento.ParamByName('ID').AsString := Params.ItemsString['idmesas'].AsString;
+          VQueryComplemento.ParamByName('status').AsString := 'ABERTO';
+          VQueryComplemento.Open();
+
+          if(VQuery.RecordCount > 0) then
+          begin
+            VjsonValue.LoadFromDataset('complementos', VQueryComplemento, VjsonValue.Encoded,Params.JsonMode);
+            valorjsoncomplemento := VjsonValue.ToJSON;
+            ShowMessage(valorjsoncomplemento);
+            Result :=  ' [ ' + valorjsonprato + ' , ' + valorjsoncomplemento + ' ] ';
+          end
+          else
+          begin
+            Result := '[{"Resposta":"Não Há ItensMesa"}]';
           end;
         end;
       except on E: Exception do
@@ -432,7 +481,7 @@ begin
         begin
           VQuery.Close;
           VQuery.SQL.Clear;
-          VQuery.SQL.Add('SELECT  DISTINCT iditens_complemento,itens_idpedidos,itens_idcomplemento,complemento_descricao  FROM itens_complemento');
+          VQuery.SQL.Add('SELECT DISTINCT iditens_complemento,itens_idpedidos,itens_idcomplemento,complemento_descricao,complemento_valor FROM itens_complemento');
           VQuery.SQL.Add('INNER JOIN complemento ON idcomplemento = itens_idcomplemento');
           VQuery.SQL.Add('INNER JOIN pedidos ON itens_idpedidos = idpedidos');
           VQuery.SQL.Add('INNER JOIN ITENS_VENDA on itens_idpedido = itens_idpedidos');
@@ -445,6 +494,10 @@ begin
           begin
             VjsonValue.LoadFromDataset('', VQuery, VjsonValue.Encoded,Params.JsonMode);
             Result := VjsonValue.ToJSON;
+          end
+          else
+          begin
+            Result := '[{"Resposta":"Não Há ItensMesaComplemento"}]';
           end;
         end;
       except on E: Exception do
@@ -520,6 +573,10 @@ begin
           VjsonValue.LoadFromDataset('', VQuery, VjsonValue.Encoded,Params.JsonMode);
           Result := VjsonValue.ToJSON;
         end
+        else
+        begin
+          Result := '[{"Resposta":"Não Há Mesas"}]';
+        end;
        except on E: Exception do
         raise Exception.Create(' Não foi Possivel Localizar! ' + E.Message);
       end;

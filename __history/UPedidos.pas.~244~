@@ -76,7 +76,7 @@ type
     procedure PedidosMesa;
     procedure BuscaPedido;
 
-    function GetIdPedido : TFDQuery;
+    function GetIdPedido : Integer;
 
   end;
 
@@ -89,7 +89,7 @@ begin
   try
     FQry.Close;
     FQry.SQL.Clear;
-    FQry.SQL.Add('select gen_id(gen_pedidos_id, 0) from rdb$database');
+    FQry.SQL.Add('SELECT MAX(PEDIDOS.idpedidos) FROM PEDIDOS');       //MAX(PEDIDOS.idpedidos)
     FQry.Active := True;
     FIDPEDIDO := FQry.Fields[0].AsInteger;
   except on E: Exception do
@@ -101,9 +101,9 @@ begin
   FQry := aQry;
 end;
 
-function TVenda.GetIdPedido: String;
+function TVenda.GetIdPedido: Integer;
 begin
-  Result := FQry;
+  Result := FIDPEDIDO;
 end;
 
 procedure TVenda.ItensVenda;
@@ -119,14 +119,14 @@ begin
     FQry.Close;
     FQry.SQL.Clear;
     FQry.SQL.Add('INSERT INTO ITENS_VENDA');
-    FQry.SQL.Add('( VENDAS_IDVENDAS , ITENS_IDPRODUTO , ITENS_VENDA_QUANTIDADE , ITENS_VENDA_IDMESA , ITENS_IDPEDIDO )');
-    FQry.SQL.Add('VALUES( :VENDAS_IDVENDAS , :ITENS_IDPRODUTO , :ITENS_VENDA_QUANTIDADE , :ITENS_VENDA_IDMESA , :ITENS_IDPEDIDO  )'); //ITENS_VENDA_IDCOMPLEMENTO
+    FQry.SQL.Add('(itens_venda.vendas_idvendas, itens_venda.itens_idproduto,itens_venda.itens_venda_quantidade,itens_venda.itens_venda_idmesa,itens_venda.itens_idpedido)');
+    FQry.SQL.Add('VALUES(:vendas_idvendas, :itens_idproduto,:itens_venda_quantidade,:itens_venda_idmesa,:itens_idpedido)'); //ITENS_VENDA_IDCOMPLEMENTO
 
-    FQry.ParamByName('VENDAS_IDVENDAS').AsInteger := FIDVENDA;
-    FQry.ParamByName('ITENS_IDPRODUTO').AsInteger := FFIDPRODUTO;
-    FQry.ParamByName('ITENS_VENDA_QUANTIDADE').AsInteger := FQUANTIDADE;
-    FQry.ParamByName('ITENS_VENDA_IDMESA').AsInteger := FITENS_MESA;
-    FQry.ParamByName('ITENS_IDPEDIDO').AsInteger := FIDPEDIDO;
+    FQry.ParamByName('vendas_idvendas').AsInteger := FIDVENDA;
+    FQry.ParamByName('itens_idproduto').AsInteger := FFIDPRODUTO;
+    FQry.ParamByName('itens_venda_quantidade').AsInteger := FQUANTIDADE;
+    FQry.ParamByName('itens_venda_idmesa').AsInteger := FITENS_MESA;
+    FQry.ParamByName('itens_idpedido').AsInteger := FIDPEDIDO;
     FQry.ExecSQL;
 
     FQry.Close;
@@ -258,24 +258,16 @@ end;
 procedure TVenda.PedidosMesa;
 begin
   try
-
     FQry.Close;
     FQry.SQL.Clear;
     FQry.SQL.Add('INSERT INTO pedidos');
-    FQry.SQL.Add('(pedidos.pedidos_status , pedidos.pedidos_pessoas , PEDIDOS_IDMESA)');
-    FQry.SQL.Add('values(:pedidos_status , :pedidos_pessoas , :PEDIDOS_IDMESA)');
+    FQry.SQL.Add('(pedidos.pedidos_status , pedidos.pedidos_pessoas , PEDIDOS_IDMESA , PEDIDOS_DATA)');
+    FQry.SQL.Add('values(:pedidos_status , :pedidos_pessoas , :PEDIDOS_IDMESA , :PEDIDOS_DATA)');
     FQry.ParamByName('pedidos_status').AsString   := FPEDIDOSTATUS;
     FQry.ParamByName('pedidos_pessoas').AsInteger := FPEDIDOPESSOAS;
     FQry.ParamByName('PEDIDOS_IDMESA').AsInteger  := FPEDIDOS_IDMESA;
+    FQry.ParamByName('PEDIDOS_DATA').AsDateTime := StrToDateTime(FormatDateTime('dd/mm/yyyy', Now));
     FQry.ExecSQL;
-
-    FQry.Close;
-    FQry.SQL.Clear;
-    FQry.SQL.Add('select gen_id(gen_pedidos_id, 0) from rdb$database');
-    FQry.Active := True;
-    FQry.Fields[0].AsInteger;
-
-
   except on E: Exception do
     raise Exception.Create(' Error no Inserir os Dados na Mesa! ');
   end;

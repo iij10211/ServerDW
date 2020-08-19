@@ -109,7 +109,6 @@ end;
 procedure TVenda.ItensVenda;
 begin
   try
-
     FQry.Close;
     FQry.SQL.Clear;
     FQry.SQL.Add('select gen_id(gen_vendas_id, 0) from rdb$database');
@@ -142,7 +141,6 @@ begin
     FQry.ParamByName('QUANT').AsInteger := FQUANTIDADE;
     FQry.ParamByName('IDPRO').AsInteger := FFIDPRODUTO;
     FQry.ExecSQL;
-
   except
     on E: Exception do
       raise Exception.Create(' Error no Cadastro de Itens Vendas! ');
@@ -258,17 +256,16 @@ end;
 procedure TVenda.PedidosMesa;
 begin
   try
-
     FQry.Close;
     FQry.SQL.Clear;
     FQry.SQL.Add('INSERT INTO pedidos');
-    FQry.SQL.Add('(pedidos.pedidos_status , pedidos.pedidos_pessoas , PEDIDOS_IDMESA)');
-    FQry.SQL.Add('values(:pedidos_status , :pedidos_pessoas , :PEDIDOS_IDMESA)');
+    FQry.SQL.Add('(pedidos.pedidos_status , pedidos.pedidos_pessoas , PEDIDOS_IDMESA , PEDIDOS_DATA)');
+    FQry.SQL.Add('values(:pedidos_status , :pedidos_pessoas , :PEDIDOS_IDMESA , :PEDIDOS_DATA)');
     FQry.ParamByName('pedidos_status').AsString   := FPEDIDOSTATUS;
     FQry.ParamByName('pedidos_pessoas').AsInteger := FPEDIDOPESSOAS;
     FQry.ParamByName('PEDIDOS_IDMESA').AsInteger  := FPEDIDOS_IDMESA;
+    FQry.ParamByName('PEDIDOS_DATA').AsDateTime := StrToDateTime(FormatDateTime('dd/mm/yyyy', Now));
     FQry.ExecSQL;
-
   except on E: Exception do
     raise Exception.Create(' Error no Inserir os Dados na Mesa! ');
   end;

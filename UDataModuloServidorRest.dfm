@@ -246,4 +246,9 @@ object DataModuleServidorRestFull: TDataModuleServidorRestFull
     Left = 248
     Top = 16
   end
+  object VQueryComplemento: TFDQuery
+    Connection = FDConnection1
+    Left = 280
+    Top = 88
+  end
 end

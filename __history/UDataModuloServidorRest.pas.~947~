@@ -25,6 +25,7 @@ type
     RESTDWDriverFD1: TRESTDWDriverFD;
     FDStanStorageBinLink1: TFDStanStorageBinLink;
     VQuery: TFDQuery;
+    VQueryComplemento: TFDQuery;
 
     procedure ServerMethodDataModuleCreate(Sender: TObject);
     procedure DWServerEvents1EventssomarReplyEvent(var Params: TDWParams; var Result: string);
@@ -144,6 +145,10 @@ begin
         VjsonValue.LoadFromDataset('', VQuery, VjsonValue.Encoded,Params.JsonMode);
         Result := VjsonValue.ToJSON;
       end
+      else
+      begin
+        Result := '[{"Resposta":"Não Há Categorias"}]';
+      end;
       except on E: Exception do
         raise Exception.Create(' Não foi Possivel Localizar ' + E.Message);
       end;
@@ -232,6 +237,10 @@ begin
           VjsonValue.LoadFromDataset('', VQuery, VjsonValue.Encoded,Params.JsonMode);
           Result := VjsonValue.ToJSON;
         end
+        else
+        begin
+          Result := '[{"Resposta":"Não Há Categoria"}]';
+        end;
       end;
       except on E: Exception do
         raise Exception.Create(' Não foi Possivel Localizar ' + E.Message);
@@ -392,6 +401,9 @@ procedure TDataModuleServidorRestFull.DWServerEvents1Eventsitens_mesaReplyEventB
   var
   Vjsonobjeto : TJSONObject;
   VjsonValue: uDWJSONObject.TJSONValue;
+  jsonresposta : String;
+  valorjsonprato : String;
+  valorjsoncomplemento : String;
 begin
    case RequestType of
     rtGet:
@@ -400,21 +412,25 @@ begin
       try
         if (Params.ItemsString['idmesas'].AsString <> '') then
         begin
+
           VQuery.Close;
           VQuery.SQL.Clear;
           VQuery.SQL.Add('SELECT iditens_venda,descricao_produto,itens_venda_quantidade,precovenda_produto,VENDAS_VALOR_VENDA FROM itens_venda');
-          VQuery.SQL.Add('LEFT join produto ON idproduto = itens_idproduto');
+          VQuery.SQL.Add('LEFT JOIN produto ON idproduto = itens_idproduto');
           VQuery.SQL.Add('LEFT JOIN pedidos ON idpedidos = itens_idpedido');
-          VQuery.SQL.Add('LEFT join vendas  on vendas_idvendas = idvendas');
+          VQuery.SQL.Add('LEFT JOIN vendas  on vendas_idvendas = idvendas');
           VQuery.SQL.Add('WHERE itens_venda_idmesa =:ID');
           VQuery.SQL.Add('AND pedidos_status =:status');
           VQuery.ParamByName('ID').AsString := Params.ItemsString['idmesas'].AsString;
           VQuery.ParamByName('status').AsString := 'ABERTO';
           VQuery.Open();
+
           if(VQuery.RecordCount > 0) then
           begin
-            VjsonValue.LoadFromDataset('', VQuery, VjsonValue.Encoded,Params.JsonMode);
-            Result := VjsonValue.ToJSON;
+            VjsonValue.LoadFromDataset('pratos', VQuery, VjsonValue.Encoded,Params.JsonMode);
+            valorjsonprato := VjsonValue.ToJSON;
+            ShowMessage(valorjsonprato);
+//            Result := VjsonValue.ToJSON;
           end
           else
           begin
@@ -536,6 +552,10 @@ begin
           VjsonValue.LoadFromDataset('', VQuery, VjsonValue.Encoded,Params.JsonMode);
           Result := VjsonValue.ToJSON;
         end
+        else
+        begin
+          Result := '[{"Resposta":"Não Há Mesas"}]';
+        end;
        except on E: Exception do
         raise Exception.Create(' Não foi Possivel Localizar! ' + E.Message);
       end;
