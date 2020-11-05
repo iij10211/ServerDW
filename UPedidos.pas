@@ -1,14 +1,14 @@
 unit UPedidos;
 
 interface
-
 uses
-  Data.DB, SysUtils, Forms, Vcl.Dialogs, FireDAC.Comp.Client;
-
+  Data.DB, SysUtils, Forms, Vcl.Dialogs, FireDAC.Comp.Client,Classes;
 type
   TVenda = class
   private
-    FQry: TFDQuery;
+
+    FQry    : TFDQuery;
+    FITEMS  : TStringList;
 
     FDATAVENDA: TDateTime;
     FdFORMAPAGAMENTO: string;
@@ -19,7 +19,6 @@ type
     FFIDPRODUTO: Integer;
     FFIDVENDA: Integer;
     FFQUANTIDADE: Integer;
-    FFIDCAIXA: Integer;
     FVENDA_IDTIPOCOBRANCA: string;
     FFITENS_MESA: Integer;
     FFITENS_VENDA_IDCOMPLEMENTO: Integer;
@@ -28,31 +27,38 @@ type
     FPEDIDOPESSOAS: Integer;
     FPEDIDOS_IDMESA: Integer;
     FIDPEDIDO: Integer;
-    // itens venda
+    FIDTENS_MESA: Integer;
+    FITENS_IDPEDIDOS: Integer;
+    FITENS_IDCOMPLEMENTOS: Integer;
+    FIDITENS_COMPLEMENTOS: Integer;
+    FIDMESAS: String;
+    FIDCAIXA: Integer;
 
     procedure SetDATAVENDA(const Value: TDateTime);
     procedure SetDESCRICAOVENDA(const Value: string);
     procedure SetFIDPRODUTO(const Value: Integer);
     procedure SetFIDVENDA(const Value: Integer);
-    procedure SetFORMAPAGAMENTO(const Value: string);
-    procedure SetVALORVENDA(const Value: Double);
-    procedure SetFQUANTIDADE(const Value: Integer);
-    procedure SetFIDCAIXA(const Value: Integer);
-    procedure SetVENDA_IDTIPOCOBRANCA(const Value: string);
+    procedure SetFITENS_IDGRUPO(const Value: Integer);
     procedure SetFITENS_MESA(const Value: Integer);
     procedure SetFITENS_VENDA_IDCOMPLEMENTO(const Value: Integer);
-    procedure SetFITENS_IDGRUPO(const Value: Integer);
-
-    procedure SetPEDIDOSTATUS(const Value: string);
+    procedure SetFORMAPAGAMENTO(const Value: string);
+    procedure SetFQUANTIDADE(const Value: Integer);
+    procedure SetIDITENS_COMPLEMENTOS(const Value: Integer);
+    procedure SetIDMESAS(const Value: String);
+    procedure SetIDPEDIDO(const Value: Integer);
+    procedure SetIDTENS_MESA(const Value: Integer);
+    procedure SetITENS_IDCOMPLEMENTOS(const Value: Integer);
+    procedure SetITENS_IDPEDIDOS(const Value: Integer);
     procedure SetPEDIDOPESSOAS(const Value: Integer);
     procedure SetPEDIDOS_IDMESA(const Value: Integer);
-    procedure SetIDPEDIDO(const Value: Integer);
+    procedure SetPEDIDOSTATUS(const Value: string);
+    procedure SetVALORVENDA(const Value: Double);
+    procedure SetVENDA_IDTIPOCOBRANCA(const Value: string);
+    procedure SetIDCAIXA(const Value: Integer);
 
   public
 
     constructor Create(aQry: TFDQuery);
-
-    property FIDCAIXA: Integer read FFIDCAIXA write SetFIDCAIXA;
     property ITENS_VENDA_IDCOMPLEMENTO : Integer read FFITENS_VENDA_IDCOMPLEMENTO write SetFITENS_VENDA_IDCOMPLEMENTO;
     property FIDVENDA: Integer read FFIDVENDA write SetFIDVENDA;
     property FQUANTIDADE: Integer read FFQUANTIDADE write SetFQUANTIDADE;
@@ -69,14 +75,21 @@ type
     property PEDIDOPESSOAS :  Integer read FPEDIDOPESSOAS write SetPEDIDOPESSOAS;
     property PEDIDOS_IDMESA : Integer read FPEDIDOS_IDMESA write SetPEDIDOS_IDMESA;
     property IDPEDIDO : Integer read FIDPEDIDO write SetIDPEDIDO;
+    property IDTENS_MESA : Integer read FIDTENS_MESA write SetIDTENS_MESA;
 
+    property IDITENS_COMPLEMENTOS : Integer read FIDITENS_COMPLEMENTOS write SetIDITENS_COMPLEMENTOS;
+    property ITENS_IDCOMPLEMENTOS : Integer read FITENS_IDCOMPLEMENTOS write SetITENS_IDCOMPLEMENTOS;
+    property ITENS_IDPEDIDOS : Integer read FITENS_IDPEDIDOS write SetITENS_IDPEDIDOS;
+    property IDCAIXA : Integer  read FIDCAIXA write SetIDCAIXA;
+
+    procedure Gravar_ItensComplementos;
     procedure ItensVenda;
     procedure Movimentacoes;
     procedure Venda;
     procedure PedidosMesa;
     procedure BuscaPedido;
-
-    function GetIdPedido : Integer;
+    procedure Itens_Mesa;
+    function  GetIdPedido  : Integer;
 
   end;
 
@@ -106,7 +119,31 @@ begin
   Result := FIDPEDIDO;
 end;
 
+procedure TVenda.Gravar_ItensComplementos;
+var
+itens_venda : String;
+begin
+  try
+
+    FQry.Close;
+    FQry.SQL.Clear;
+    FQry.SQL.Add('INSERT INTO ITENS_COMPLEMENTO');
+    FQry.SQL.Add('(ITENS_IDCOMPLEMENTO , ITENS_IDPEDIDOS,POST_TYPE)');
+    FQry.SQL.Add('VALUES(:ITENS_IDCOMPLEMENTO ,:ITENS_IDPEDIDOS,:POST_TYPE)');
+    FQry.ParamByName('ITENS_IDCOMPLEMENTO').AsInteger := FITENS_IDCOMPLEMENTOS;
+    FQry.ParamByName('ITENS_IDPEDIDOS').AsInteger := FITENS_IDPEDIDOS;
+    FQry.ParamByName('POST_TYPE').AsInteger := 0;
+    FQry.ExecSQL;
+
+  except on E: Exception do
+    raise Exception.Create('  Error no Cadastro de ItensComplementos! ' + E.Message);
+  end;
+end;
+
 procedure TVenda.ItensVenda;
+var
+itensvenda : TStringList;
+i : Integer;
 begin
   try
     FQry.Close;
@@ -118,14 +155,16 @@ begin
     FQry.Close;
     FQry.SQL.Clear;
     FQry.SQL.Add('INSERT INTO ITENS_VENDA');
-    FQry.SQL.Add('(itens_venda.vendas_idvendas, itens_venda.itens_idproduto,itens_venda.itens_venda_quantidade,itens_venda.itens_venda_idmesa,itens_venda.itens_idpedido)');
-    FQry.SQL.Add('VALUES(:vendas_idvendas, :itens_idproduto,:itens_venda_quantidade,:itens_venda_idmesa,:itens_idpedido)'); //ITENS_VENDA_IDCOMPLEMENTO
+    FQry.SQL.Add('(itens_venda.vendas_idvendas, itens_venda.itens_idproduto,itens_venda.itens_venda_quantidade,itens_venda.itens_venda_idmesa,itens_venda.itens_idpedido,ITENS_MESA_IDPEDIDO,POST_TYPE)');
+    FQry.SQL.Add('VALUES(:vendas_idvendas, :itens_idproduto,:itens_venda_quantidade,:itens_venda_idmesa,:itens_idpedido,:ITENS_MESA_IDPEDIDO,:POST_TYPE)'); //ITENS_VENDA_IDCOMPLEMENTO
 
     FQry.ParamByName('vendas_idvendas').AsInteger := FIDVENDA;
     FQry.ParamByName('itens_idproduto').AsInteger := FFIDPRODUTO;
     FQry.ParamByName('itens_venda_quantidade').AsInteger := FQUANTIDADE;
     FQry.ParamByName('itens_venda_idmesa').AsInteger := FITENS_MESA;
     FQry.ParamByName('itens_idpedido').AsInteger := FIDPEDIDO;
+//    FQry.ParamByName('ITENS_MESA_IDPEDIDO').AsInteger := FIDTENS_MESA;
+    FQry.ParamByName('POST_TYPE').AsInteger := 1;
     FQry.ExecSQL;
 
     FQry.Close;
@@ -147,84 +186,20 @@ begin
   end;
 end;
 
-procedure TVenda.SetDATAVENDA(const Value: TDateTime);
+procedure TVenda.Itens_Mesa;
 begin
-  FDATAVENDA := Value;
-end;
+  try
 
-procedure TVenda.SetDESCRICAOVENDA(const Value: string);
-begin
-  FDESCRICAOVENDA := Value;
-end;
+    FQry.Close;
+    FQry.SQL.Clear;
+    FQry.SQL.Add('INSERT INTO ITENS_MESA');
+    FQry.SQL.Add('(IDITENS_MESA)VALUES(:IDITENS_MESA)');
+    FQry.ParamByName('IDITENS_MESA').AsInteger := FIDTENS_MESA;
+    FQry.ExecSQL;
 
-procedure TVenda.SetFIDCAIXA(const Value: Integer);
-begin
-  FFIDCAIXA := Value;
-end;
-
-procedure TVenda.SetFIDPRODUTO(const Value: Integer);
-begin
-  FFIDPRODUTO := Value;
-end;
-
-procedure TVenda.SetFIDVENDA(const Value: Integer);
-begin
-  FFIDVENDA := Value;
-end;
-
-procedure TVenda.SetFITENS_IDGRUPO(const Value: Integer);
-begin
-  FFITENS_IDGRUPO := Value;
-end;
-
-procedure TVenda.SetFITENS_MESA(const Value: Integer);
-begin
-  FFITENS_MESA := Value;
-end;
-
-procedure TVenda.SetFITENS_VENDA_IDCOMPLEMENTO(const Value: Integer);
-begin
-  FFITENS_VENDA_IDCOMPLEMENTO := Value;
-end;
-
-procedure TVenda.SetFORMAPAGAMENTO(const Value: string);
-begin
-  FdFORMAPAGAMENTO := Value;
-end;
-
-procedure TVenda.SetFQUANTIDADE(const Value: Integer);
-begin
-  FFQUANTIDADE := Value;
-end;
-
-procedure TVenda.SetIDPEDIDO(const Value: Integer);
-begin
-  FIDPEDIDO := Value;
-end;
-
-procedure TVenda.SetPEDIDOPESSOAS(const Value: Integer);
-begin
-  FPEDIDOPESSOAS := Value;
-end;
-
-procedure TVenda.SetPEDIDOSTATUS(const Value: string);
-begin
-  FPEDIDOSTATUS := Value;
-end;
-
-procedure TVenda.SetPEDIDOS_IDMESA(const Value: Integer);
-begin
-  FPEDIDOS_IDMESA := Value;
-end;
-
-procedure TVenda.SetVALORVENDA(const Value: Double);
-begin
-  FVALORVENDA := Value;
-end;
-
-procedure TVenda.SetVENDA_IDTIPOCOBRANCA(const Value: string);
-begin
-  FVENDA_IDTIPOCOBRANCA := Value;
+  except on E: Exception do
+    raise Exception.Create('Error' + E.Message);
+  end;
 end;
 
 procedure TVenda.Movimentacoes;
@@ -264,16 +239,121 @@ begin
     FQry.ParamByName('pedidos_status').AsString   := FPEDIDOSTATUS;
     FQry.ParamByName('pedidos_pessoas').AsInteger := FPEDIDOPESSOAS;
     FQry.ParamByName('PEDIDOS_IDMESA').AsInteger  := FPEDIDOS_IDMESA;
-    FQry.ParamByName('PEDIDOS_DATA').AsDateTime := StrToDateTime(FormatDateTime('dd/mm/yyyy', Now));
+    FQry.ParamByName('PEDIDOS_DATA').AsDateTime   := StrToDateTime(FormatDateTime('dd/mm/yyyy', Now));
     FQry.ExecSQL;
   except on E: Exception do
     raise Exception.Create(' Error no Inserir os Dados na Mesa! ');
   end;
 end;
 
-procedure TVenda.Venda;
+procedure TVenda.SetDATAVENDA(const Value: TDateTime);
 begin
-  try
+  FDATAVENDA := Value;
+end;
+
+procedure TVenda.SetDESCRICAOVENDA(const Value: string);
+begin
+  FDESCRICAOVENDA := Value;
+end;
+
+procedure TVenda.SetFIDPRODUTO(const Value: Integer);
+begin
+  FFIDPRODUTO := Value;
+end;
+
+procedure TVenda.SetFIDVENDA(const Value: Integer);
+begin
+  FFIDVENDA := Value;
+end;
+
+procedure TVenda.SetFITENS_IDGRUPO(const Value: Integer);
+begin
+  FFITENS_IDGRUPO := Value;
+end;
+
+procedure TVenda.SetFITENS_MESA(const Value: Integer);
+begin
+  FFITENS_MESA := Value;
+end;
+
+procedure TVenda.SetFITENS_VENDA_IDCOMPLEMENTO(const Value: Integer);
+begin
+  FFITENS_VENDA_IDCOMPLEMENTO := Value;
+end;
+
+procedure TVenda.SetFORMAPAGAMENTO(const Value: string);
+begin
+  FdFORMAPAGAMENTO := Value;
+end;
+
+procedure TVenda.SetFQUANTIDADE(const Value: Integer);
+begin
+  FFQUANTIDADE := Value;
+end;
+
+procedure TVenda.SetIDCAIXA(const Value: Integer);
+begin
+  FIDCAIXA := Value;
+end;
+
+procedure TVenda.SetIDITENS_COMPLEMENTOS(const Value: Integer);
+begin
+  FIDITENS_COMPLEMENTOS := Value;
+end;
+
+ procedure TVenda.SetIDMESAS(const Value: String);
+begin
+  FIDMESAS := Value;
+end;
+
+procedure TVenda.SetIDPEDIDO(const Value: Integer);
+begin
+  FIDPEDIDO := Value;
+end;
+
+procedure TVenda.SetIDTENS_MESA(const Value: Integer);
+begin
+  FIDTENS_MESA := Value;
+end;
+
+procedure TVenda.SetITENS_IDCOMPLEMENTOS(const Value: Integer);
+begin
+  FITENS_IDCOMPLEMENTOS := Value;
+end;
+
+procedure TVenda.SetITENS_IDPEDIDOS(const Value: Integer);
+begin
+  FITENS_IDPEDIDOS := Value;
+end;
+
+procedure TVenda.SetPEDIDOPESSOAS(const Value: Integer);
+begin
+  FPEDIDOPESSOAS := Value;
+end;
+
+procedure TVenda.SetPEDIDOSTATUS(const Value: string);
+begin
+  FPEDIDOSTATUS := Value;
+end;
+
+procedure TVenda.SetPEDIDOS_IDMESA(const Value: Integer);
+begin
+  FPEDIDOS_IDMESA := Value;
+end;
+
+procedure TVenda.SetVALORVENDA(const Value: Double);
+begin
+  FVALORVENDA := Value;
+end;
+
+procedure TVenda.SetVENDA_IDTIPOCOBRANCA(const Value: string);
+begin
+  FVENDA_IDTIPOCOBRANCA := Value;
+end;
+
+procedure Tvenda.Venda;
+begin
+ try
     FQry.Close;
     FQry.SQL.Clear;
     FQry.SQL.Add('INSERT INTO VENDAS');

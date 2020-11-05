@@ -3,7 +3,7 @@ object DataModuleServidorRestFull: TDataModuleServidorRestFull
   OnCreate = ServerMethodDataModuleCreate
   OnDestroy = ServerMethodDataModuleDestroy
   Encoding = esUtf8
-  Height = 242
+  Height = 229
   Width = 487
   object FDGUIxWaitCursor1: TFDGUIxWaitCursor
     Provider = 'Forms'
@@ -207,8 +207,8 @@ object DataModuleServidorRestFull: TDataModuleServidorRestFull
             Encoded = True
           end>
         JsonMode = jmPureJSON
-        Name = 'itens_mesa_complemento'
-        OnReplyEventByType = DWServerEvents1Eventsitens_mesa_complementoReplyEventByType
+        Name = 'itens_mesa_complementos'
+        OnReplyEventByType = DWServerEvents1Eventsitens_mesa_complementosReplyEventByType
       end>
     Left = 168
     Top = 152
@@ -238,8 +238,8 @@ object DataModuleServidorRestFull: TDataModuleServidorRestFull
     Top = 72
   end
   object FDStanStorageBinLink1: TFDStanStorageBinLink
-    Left = 360
-    Top = 144
+    Left = 280
+    Top = 152
   end
   object VQuery: TFDQuery
     Connection = FDConnection1
@@ -249,6 +249,10 @@ object DataModuleServidorRestFull: TDataModuleServidorRestFull
   object VQueryComplemento: TFDQuery
     Connection = FDConnection1
     Left = 280
+    Top = 88
+  end
+  object FDStanStorageJSONLink1: TFDStanStorageJSONLink
+    Left = 400
     Top = 88
   end
 end
