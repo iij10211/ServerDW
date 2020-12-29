@@ -31,8 +31,10 @@ type
     FITENS_IDPEDIDOS: Integer;
     FITENS_IDCOMPLEMENTOS: Integer;
     FIDITENS_COMPLEMENTOS: Integer;
-    FIDMESAS: String;
     FIDCAIXA: Integer;
+    FITENS_VENDA_OBSERVACAO: String;
+    FFPEDIDOSTATUS: String;
+    FFIDMESA: String;
 
     procedure SetDATAVENDA(const Value: TDateTime);
     procedure SetDESCRICAOVENDA(const Value: string);
@@ -44,7 +46,6 @@ type
     procedure SetFORMAPAGAMENTO(const Value: string);
     procedure SetFQUANTIDADE(const Value: Integer);
     procedure SetIDITENS_COMPLEMENTOS(const Value: Integer);
-    procedure SetIDMESAS(const Value: String);
     procedure SetIDPEDIDO(const Value: Integer);
     procedure SetIDTENS_MESA(const Value: Integer);
     procedure SetITENS_IDCOMPLEMENTOS(const Value: Integer);
@@ -55,8 +56,12 @@ type
     procedure SetVALORVENDA(const Value: Double);
     procedure SetVENDA_IDTIPOCOBRANCA(const Value: string);
     procedure SetIDCAIXA(const Value: Integer);
+    procedure SetITENS_VENDA_OBSERVACAO(const Value: String);
+    procedure SetFPEDIDOSTATUS(const Value: String);
+    procedure SetFIDMESA(const Value: String);
 
-  public
+
+    public
 
     constructor Create(aQry: TFDQuery);
     property ITENS_VENDA_IDCOMPLEMENTO : Integer read FFITENS_VENDA_IDCOMPLEMENTO write SetFITENS_VENDA_IDCOMPLEMENTO;
@@ -81,9 +86,11 @@ type
     property ITENS_IDCOMPLEMENTOS : Integer read FITENS_IDCOMPLEMENTOS write SetITENS_IDCOMPLEMENTOS;
     property ITENS_IDPEDIDOS : Integer read FITENS_IDPEDIDOS write SetITENS_IDPEDIDOS;
     property IDCAIXA : Integer  read FIDCAIXA write SetIDCAIXA;
+    property ITENS_VENDA_OBSERVACAO : String read FITENS_VENDA_OBSERVACAO write SetITENS_VENDA_OBSERVACAO;
+    property FIDMESA : String   read FFIDMESA write SetFIDMESA;
 
-    procedure Gravar_ItensComplementos;
     procedure ItensVenda;
+    procedure Gravar_ItensComplementos;
     procedure Movimentacoes;
     procedure Venda;
     procedure PedidosMesa;
@@ -155,14 +162,15 @@ begin
     FQry.Close;
     FQry.SQL.Clear;
     FQry.SQL.Add('INSERT INTO ITENS_VENDA');
-    FQry.SQL.Add('(itens_venda.vendas_idvendas, itens_venda.itens_idproduto,itens_venda.itens_venda_quantidade,itens_venda.itens_venda_idmesa,itens_venda.itens_idpedido,ITENS_MESA_IDPEDIDO,POST_TYPE)');
-    FQry.SQL.Add('VALUES(:vendas_idvendas, :itens_idproduto,:itens_venda_quantidade,:itens_venda_idmesa,:itens_idpedido,:ITENS_MESA_IDPEDIDO,:POST_TYPE)'); //ITENS_VENDA_IDCOMPLEMENTO
+    FQry.SQL.Add('(itens_venda.vendas_idvendas, itens_venda.itens_idproduto,itens_venda.itens_venda_quantidade,itens_venda.itens_venda_idmesa,itens_venda.itens_idpedido,ITENS_MESA_IDPEDIDO,POST_TYPE,ITENS_VENDA_OBSERVACAO)');
+    FQry.SQL.Add('VALUES(:vendas_idvendas, :itens_idproduto,:itens_venda_quantidade,:itens_venda_idmesa,:itens_idpedido,:ITENS_MESA_IDPEDIDO,:POST_TYPE,:ITENS_VENDA_OBSERVACAO)'); //ITENS_VENDA_IDCOMPLEMENTO
 
     FQry.ParamByName('vendas_idvendas').AsInteger := FIDVENDA;
     FQry.ParamByName('itens_idproduto').AsInteger := FFIDPRODUTO;
     FQry.ParamByName('itens_venda_quantidade').AsInteger := FQUANTIDADE;
     FQry.ParamByName('itens_venda_idmesa').AsInteger := FITENS_MESA;
     FQry.ParamByName('itens_idpedido').AsInteger := FIDPEDIDO;
+    FQry.ParamByName('ITENS_VENDA_OBSERVACAO').AsString := FITENS_VENDA_OBSERVACAO;
 //    FQry.ParamByName('ITENS_MESA_IDPEDIDO').AsInteger := FIDTENS_MESA;
     FQry.ParamByName('POST_TYPE').AsInteger := 1;
     FQry.ExecSQL;
@@ -256,6 +264,11 @@ begin
   FDESCRICAOVENDA := Value;
 end;
 
+procedure TVenda.SetFIDMESA(const Value: String);
+begin
+  FFIDMESA := Value;
+end;
+
 procedure TVenda.SetFIDPRODUTO(const Value: Integer);
 begin
   FFIDPRODUTO := Value;
@@ -286,6 +299,11 @@ begin
   FdFORMAPAGAMENTO := Value;
 end;
 
+procedure TVenda.SetFPEDIDOSTATUS(const Value: String);
+begin
+  FFPEDIDOSTATUS := Value;
+end;
+
 procedure TVenda.SetFQUANTIDADE(const Value: Integer);
 begin
   FFQUANTIDADE := Value;
@@ -299,11 +317,6 @@ end;
 procedure TVenda.SetIDITENS_COMPLEMENTOS(const Value: Integer);
 begin
   FIDITENS_COMPLEMENTOS := Value;
-end;
-
- procedure TVenda.SetIDMESAS(const Value: String);
-begin
-  FIDMESAS := Value;
 end;
 
 procedure TVenda.SetIDPEDIDO(const Value: Integer);
@@ -324,6 +337,11 @@ end;
 procedure TVenda.SetITENS_IDPEDIDOS(const Value: Integer);
 begin
   FITENS_IDPEDIDOS := Value;
+end;
+
+procedure TVenda.SetITENS_VENDA_OBSERVACAO(const Value: String);
+begin
+  FITENS_VENDA_OBSERVACAO := Value;
 end;
 
 procedure TVenda.SetPEDIDOPESSOAS(const Value: Integer);
@@ -352,19 +370,55 @@ begin
 end;
 
 procedure Tvenda.Venda;
+var
+idvenda :Integer;
+valorvenda : Double;
 begin
  try
-    FQry.Close;
-    FQry.SQL.Clear;
-    FQry.SQL.Add('INSERT INTO VENDAS');
-    FQry.SQL.Add('( VENDAS_VALOR_VENDA , VENDAS_DTVENDAS , VENDAS_DESCRICAO_VENDA , VENDAS_IDFORMA_PAGAMENTO)');
-    FQry.SQL.Add('VALUES( :VENDAS_VALOR_VENDA , :VENDAS_DTVENDAS , :VENDAS_DESCRICAO_VENDA , :VENDAS_IDFORMA_PAGAMENTO)');
+    idvenda := 0;
+    valorvenda := 0.00;
+    if(FPEDIDOSTATUS = 'EM CONSUMO')then
+    begin
 
-    FQry.ParamByName('VENDAS_VALOR_VENDA').AsFloat := FVALORVENDA;
-    FQry.ParamByName('VENDAS_DTVENDAS').AsDateTime := StrToDateTime(FormatDateTime('dd/mm/yyyy', Now));
-    FQry.ParamByName('VENDAS_DESCRICAO_VENDA').AsString := FDESCRICAOVENDA;
-    FQry.ParamByName('VENDAS_IDFORMA_PAGAMENTO').AsString:= FdFORMAPAGAMENTO;
-    FQry.ExecSQL;
+      FQry.Close;
+      FQry.SQL.Clear;
+      FQry.SQL.Add('SELECT * FROM VENDAS');
+      FQry.SQL.Add('LEFT JOIN ITENS_VENDA ON VENDAS.idvendas = itens_venda.vendas_idvendas');
+      FQry.SQL.Add('LEFT JOIN PEDIDOS ON itens_venda.itens_idpedido = PEDIDOS.idpedidos');
+      FQry.SQL.Add('WHERE itens_venda.itens_venda_idmesa =:idmesa');
+      FQry.SQL.Add('AND PEDIDOS.pedidos_status =:status');
+      FQry.ParamByName('idmesa').AsString := FIDMESA;
+      FQry.ParamByName('status').AsString := 'ABERTO';
+      FQry.Active := True;
+
+      if(FQry.RecordCount > 0) then
+      begin
+        valorvenda := FQry.FieldByName('VENDAS_VALOR_VENDA').AsFloat;
+        idvenda    := FQry.FieldByName('VENDAS_IDVENDAS').AsInteger;
+
+        FQry.Close;
+        FQry.SQL.Clear;
+        FQry.SQL.Add('UPDATE VENDAS SET VENDAS.VENDAS_VALOR_VENDA =:VALOR');
+        FQry.SQL.Add('WHERE VENDAS.IDVENDAS =:id');
+        FQry.ParamByName('id').AsInteger  := idvenda;
+        FQry.ParamByName('VALOR').AsFloat := valorvenda + FVALORVENDA;
+        FQry.ExecSQL;
+      end;
+    end
+    else if(FPEDIDOSTATUS = 'OCUPADA')then
+    begin
+      FQry.Close;
+      FQry.SQL.Clear;
+      FQry.SQL.Add('INSERT INTO VENDAS');
+      FQry.SQL.Add('( VENDAS_VALOR_VENDA , VENDAS_DTVENDAS , VENDAS_DESCRICAO_VENDA , VENDAS_IDFORMA_PAGAMENTO)');
+      FQry.SQL.Add('VALUES( :VENDAS_VALOR_VENDA , :VENDAS_DTVENDAS , :VENDAS_DESCRICAO_VENDA , :VENDAS_IDFORMA_PAGAMENTO)');
+
+      FQry.ParamByName('VENDAS_VALOR_VENDA').AsFloat := FVALORVENDA;
+      FQry.ParamByName('VENDAS_DTVENDAS').AsDateTime := StrToDateTime(FormatDateTime('dd/mm/yyyy', Now));
+      FQry.ParamByName('VENDAS_DESCRICAO_VENDA').AsString := FDESCRICAOVENDA;
+      FQry.ParamByName('VENDAS_IDFORMA_PAGAMENTO').AsString:= FdFORMAPAGAMENTO;
+      FQry.ExecSQL;
+    end;
  except on E: Exception do
     raise Exception.Create(' Error no Cadastro de Vendas! ');
   end;

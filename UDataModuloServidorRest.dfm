@@ -22,6 +22,7 @@ object DataModuleServidorRestFull: TDataModuleServidorRestFull
       'CharacterSet=UTF8'
       'DriverID=FB')
     ConnectedStoredUsage = []
+    Connected = True
     LoginPrompt = False
     Left = 48
     Top = 8
@@ -254,5 +255,10 @@ object DataModuleServidorRestFull: TDataModuleServidorRestFull
   object FDStanStorageJSONLink1: TFDStanStorageJSONLink
     Left = 400
     Top = 88
+  end
+  object VqueryVendas: TFDQuery
+    Connection = FDConnection1
+    Left = 416
+    Top = 168
   end
 end
