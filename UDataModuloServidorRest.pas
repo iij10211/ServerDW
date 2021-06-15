@@ -13,7 +13,7 @@ uses
   FireDAC.DApt.Intf, FireDAC.Comp.DataSet, uDWConstsData, FireDAC.DApt,
   FireDAC.Phys.IB, FireDAC.Phys.IBDef, FireDAC.Stan.StorageBin,System.JSON,
   uDWConsts, uRESTDWServerContext, Datasnap.DBClient, uConfigIni,
-  FireDAC.Stan.StorageJSON;
+  FireDAC.Stan.StorageJSON, Vcl.ExtCtrls;
 
 type
     TDataModuleServidorRestFull = class(TServerMethodDataModule)
@@ -22,13 +22,16 @@ type
     FDConnection1: TFDConnection;
     DWServerEvents1: TDWServerEvents;
     qrGeral: TFDQuery;
-    RESTDWPoolerDB1: TRESTDWPoolerDB;
-    RESTDWDriverFD1: TRESTDWDriverFD;
     FDStanStorageBinLink1: TFDStanStorageBinLink;
     VQuery: TFDQuery;
     VQueryComplemento: TFDQuery;
     FDStanStorageJSONLink1: TFDStanStorageJSONLink;
     VqueryVendas: TFDQuery;
+    ClientDataSet1: TClientDataSet;
+    ClientDataSet1idmesa: TIntegerField;
+    Timer1: TTimer;
+    RESTDWPoolerDB1: TRESTDWPoolerDB;
+    RESTDWDriverFD1: TRESTDWDriverFD;
 
     procedure ServerMethodDataModuleCreate(Sender: TObject);
     procedure DWServerEvents1EventssomarReplyEvent(var Params: TDWParams; var Result: string);
@@ -84,6 +87,15 @@ type
       var Params: TDWParams; var Result: string;
       const RequestType: TRequestType; var StatusCode: Integer;
       RequestHeader: TStringList);
+    procedure DWServerEvents1Eventsfechar_caixaReplyEventByType(
+      var Params: TDWParams; var Result: string;
+      const RequestType: TRequestType; var StatusCode: Integer;
+      RequestHeader: TStringList);
+    procedure DWServerEvents1Eventspedido_cozinhaReplyEventByType(
+      var Params: TDWParams; var Result: string;
+      const RequestType: TRequestType; var StatusCode: Integer;
+      RequestHeader: TStringList);
+
 
   private
     FConfigIni: TConfigIni;
@@ -404,6 +416,34 @@ begin
   end;
 end;
 
+procedure TDataModuleServidorRestFull.DWServerEvents1Eventsfechar_caixaReplyEventByType(
+  var Params: TDWParams; var Result: string; const RequestType: TRequestType;
+  var StatusCode: Integer; RequestHeader: TStringList);
+  var
+  Vjsonobjeto : TJSONObject;
+  pedido : TVenda;
+  VjsonValue: uDWJSONObject.TJSONValue;
+begin
+  pedido := TVenda.Create(qrGeral);
+  case RequestType of
+    rtPost:
+    begin
+      Vjsonobjeto := TJSONObject.ParseJSONValue( Params.ItemsString['UNDEFINED'].AsString ) as TJSONObject;
+      try
+        try
+          pedido.PEDIDOS_IDMESA := Vjsonobjeto.GetValue<Integer>('IDMESA');
+          pedido.Atualizar_Pedido;
+          Result := '[{"Resposta":" Pedido Gravado Com Sucess"}]';
+        except on E: Exception do
+          raise Exception.Create('Erro ao Atualizar!');
+        end;
+      finally
+        pedido.Free;
+      end;
+    end;
+  end;
+end;
+
 procedure TDataModuleServidorRestFull.DWServerEvents1Eventsitens_mesaReplyEventByType(
   var Params: TDWParams; var Result: string; const RequestType: TRequestType;
   var StatusCode: Integer; RequestHeader: TStringList);
@@ -533,7 +573,7 @@ begin
             raise Exception.Create(' Erro ao Inserir os Dados! ' + E.Message);
           end;
         finally
-          pedido.Free;
+         // pedido.Free;
         end;
       end;
     end;
@@ -618,6 +658,45 @@ begin
   end;
 end;
 
+procedure TDataModuleServidorRestFull.DWServerEvents1Eventspedido_cozinhaReplyEventByType(
+  var Params: TDWParams; var Result: string; const RequestType: TRequestType;
+  var StatusCode: Integer; RequestHeader: TStringList);
+  var
+  Vjsonobjeto : TJSONObject;
+  VjsonValue: uDWJSONObject.TJSONValue;
+  idmesa : String;
+begin
+  case RequestType of
+    rtGet:
+    begin
+      VjsonValue := uDWJSONObject.TJSONValue.Create;
+      Vjsonobjeto:= TJSONObject.Create;
+      try
+
+        VQuery.Close;
+        VQuery.SQL.Clear;
+        VQuery.SQL.Add('SELECT * FROM MESAS');
+        VQuery.SQL.Add('WHERE MESAS.MESAS_STATUS =:status');
+        VQuery.ParamByName('status').AsInteger := 1;
+        VQuery.Open();
+
+        if(VQuery.RecordCount > 0) then
+        begin
+          VjsonValue.LoadFromDataset('', VQuery, VjsonValue.Encoded,Params.JsonMode);
+          Result := VjsonValue.ToJSON;
+        end
+        else
+        begin
+          Result := '[{"Resposta":"Não Há Pedidos Registrados!"}]';
+        end;
+
+       except on E: Exception do
+        raise Exception.Create(' Error ao Buscar Pedido! ' + E.Message);
+      end;
+    end;
+  end;
+end;
+
 procedure TDataModuleServidorRestFull.DWServerEvents1EventspratosReplyEventByType(
   var Params: TDWParams; var Result: string; const RequestType: TRequestType;
   var StatusCode: Integer; RequestHeader: TStringList);
@@ -633,7 +712,6 @@ begin
       try
         if (Params.ItemsString['idmesas'].AsString <> '') then
         begin
-
           VQuery.Close;
           VQuery.SQL.Clear;
           VQuery.SQL.Add('SELECT itens_venda.iditens_venda,itens_venda.vendas_idvendas,PRODUTO.nome_produto,produto.precovenda_produto FROM itens_venda');

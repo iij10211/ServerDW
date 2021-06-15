@@ -1663,20 +1663,21 @@ object FServidor: TFServidor
       
         'Access-Control-Allow-Headers=Content-Type, Origin, Accept, Autho' +
         'rization, X-CUSTOM-HEADER')
+    PathTraversalRaiseError = True
     RequestTimeout = -1
     ServicePort = 8082
     ProxyOptions.Port = 8888
-    TokenOptions.Active = False
-    TokenOptions.ServerRequest = 'RESTDWServer01'
-    TokenOptions.TokenHash = 'RDWTS_HASH'
-    TokenOptions.LifeCycle = 30
-    ServerParams.HasAuthentication = True
-    ServerParams.UserName = 'testserver'
-    ServerParams.Password = 'testserver'
+    AuthenticationOptions.AuthorizationOption = rdwAOBasic
+    AuthenticationOptions.OptionParams.AuthDialog = True
+    AuthenticationOptions.OptionParams.CustomDialogAuthMessage = 'Protected Space...'
+    AuthenticationOptions.OptionParams.Custom404TitleMessage = '(404) The address you are looking for does not exist'
+    AuthenticationOptions.OptionParams.Custom404BodyMessage = '404'
+    AuthenticationOptions.OptionParams.Custom404FooterMessage = 'Take me back to <a href="./">Home REST Dataware'
+    AuthenticationOptions.OptionParams.Username = 'testserver'
+    AuthenticationOptions.OptionParams.Password = 'testserver'
     SSLMethod = sslvSSLv2
     SSLVersions = []
     Encoding = esUtf8
-    ServerContext = 'restdataware'
     RootPath = '/'
     SSLVerifyMode = []
     SSLVerifyDepth = 0
@@ -1684,13 +1685,20 @@ object FServidor: TFServidor
     CriptOptions.Use = False
     CriptOptions.Key = 'RDWBASEKEY256'
     MultiCORE = False
-    Left = 440
-    Top = 257
+    Left = 416
+    Top = 225
   end
   object RESTDWServiceNotification1: TRESTDWServiceNotification
+    Active = False
+    AuthenticationOptions.AuthorizationOption = rdwAONone
+    Encoding = esUtf8
+    CriptOptions.Use = False
+    CriptOptions.Key = 'RDWBASEKEY256'
+    MultiCORE = False
+    RequestTimeout = 5000
+    ServicePort = 9092
     GarbageTime = 60000
-    QueueNotifications = 50
-    Left = 88
-    Top = 241
+    Left = 104
+    Top = 281
   end
 end

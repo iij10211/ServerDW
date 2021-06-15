@@ -1,0 +1,776 @@
+object FConsCategoria: TFConsCategoria
+  Left = 0
+  Top = 0
+  Align = alClient
+  BorderIcons = []
+  BorderStyle = bsNone
+  Caption = 'ConsultaCategoria'
+  ClientHeight = 805
+  ClientWidth = 1385
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  OnClose = FormClose
+  OnResize = FormResize
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 1385
+    Height = 57
+    Align = alTop
+    Color = clWindow
+    ParentBackground = False
+    TabOrder = 0
+    DesignSize = (
+      1385
+      57)
+    object Label3: TLabel
+      Left = 1
+      Top = 34
+      Width = 73
+      Height = 14
+      Caption = 'Procurar Por:'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Arial'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object PngSpeedButton2: TPngSpeedButton
+      Left = 703
+      Top = 23
+      Width = 72
+      Height = 29
+      Caption = 'Procurar:'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Arial'
+      Font.Style = []
+      ParentFont = False
+      OnClick = PngSpeedButton2Click
+    end
+    object lbl2: TLabel
+      Left = 781
+      Top = 10
+      Width = 49
+      Height = 14
+      Caption = 'Situa'#231#227'o:'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Arial'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object btnFechar2: TPngSpeedButton
+      Left = 1292
+      Top = 5
+      Width = 88
+      Height = 47
+      Anchors = [akTop, akRight]
+      Caption = 'Fechar:'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Arial'
+      Font.Style = []
+      ParentFont = False
+      OnClick = btnFechar2Click
+      PngImage.Data = {
+        89504E470D0A1A0A0000000D49484452000000100000001008060000001FF3FF
+        610000000473424954080808087C086488000000097048597300000B1300000B
+        1301009A9C180000005C4944415478DAB593411200100C03D397E3E72E0E4553
+        33422E6AA45B0A832873715D46A6C9676E5246DC12C8E68B000C127AEC6438AD
+        79003322DBDD0A882060C90CC0206173BF00A423484DAC10AE314B4E0B3C7BCA
+        80F899AED501E7842A111A5A34560000000049454E44AE426082}
+    end
+    object ComboBox1: TComboBox
+      Left = 80
+      Top = 30
+      Width = 257
+      Height = 22
+      Style = csOwnerDrawFixed
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Arial'
+      Font.Style = [fsBold]
+      ItemIndex = 0
+      ParentFont = False
+      TabOrder = 0
+      Text = 'ID:'
+      OnChange = ComboBox1Change
+      Items.Strings = (
+        'ID:'
+        'DESCRICAO:'
+        'DT CADASTRO:')
+    end
+    object edtBusca: TEdit
+      Left = 343
+      Top = 30
+      Width = 354
+      Height = 22
+      CharCase = ecUpperCase
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Arial'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 1
+      TextHint = 'Procurar:'
+      OnKeyPress = edtBuscaKeyPress
+    end
+    object cbb2: TComboBox
+      Left = 781
+      Top = 30
+      Width = 108
+      Height = 22
+      Style = csOwnerDrawFixed
+      CharCase = ecUpperCase
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Arial'
+      Font.Style = []
+      ItemIndex = 0
+      ParentFont = False
+      TabOrder = 2
+      TextHint = 'Situa'#231#227'o'
+      Items.Strings = (
+        ''
+        'ATIVO'
+        'INATIVO')
+    end
+  end
+  object Panel5: TPanel
+    Left = 0
+    Top = 57
+    Width = 1385
+    Height = 677
+    Align = alClient
+    Caption = 'Panel5'
+    TabOrder = 1
+    object AdvPageControl1: TAdvPageControl
+      Left = 1
+      Top = 1
+      Width = 1383
+      Height = 675
+      ActivePage = AdvTabSheet2
+      ActiveFont.Charset = DEFAULT_CHARSET
+      ActiveFont.Color = clWindowText
+      ActiveFont.Height = -11
+      ActiveFont.Name = 'Tahoma'
+      ActiveFont.Style = []
+      Align = alClient
+      DoubleBuffered = True
+      DefaultTabColor = clWhite
+      ActiveColor = clMenuBar
+      TabSheetBorderColor = clWhite
+      TabBackGroundColor = clWhite
+      TabMargin.RightMargin = 0
+      TabOverlap = 0
+      Version = '2.0.0.10'
+      PersistPagesState.Location = plRegistry
+      PersistPagesState.Enabled = False
+      TabOrder = 0
+      OnChange = AdvPageControl1Change
+      object AdvTabSheet1: TAdvTabSheet
+        Caption = 'Busca:'
+        Color = clWhite
+        ColorTo = clNone
+        TabColor = clWhite
+        TabColorTo = clNone
+        object DBGrid1: TDBGrid
+          Left = 0
+          Top = 0
+          Width = 1375
+          Height = 647
+          Align = alClient
+          DataSource = DataSource1
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 0
+          TitleFont.Charset = DEFAULT_CHARSET
+          TitleFont.Color = clWindowText
+          TitleFont.Height = -11
+          TitleFont.Name = 'Tahoma'
+          TitleFont.Style = []
+          OnDblClick = DBGrid1DblClick
+          Columns = <
+            item
+              Expanded = False
+              FieldName = 'IDCATEGORIA'
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -12
+              Font.Name = 'Arial'
+              Font.Style = []
+              Title.Caption = 'ID'
+              Title.Font.Charset = ANSI_CHARSET
+              Title.Font.Color = clWindowText
+              Title.Font.Height = -11
+              Title.Font.Name = 'Arial'
+              Title.Font.Style = []
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'NOMECATEGORIA'
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -12
+              Font.Name = 'Arial'
+              Font.Style = []
+              Title.Caption = 'NOME'
+              Title.Font.Charset = ANSI_CHARSET
+              Title.Font.Color = clWindowText
+              Title.Font.Height = -11
+              Title.Font.Name = 'Arial'
+              Title.Font.Style = []
+              Width = 220
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'DESCRICAOCATEGORIA'
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -12
+              Font.Name = 'Arial'
+              Font.Style = []
+              Title.Caption = 'DESCRICAO'
+              Title.Font.Charset = ANSI_CHARSET
+              Title.Font.Color = clWindowText
+              Title.Font.Height = -11
+              Title.Font.Name = 'Arial'
+              Title.Font.Style = []
+              Width = 220
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'DTCADASTROCATEGORIA'
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -12
+              Font.Name = 'Arial'
+              Font.Style = []
+              Title.Caption = 'DTCATEGORIA'
+              Title.Font.Charset = ANSI_CHARSET
+              Title.Font.Color = clWindowText
+              Title.Font.Height = -11
+              Title.Font.Name = 'Arial'
+              Title.Font.Style = []
+              Width = 136
+              Visible = True
+            end>
+        end
+      end
+      object AdvTabSheet2: TAdvTabSheet
+        Caption = 'Cadastro:'
+        Color = clWhite
+        ColorTo = clNone
+        TabColor = clWhite
+        TabColorTo = clNone
+        DesignSize = (
+          1375
+          647)
+        object Label1: TLabel
+          Left = 6
+          Top = 3
+          Width = 91
+          Height = 14
+          Caption = 'Nome Categoria:'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object Label4: TLabel
+          Left = 6
+          Top = 52
+          Width = 57
+          Height = 14
+          Caption = 'Descri'#231#227'o:'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object Label18: TLabel
+          Left = 1364
+          Top = 3
+          Width = 11
+          Height = 13
+          Anchors = [akTop, akRight]
+          Caption = 'N:'
+        end
+        object Label8: TLabel
+          Left = 6
+          Top = 101
+          Width = 68
+          Height = 14
+          Caption = 'Observa'#231#227'o:'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object Edit1: TEdit
+          Left = 6
+          Top = 25
+          Width = 445
+          Height = 22
+          CharCase = ecUpperCase
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          ParentFont = False
+          TabOrder = 1
+        end
+        object Edit2: TEdit
+          Left = 6
+          Top = 74
+          Width = 445
+          Height = 22
+          CharCase = ecUpperCase
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          ParentFont = False
+          TabOrder = 2
+        end
+        object Edit15: TEdit
+          Left = 1296
+          Top = 22
+          Width = 79
+          Height = 24
+          Alignment = taCenter
+          Anchors = [akTop, akRight]
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -13
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+          TabOrder = 0
+        end
+        object Memo1: TMemo
+          Left = 6
+          Top = 120
+          Width = 947
+          Height = 527
+          Anchors = [akLeft, akTop, akBottom]
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          ParentFont = False
+          TabOrder = 3
+        end
+      end
+    end
+  end
+  object Panel6: TPanel
+    Left = 590
+    Top = 308
+    Width = 265
+    Height = 89
+    TabOrder = 2
+    Visible = False
+    object Label5: TLabel
+      Left = 17
+      Top = 21
+      Width = 60
+      Height = 14
+      Caption = 'Data Inicial:'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Arial'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object Label6: TLabel
+      Left = 90
+      Top = 48
+      Width = 6
+      Height = 13
+      Caption = '/'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object Label7: TLabel
+      Left = 102
+      Top = 21
+      Width = 54
+      Height = 14
+      Caption = 'Data Final:'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Arial'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object PngSpeedButton6: TPngSpeedButton
+      Left = 175
+      Top = 32
+      Width = 72
+      Height = 29
+      Caption = 'Buscar:'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Arial'
+      Font.Style = []
+      ParentFont = False
+      OnClick = PngSpeedButton2Click
+    end
+    object MaskEdit2: TMaskEdit
+      Left = 17
+      Top = 40
+      Width = 67
+      Height = 22
+      EditMask = '!99/99/0000;1;_'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Arial'
+      Font.Style = []
+      MaxLength = 10
+      ParentFont = False
+      TabOrder = 0
+      Text = '  /  /    '
+    end
+    object MaskEdit3: TMaskEdit
+      Left = 102
+      Top = 40
+      Width = 67
+      Height = 22
+      EditMask = '!99/99/0000;1;_'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Arial'
+      Font.Style = []
+      MaxLength = 10
+      ParentFont = False
+      TabOrder = 1
+      Text = '  /  /    '
+    end
+  end
+  object Panel2: TPanel
+    Left = 0
+    Top = 734
+    Width = 1385
+    Height = 71
+    Align = alBottom
+    Color = clWhite
+    ParentBackground = False
+    TabOrder = 3
+    DesignSize = (
+      1385
+      71)
+    object Label2: TLabel
+      Left = 11
+      Top = 1
+      Width = 41
+      Height = 14
+      Caption = 'Buscar:'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Arial'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object btnEditar: TPngSpeedButton
+      Left = 105
+      Top = 20
+      Width = 88
+      Height = 47
+      Caption = 'Editar:'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Arial'
+      Font.Style = []
+      ParentFont = False
+      OnClick = btnEditarClick
+      PngImage.Data = {
+        89504E470D0A1A0A0000000D4948445200000018000000180806000000E0773D
+        F80000000473424954080808087C086488000000097048597300000B1300000B
+        1301009A9C18000001E74944415478DAED953B4F1B41108067C6F85CD0D05044
+        0AF7301254546979597149196117485024455A6810690969F2172005A188920A
+        89921F80441125921136D8DC9AF0120D080A38DF4EC68E0F4172C1E747132953
+        EDDEE8BE6F6E765687D0C1485A569601DFCAF2042B3453FC512C60A7E0CE5367
+        8862FC559654DD33C01113A63A22E8B7ED0CFAFE3613650170F12EC13ADFB620
+        69DBD3C8F041B33E8C31A74492815F6DAA455B82001E704452AE4B26E5D1927C
+        C2F75AC234CD27711DEF6E0424F27441A962183C883B09C69E5790D7514EFE33
+        02BE8850306BE09725D75DF91BFC5E6CEEBB07E95A8BFA2D9BA3C091F5AB3DA5
+        961BC3B9D0A5F5F86EB97CF44020E5ED20F17AD82BC8B4BDA74A5F1AC2656ABA
+        A43D01FC81407AF7A9A45436EA8146814716B40A8F2A2019848C0CC247A8DFD2
+        DFE11EC0B852EA38B4BD8D048E65BD26E62D461CFC43A2F5AE8790EAB9B9B9AC
+        6EBF9D9E5E372D90EAE79979562ECF08323F23C0D59AE41EFC2A91D8F011675C
+        D73D68492095BF13A002233EAC3D6F1490167CD6E9008E48631560A73D41BD25
+        9830460CC3B8C8E572B749D35E448437D554CB82C722D967BF4782B9FF827F45
+        007C2833BED58C406EF1908CECC0A302C734CF08A9B7297048C46E8DDEFC71FE
+        3C44E04C00F82B6D4AD6E407331596F8095A4F7CF22CC048590000000049454E
+        44AE426082}
+    end
+    object btnExcluir: TPngSpeedButton
+      Left = 199
+      Top = 20
+      Width = 88
+      Height = 47
+      Caption = 'Excluir:'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Arial'
+      Font.Style = []
+      ParentFont = False
+      OnClick = btnExcluirClick
+      PngImage.Data = {
+        89504E470D0A1A0A0000000D49484452000000100000001008060000001FF3FF
+        610000000473424954080808087C086488000000097048597300000B1300000B
+        1301009A9C180000005C4944415478DAB593411200100C03D397E3E72E0E4553
+        33422E6AA45B0A832873715D46A6C9676E5246DC12C8E68B000C127AEC6438AD
+        79003322DBDD0A882060C90CC0206173BF00A423484DAC10AE314B4E0B3C7BCA
+        80F899AED501E7842A111A5A34560000000049454E44AE426082}
+    end
+    object PngSpeedButton5: TPngSpeedButton
+      Left = 293
+      Top = 20
+      Width = 88
+      Height = 47
+      Caption = 'Imprimir:'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Arial'
+      Font.Style = []
+      ParentFont = False
+      PngImage.Data = {
+        89504E470D0A1A0A0000000D494844520000002000000020080300000044A48A
+        C600000192504C54450000004444404444404444404444404444404444404444
+        4001010100000001010105050506060500000044444044444044444000000000
+        00000707060808070000000000000000000505050404041C1C1A1F1F1D000000
+        0202021D1D1B0000000303033535322B2B280000000000000000000000000B0B
+        0A0000000000000101010000000101010404042C2C290000000000003F3F3C06
+        06050909080000000000000101001A1A180707060000000101010505040B0B0A
+        01010104040305050540403C0000000000000101010808070909080E0E0E0000
+        0001010106060607070601010100000005050501010101010012121103030300
+        0000040404141413000000010101000000000000000000050504000000070706
+        1F1F1D0505040A0A0A0000000000000101010606060404040202020000000606
+        0500000000000001010104040405050530302D1414130A0A090000000000000B
+        0B0B000000000000040403040404000000373733000000000000010101070707
+        0808080000000707070404040000000101010606060707070202014F3EA20600
+        00008674524E530003040107080A0B6380818586760D0F02C49E87888AEC3C16
+        ED2022C33B1FEA211103230961620BCCB48281B4D01808030EB96852F3DC2388
+        AE64BE624CF3D51034707177793FD3A396979190A7D2D83329D8DA3528835EBB
+        02DA8C8904C06507C2C497EF34131433EE92C8C4130659E92F5A4AFCFCFC4113
+        04D6757B7C7491D7488D929348D3EB5965000001F64944415478DA8553CF4B15
+        51143EDFDCCB3CE759F48420918A1425822888362D024DC44D1105E6220457D2
+        4A8876B56A15AD6A15847F40845090421085AD5D8818451141912042E40439CF
+        F7983BD773E74CCE74939CCD7C73BE6FCE8FEF9E0BDAE3C19F37ACDD15894039
+        6C7645B94029D800F213475D029D70CC1829A13A1D8F267F45B04DC7EFC316C7
+        62E941A9887157B84E8DAC8852379202B140AB1A6316947CA36E3705B1001A75
+        C65D61ABE4B3FD5933472A030541DEF561FC2A791CC03799840508F2A98EE167
+        C9DB83F8E25062D37CB87EACEEF45F4E72046B2D930BFA35B0FE0FDFC79E7C34
+        C6090674EB47A57E8E4EE36B2FB02C4E46BDAB3E7FD6FD7E62251127EB51EAF1
+        748E052BA96D8A931D51DBE3E93CF0396991087447CD787C233BB314C49108A0
+        43CBB586B07392EE4CB118130BC4C9D0D51A75BC9CB9CDA0F0829BA7B63819BA
+        5497B150E97418CF5880549C8CFADE536318AF2A9D8E18165C7BF35B9C1C075E
+        661793B7F175CE64742D988FC75830013C112727B9FC5A0F66686A8352ABD343
+        8FE906BE1FE5E8A36227A7F1C19EC483CAA437ED3B9C7ABE115776F2829ABD85
+        62E7D5FDB1F682BF9357D52C4DCF8D3FBDD449748FAE04AFFD9D6441C5C9C1FA
+        BCBF93B767A65C7EE582868D7AE8EFE4DDDCE94F2E7ADC797AC7DF4955DCA4BF
+        51B193FFB99DE99EB77B1B4BA2193C9BD4532B0000000049454E44AE426082}
+    end
+    object PngSpeedButton11: TPngSpeedButton
+      Left = 387
+      Top = 20
+      Width = 88
+      Height = 47
+      Caption = 'Personalizar'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Arial'
+      Font.Style = []
+      ParentFont = False
+    end
+    object btnCancelar: TPngSpeedButton
+      Left = 1292
+      Top = 16
+      Width = 88
+      Height = 47
+      Anchors = [akRight, akBottom]
+      Caption = 'Cancelar:'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Arial'
+      Font.Style = []
+      ParentFont = False
+      PngImage.Data = {
+        89504E470D0A1A0A0000000D49484452000000100000001008060000001FF3FF
+        610000000473424954080808087C086488000000097048597300000B1300000B
+        1301009A9C180000005C4944415478DAB593411200100C03D397E3E72E0E4553
+        33422E6AA45B0A832873715D46A6C9676E5246DC12C8E68B000C127AEC6438AD
+        79003322DBDD0A882060C90CC0206173BF00A423484DAC10AE314B4E0B3C7BCA
+        80F899AED501E7842A111A5A34560000000049454E44AE426082}
+      ExplicitLeft = 1257
+    end
+    object btnCadastrar: TPngSpeedButton
+      Left = 1198
+      Top = 16
+      Width = 88
+      Height = 47
+      Anchors = [akRight, akBottom]
+      Caption = 'Cadastrar:'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Arial'
+      Font.Style = []
+      ParentFont = False
+      OnClick = btnCadastrarClick
+      PngImage.Data = {
+        89504E470D0A1A0A0000000D49484452000000140000001408060000008D891D
+        0D0000000473424954080808087C086488000000097048597300000B1300000B
+        1301009A9C180000012F4944415478DAEDD13B4EC3401006E07D781D84FCC0B0
+        36E60ADC823882327D7ACEC015380415351D1D60B803A7880DD8F1A320597B97
+        B10448313844068902A69A62F5EDCC3F18FD70E17FF07741C7716C8CF125B467
+        49929C7F0BB46D7B0B1372850831744A0FE2388E7A830D4608B956846C02367C
+        C37A8180390D06D36D304D1B465114F7CED0B2AC6D4DD36E10C60CB0A08D2D81
+        0EE7C7A8AE2710F21802CEDB0F4DD3DC618C35185D301694D3E9C3679FBE839C
+        F3BDAAAEEF20E41996F2284DD3AC858580E1C57C1E9465F9D8B5C5D2CAAEEBFA
+        42CA5B2465A9A43CCCB26C661806D707831029A584104151144FAB62F990A1E7
+        79BB306908E033A5742295BA00AC066CF415D67914C3F75D5D8810DA7DC0EEAB
+        AA1AE5799EAC73B8CE2BBFE67602D8E9BAD84AB06FFD41F005907B7E158CADB9
+        850000000049454E44AE426082}
+      ExplicitLeft = 1163
+    end
+    object PngSpeedButton1: TPngSpeedButton
+      Left = 11
+      Top = 20
+      Width = 88
+      Height = 47
+      Caption = 'Novo:'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Arial'
+      Font.Style = []
+      ParentFont = False
+      OnClick = PngSpeedButton1Click
+      PngImage.Data = {
+        89504E470D0A1A0A0000000D4948445200000018000000180806000000E0773D
+        F80000000473424954080808087C086488000000097048597300000B1300000B
+        1301009A9C180000008F4944415478DA6364A0316024412D13102700F17F205E
+        00A5A96A411210CF85B213A19650D5820620AE87B21BA1FC510B462DA0A305B0
+        4C248747AD0310DB43D90781F8001EB50F19A0991166017226A2160067464624
+        CE3C2A5B100FC48B601630420514A81444F7807831721011031A1806732A1AB5
+        60D4023040CE8CE04C446D0B6099F11F03341351DB02B200007D913419C9229C
+        B80000000049454E44AE426082}
+    end
+  end
+  object DataSource1: TDataSource
+    DataSet = RESTDWClientSQL1
+    Left = 504
+    Top = 296
+  end
+  object RESTDWClientSQL1: TRESTDWClientSQL
+    FieldDefs = <>
+    IndexDefs = <>
+    FetchOptions.AssignedValues = [evMode]
+    FetchOptions.Mode = fmAll
+    ResourceOptions.AssignedValues = [rvSilentMode]
+    ResourceOptions.SilentMode = True
+    UpdateOptions.AssignedValues = [uvCheckRequired, uvAutoCommitUpdates]
+    UpdateOptions.CheckRequired = False
+    UpdateOptions.AutoCommitUpdates = True
+    StoreDefs = True
+    BinaryCompatibleMode = False
+    MasterCascadeDelete = True
+    BinaryRequest = False
+    Datapacks = -1
+    DataCache = False
+    Params = <>
+    DataBase = RESTDWDataBase1
+    CacheUpdateRecords = True
+    AutoCommitData = False
+    AutoRefreshAfterCommit = False
+    RaiseErrors = True
+    ActionCursor = crSQLWait
+    ReflectChanges = False
+    Left = 432
+    Top = 425
+  end
+  object RESTDWDataBase1: TRESTDWDataBase
+    Active = False
+    Compression = True
+    CriptOptions.Use = False
+    CriptOptions.Key = 'RDWBASEKEY256'
+    Login = 'iij'
+    Password = '123'
+    Proxy = False
+    ProxyOptions.Port = 8888
+    PoolerService = '127.0.0.1'
+    PoolerPort = 8082
+    PoolerName = 'TDataModuleServidorRestFull.RESTDWPoolerDB1'
+    StateConnection.AutoCheck = False
+    StateConnection.InTime = 1000
+    RequestTimeOut = 10000
+    EncodeStrings = True
+    Encoding = esUtf8
+    StrsTrim = False
+    StrsEmpty2Null = False
+    StrsTrim2Len = True
+    ParamCreate = True
+    FailOver = False
+    FailOverConnections = <>
+    FailOverReplaceDefaults = False
+    ClientConnectionDefs.Active = False
+    UserAgent = 
+      'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, l' +
+      'ike Gecko) Chrome/41.0.2227.0 Safari/537.36'
+    TokenOptions.Active = False
+    TokenOptions.TokenHash = 'RDWTS_HASH'
+    Left = 840
+    Top = 544
+  end
+end

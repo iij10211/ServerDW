@@ -40,9 +40,9 @@ type
     Panel2: TPanel;
     Panel3: TPanel;
     Button3: TButton;
+    idcaixa: TLabel;
     RESTServicePooler1: TRESTServicePooler;
     RESTDWServiceNotification1: TRESTDWServiceNotification;
-    idcaixa: TLabel;
 
     procedure Button1Click(Sender: TObject);
     procedure IniciarServidor;
@@ -70,7 +70,7 @@ var
 implementation
 
 uses
-UDataModuloServidorRest, URecurso;
+UDataModuloServidorRest, URecurso,ServerUtils;
 
 {$R *.dfm}
 
@@ -144,17 +144,21 @@ end;
 procedure TFServidor.IniciarServidor;
 begin
   SetParametros;
-
   if Not RESTServicePooler1.Active then
   begin
-    RESTServicePooler1.ServerParams.UserName := Trim(edt_UserDW.Text);
-    RESTServicePooler1.ServerParams.Password := Trim(edt_PasswordDW.Text);
-    RESTServicePooler1.ServicePort           := StrToInt(edt_PortaDW.Text);
-    RESTServicePooler1.Active                := True;
 
-    if RESTServicePooler1.Active = True then
+    with RESTServicePooler1 do
     begin
-      lSeguro.Caption := ' SERVIDOR CONECTADO! ';
+
+      TRDWAuthOptionBasic(AuthenticationOptions.OptionParams).Username := Trim(edt_UserDW.Text);
+      TRDWAuthOptionBasic(AuthenticationOptions.OptionParams).Password := Trim(edt_PasswordDW.Text);
+      RESTServicePooler1.ServicePort           := StrToInt(edt_PortaDW.Text);
+      RESTServicePooler1.Active                := True;
+
+      if RESTServicePooler1.Active = True then
+      begin
+        lSeguro.Caption := ' SERVIDOR CONECTADO! ';
+      end;
     end;
   end;
   Minimizar;

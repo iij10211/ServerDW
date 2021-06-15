@@ -60,7 +60,6 @@ type
     procedure SetFPEDIDOSTATUS(const Value: String);
     procedure SetFIDMESA(const Value: String);
 
-
     public
 
     constructor Create(aQry: TFDQuery);
@@ -96,6 +95,7 @@ type
     procedure PedidosMesa;
     procedure BuscaPedido;
     procedure Itens_Mesa;
+    procedure Atualizar_Pedido;
     function  GetIdPedido  : Integer;
 
   end;
@@ -103,6 +103,23 @@ type
 implementation
 
 { TVenda }
+
+procedure TVenda.Atualizar_Pedido;
+begin
+  FQry.Close;
+  FQry.SQL.Clear;
+  FQry.SQL.Add('UPDATE PEDIDOS SET PEDIDOS.PEDIDOS_STATUS =:STATUS WHERE PEDIDOS.PEDIDOS_IDMESA =:IDMESA');
+  FQry.ParamByName('STATUS').AsString  := 'FECHADO';
+  FQry.ParamByName('IDMESA').AsInteger :=  FPEDIDOS_IDMESA;
+  FQry.ExecSQL;
+
+  FQry.Close;
+  FQry.SQL.Clear;
+  FQry.SQL.Add('UPDATE MESAS SET MESAS.MESAS_STATUS =:STATUS WHERE MESAS.IDMESAS =:IDMESA');
+  FQry.ParamByName('IDMESA').AsInteger := FPEDIDOS_IDMESA;
+  FQry.ParamByName('STATUS').AsInteger := 0;
+  FQry.ExecSQL;
+end;
 
 procedure TVenda.BuscaPedido;
 begin
@@ -151,8 +168,10 @@ procedure TVenda.ItensVenda;
 var
 itensvenda : TStringList;
 i : Integer;
+quantidade_venda_itens : Integer;
 begin
   try
+    quantidade_venda_itens := 1;
     FQry.Close;
     FQry.SQL.Clear;
     FQry.SQL.Add('select gen_id(gen_vendas_id, 0) from rdb$database');
@@ -162,8 +181,8 @@ begin
     FQry.Close;
     FQry.SQL.Clear;
     FQry.SQL.Add('INSERT INTO ITENS_VENDA');
-    FQry.SQL.Add('(itens_venda.vendas_idvendas, itens_venda.itens_idproduto,itens_venda.itens_venda_quantidade,itens_venda.itens_venda_idmesa,itens_venda.itens_idpedido,ITENS_MESA_IDPEDIDO,POST_TYPE,ITENS_VENDA_OBSERVACAO)');
-    FQry.SQL.Add('VALUES(:vendas_idvendas, :itens_idproduto,:itens_venda_quantidade,:itens_venda_idmesa,:itens_idpedido,:ITENS_MESA_IDPEDIDO,:POST_TYPE,:ITENS_VENDA_OBSERVACAO)'); //ITENS_VENDA_IDCOMPLEMENTO
+    FQry.SQL.Add('(itens_venda.vendas_idvendas, itens_venda.itens_idproduto,itens_venda.itens_venda_quantidade,itens_venda.itens_venda_idmesa,itens_venda.itens_idpedido,ITENS_MESA_IDPEDIDO,POST_TYPE,ITENS_VENDA_OBSERVACAO,ITENS_VENDA_QUANTIDADE_VENDA)');
+    FQry.SQL.Add('VALUES(:vendas_idvendas, :itens_idproduto,:itens_venda_quantidade,:itens_venda_idmesa,:itens_idpedido,:ITENS_MESA_IDPEDIDO,:POST_TYPE,:ITENS_VENDA_OBSERVACAO,:ITENS_VENDA_QUANTIDADE_VENDA)');
 
     FQry.ParamByName('vendas_idvendas').AsInteger := FIDVENDA;
     FQry.ParamByName('itens_idproduto').AsInteger := FFIDPRODUTO;
@@ -171,7 +190,7 @@ begin
     FQry.ParamByName('itens_venda_idmesa').AsInteger := FITENS_MESA;
     FQry.ParamByName('itens_idpedido').AsInteger := FIDPEDIDO;
     FQry.ParamByName('ITENS_VENDA_OBSERVACAO').AsString := FITENS_VENDA_OBSERVACAO;
-//    FQry.ParamByName('ITENS_MESA_IDPEDIDO').AsInteger := FIDTENS_MESA;
+    FQry.ParamByName('ITENS_VENDA_QUANTIDADE_VENDA').AsInteger := + 1;
     FQry.ParamByName('POST_TYPE').AsInteger := 1;
     FQry.ExecSQL;
 
@@ -377,6 +396,13 @@ begin
  try
     idvenda := 0;
     valorvenda := 0.00;
+
+    FQry.Close;
+    FQry.SQL.Clear;
+    FQry.SQL.Add('select gen_id(gen_caixa_id, 0) from rdb$database');
+    FQry.Active := True;
+    FIDCAIXA := FQry.Fields[0].AsInteger;
+
     if(FPEDIDOSTATUS = 'EM CONSUMO')then
     begin
 
@@ -403,6 +429,42 @@ begin
         FQry.ParamByName('id').AsInteger  := idvenda;
         FQry.ParamByName('VALOR').AsFloat := valorvenda + FVALORVENDA;
         FQry.ExecSQL;
+
+        if(FIDCAIXA <> 0) then
+        begin
+          FQry.Close;
+          FQry.SQL.Clear;
+          FQry.SQL.Add('INSERT INTO MOVIMENTACOES');
+          FQry.SQL.Add('( ENTRADA_MOVIMENTACOES , MOVIMENTACOES_IDVENDAS , MOVIMENTACOES_IDCAIXA , DATA_MOVIMENTACOES)');
+          FQry.SQL.Add('VALUES(:ENTRADA_MOVIMENTACOES , :MOVIMENTACOES_IDVENDAS , :MOVIMENTACOES_IDCAIXA , :DATA_MOVIMENTACOES)');
+
+          FQry.ParamByName('MOVIMENTACOES_IDVENDAS').AsInteger := idvenda;
+          FQry.ParamByName('MOVIMENTACOES_IDCAIXA').AsInteger  := FIDCAIXA;
+          FQry.ParamByName('ENTRADA_MOVIMENTACOES').AsString := 'E';
+          FQry.ParamByName('DATA_MOVIMENTACOES').AsDateTime := StrToDateTime(FormatDateTime('DD/MM/YYYY', Now));
+          FQry.ExecSQL;
+        end
+        else
+        begin
+//          FQry.Close;
+//          FQry.SQL.Clear;
+//          FQry.SQL.Add('select gen_id(gen_caixa_id, 0) from rdb$database');
+//          FQry.Active := True;
+//          FIDCAIXA := FQry.Fields[0].AsInteger;
+
+          FQry.Close;
+          FQry.SQL.Clear;
+          FQry.SQL.Add('INSERT INTO MOVIMENTACOES');
+          FQry.SQL.Add('( ENTRADA_MOVIMENTACOES , MOVIMENTACOES_IDVENDAS , MOVIMENTACOES_IDCAIXA , DATA_MOVIMENTACOES)');
+          FQry.SQL.Add('VALUES(:ENTRADA_MOVIMENTACOES , :MOVIMENTACOES_IDVENDAS , :MOVIMENTACOES_IDCAIXA , :DATA_MOVIMENTACOES)');
+
+          FQry.ParamByName('MOVIMENTACOES_IDVENDAS').AsInteger := idvenda;
+          FQry.ParamByName('MOVIMENTACOES_IDCAIXA').AsInteger  := FIDCAIXA;
+          FQry.ParamByName('ENTRADA_MOVIMENTACOES').AsString := 'E';
+          FQry.ParamByName('DATA_MOVIMENTACOES').AsDateTime := StrToDateTime(FormatDateTime('DD/MM/YYYY', Now));
+          FQry.ExecSQL;
+
+        end;
       end;
     end
     else if(FPEDIDOSTATUS = 'OCUPADA')then
@@ -418,7 +480,30 @@ begin
       FQry.ParamByName('VENDAS_DESCRICAO_VENDA').AsString := FDESCRICAOVENDA;
       FQry.ParamByName('VENDAS_IDFORMA_PAGAMENTO').AsString:= FdFORMAPAGAMENTO;
       FQry.ExecSQL;
+
+      FQry.Close;
+      FQry.SQL.Clear;
+      FQry.SQL.Add('select gen_id(GEN_VENDAS_ID, 0) from rdb$database');
+      FQry.Active := True;
+      FIDVENDA := FQry.Fields[0].AsInteger;
+
+
+
+      FQry.Close;
+      FQry.SQL.Clear;
+      FQry.SQL.Add('INSERT INTO MOVIMENTACOES');
+      FQry.SQL.Add('( ENTRADA_MOVIMENTACOES , MOVIMENTACOES_IDVENDAS , MOVIMENTACOES_IDCAIXA , DATA_MOVIMENTACOES)');
+      FQry.SQL.Add('VALUES(:ENTRADA_MOVIMENTACOES , :MOVIMENTACOES_IDVENDAS , :MOVIMENTACOES_IDCAIXA , :DATA_MOVIMENTACOES)');
+
+      FQry.ParamByName('MOVIMENTACOES_IDVENDAS').AsInteger := FIDVENDA;
+      FQry.ParamByName('MOVIMENTACOES_IDCAIXA').AsInteger  := FIDCAIXA;
+      FQry.ParamByName('ENTRADA_MOVIMENTACOES').AsString := 'E';
+      FQry.ParamByName('DATA_MOVIMENTACOES').AsDateTime := StrToDateTime(FormatDateTime('DD/MM/YYYY', Now));
+      FQry.ExecSQL;
+
+
     end;
+
  except on E: Exception do
     raise Exception.Create(' Error no Cadastro de Vendas! ');
   end;

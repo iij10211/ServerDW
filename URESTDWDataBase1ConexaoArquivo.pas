@@ -29,10 +29,10 @@ begin
     RESTDWDataBase1.Close;
     RESTDWDataBase1.PoolerService := ArquivoIni.ReadString('config','Host','');
     RESTDWDataBase1.PoolerPort :=StrToInt(ArquivoIni.ReadString('config','Port',''));
-    RESTDWDataBase1.Login := ArquivoIni.ReadString('config','User','');
-    RESTDWDataBase1.Password := ArquivoIni.ReadString('config','Password','');
+//    RESTDWDataBase1.Login := ArquivoIni.ReadString('config','User','');
+//    RESTDWDataBase1.Password := ArquivoIni.ReadString('config','Password','');
     RESTDWDataBase1.Compression := True;
-    RESTDWDataBase1.TypeRequest := TTypeRequest.trHttp;
+//    RESTDWDataBase1.TypeRequest := TTypeRequest.trHttp;
     RESTDWDataBase1.Open;
     RESTDWDataBase1.PoolerName := 'TDataModuleServidorRestFull.RESTDWPoolerDB1';
   finally
@@ -49,10 +49,10 @@ begin
     RESTDWDataBase1.Close;
     RESTDWDataBase1.PoolerService := ArquivoIni.ReadString('config','Host','');
     RESTDWDataBase1.PoolerPort := StrToInt(ArquivoIni.ReadString('config','Port',''));
-    RESTDWDataBase1.Login := ArquivoIni.ReadString('config','User','');
-    RESTDWDataBase1.Password := ArquivoIni.ReadString('config','Password','');
+//    RESTDWDataBase1.Login := ArquivoIni.ReadString('config','User','');
+//    RESTDWDataBase1.Password := ArquivoIni.ReadString('config','Password','');
     RESTDWDataBase1.Compression := True;
-    RESTDWDataBase1.TypeRequest := TTypeRequest.trHttp;
+//    RESTDWDataBase1.TypeRequest := TTypeRequest.trHttp;
     RESTDWDataBase1.PoolerName := 'TDataModuleServidorRestFull.RESTDWPoolerDB1';
     RESTDWDataBase1.Open;
     PoolerConexaoCliente;
@@ -79,8 +79,8 @@ begin
     RESTDWPoolerList1.Active        := False;
     RESTDWPoolerList1.PoolerService := arquivoIni.ReadString('config','Host','');
     RESTDWPoolerList1.PoolerPort    := StrToInt(arquivoIni.ReadString('config','Port',''));
-    RESTDWPoolerList1.Login         := arquivoIni.ReadString('config','User','');
-    RESTDWPoolerList1.Password      := arquivoIni.ReadString('config','Password','');
+//    RESTDWPoolerList1.Login         := arquivoIni.ReadString('config','User','');
+//    RESTDWPoolerList1.Password      := arquivoIni.ReadString('config','Password','');
     RESTDWPoolerList1.Active        := True;
 
     if RESTDWPoolerList1.Active then

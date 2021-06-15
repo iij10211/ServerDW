@@ -3,7 +3,7 @@ object DataModuleServidorRestFull: TDataModuleServidorRestFull
   OnCreate = ServerMethodDataModuleCreate
   OnDestroy = ServerMethodDataModuleDestroy
   Encoding = esUtf8
-  Height = 229
+  Height = 265
   Width = 487
   object FDGUIxWaitCursor1: TFDGUIxWaitCursor
     Provider = 'Forms'
@@ -11,8 +11,8 @@ object DataModuleServidorRestFull: TDataModuleServidorRestFull
     Top = 16
   end
   object FDPhysFBDriverLink1: TFDPhysFBDriverLink
-    Left = 168
-    Top = 80
+    Left = 40
+    Top = 88
   end
   object FDConnection1: TFDConnection
     Params.Strings = (
@@ -22,7 +22,6 @@ object DataModuleServidorRestFull: TDataModuleServidorRestFull
       'CharacterSet=UTF8'
       'DriverID=FB')
     ConnectedStoredUsage = []
-    Connected = True
     LoginPrompt = False
     Left = 48
     Top = 8
@@ -32,6 +31,7 @@ object DataModuleServidorRestFull: TDataModuleServidorRestFull
     Events = <
       item
         Routes = [crAll]
+        NeedAuthorization = True
         DWParams = <
           item
             TypeObject = toParam
@@ -49,16 +49,22 @@ object DataModuleServidorRestFull: TDataModuleServidorRestFull
           end>
         JsonMode = jmPureJSON
         Name = 'somar'
+        EventName = 'somar'
+        OnlyPreDefinedParams = False
         OnReplyEvent = DWServerEvents1EventssomarReplyEvent
       end
       item
         Routes = [crAll]
+        NeedAuthorization = True
         DWParams = <>
         JsonMode = jmPureJSON
         Name = 'subtrair'
+        EventName = 'subtrair'
+        OnlyPreDefinedParams = False
       end
       item
         Routes = [crAll]
+        NeedAuthorization = True
         DWParams = <
           item
             TypeObject = toParam
@@ -69,10 +75,13 @@ object DataModuleServidorRestFull: TDataModuleServidorRestFull
           end>
         JsonMode = jmPureJSON
         Name = 'busca'
+        EventName = 'busca'
+        OnlyPreDefinedParams = False
         OnReplyEvent = DWServerEvents1EventsbuscaReplyEvent
       end
       item
         Routes = [crAll]
+        NeedAuthorization = True
         DWParams = <
           item
             TypeObject = toParam
@@ -90,17 +99,23 @@ object DataModuleServidorRestFull: TDataModuleServidorRestFull
           end>
         JsonMode = jmPureJSON
         Name = 'usuario'
+        EventName = 'usuario'
+        OnlyPreDefinedParams = False
         OnReplyEvent = DWServerEvents1EventsusuarioReplyEvent
       end
       item
         Routes = [crAll]
+        NeedAuthorization = True
         DWParams = <>
         JsonMode = jmPureJSON
         Name = 'cliente'
+        EventName = 'cliente'
+        OnlyPreDefinedParams = False
         OnReplyEventByType = DWServerEvents1EventsclienteReplyEventByType
       end
       item
         Routes = [crAll]
+        NeedAuthorization = True
         DWParams = <
           item
             TypeObject = toParam
@@ -111,17 +126,23 @@ object DataModuleServidorRestFull: TDataModuleServidorRestFull
           end>
         JsonMode = jmPureJSON
         Name = 'categoria'
+        EventName = 'categoria'
+        OnlyPreDefinedParams = False
         OnReplyEventByType = DWServerEvents1EventscategoriaReplyEventByType
       end
       item
         Routes = [crAll]
+        NeedAuthorization = True
         DWParams = <>
         JsonMode = jmPureJSON
         Name = 'mesas'
+        EventName = 'mesas'
+        OnlyPreDefinedParams = False
         OnReplyEventByType = DWServerEvents1EventsmesasReplyEventByType
       end
       item
         Routes = [crAll]
+        NeedAuthorization = True
         DWParams = <
           item
             TypeObject = toParam
@@ -132,10 +153,13 @@ object DataModuleServidorRestFull: TDataModuleServidorRestFull
           end>
         JsonMode = jmPureJSON
         Name = 'categoria_restaurante'
+        EventName = 'categoria_restaurante'
+        OnlyPreDefinedParams = False
         OnReplyEventByType = DWServerEvents1Eventscategoria_restauranteReplyEventByType
       end
       item
         Routes = [crAll]
+        NeedAuthorization = True
         DWParams = <
           item
             TypeObject = toParam
@@ -146,38 +170,53 @@ object DataModuleServidorRestFull: TDataModuleServidorRestFull
           end>
         JsonMode = jmPureJSON
         Name = 'comanda_produtos'
+        EventName = 'comanda_produtos'
+        OnlyPreDefinedParams = False
         OnReplyEventByType = DWServerEvents1Eventscomanda_produtosReplyEventByType
       end
       item
         Routes = [crAll]
+        NeedAuthorization = True
         DWParams = <>
         JsonMode = jmPureJSON
         Name = 'pedidos'
+        EventName = 'pedidos'
+        OnlyPreDefinedParams = False
         OnReplyEventByType = DWServerEvents1EventspedidosReplyEventByType
       end
       item
         Routes = [crAll]
+        NeedAuthorization = True
         DWParams = <>
         JsonMode = jmPureJSON
         Name = 'itens_pedidos'
+        EventName = 'itens_pedidos'
+        OnlyPreDefinedParams = False
         OnReplyEventByType = DWServerEvents1Eventsitens_pedidosReplyEventByType
       end
       item
         Routes = [crAll]
+        NeedAuthorization = True
         DWParams = <>
         JsonMode = jmPureJSON
         Name = 'complementos'
+        EventName = 'complementos'
+        OnlyPreDefinedParams = False
         OnReplyEventByType = DWServerEvents1EventscomplementosReplyEventByType
       end
       item
         Routes = [crAll]
+        NeedAuthorization = True
         DWParams = <>
         JsonMode = jmPureJSON
         Name = 'vendas'
+        EventName = 'vendas'
+        OnlyPreDefinedParams = False
         OnReplyEventByType = DWServerEvents1EventsvendasReplyEventByType
       end
       item
         Routes = [crAll]
+        NeedAuthorization = True
         DWParams = <
           item
             TypeObject = toParam
@@ -195,10 +234,13 @@ object DataModuleServidorRestFull: TDataModuleServidorRestFull
           end>
         JsonMode = jmPureJSON
         Name = 'itens_mesa'
+        EventName = 'itens_mesa'
+        OnlyPreDefinedParams = False
         OnReplyEventByType = DWServerEvents1Eventsitens_mesaReplyEventByType
       end
       item
         Routes = [crAll]
+        NeedAuthorization = True
         DWParams = <
           item
             TypeObject = toParam
@@ -209,15 +251,94 @@ object DataModuleServidorRestFull: TDataModuleServidorRestFull
           end>
         JsonMode = jmPureJSON
         Name = 'itens_mesa_complementos'
+        EventName = 'itens_mesa_complementos'
+        OnlyPreDefinedParams = False
         OnReplyEventByType = DWServerEvents1Eventsitens_mesa_complementosReplyEventByType
+      end
+      item
+        Routes = [crAll]
+        NeedAuthorization = True
+        DWParams = <
+          item
+            TypeObject = toParam
+            ObjectDirection = odINOUT
+            ObjectValue = ovString
+            ParamName = 'idmesa'
+            Encoded = True
+          end>
+        JsonMode = jmPureJSON
+        Name = 'fechar_caixa'
+        EventName = 'fechar_caixa'
+        OnlyPreDefinedParams = False
+        OnReplyEventByType = DWServerEvents1Eventsfechar_caixaReplyEventByType
+      end
+      item
+        Routes = [crAll]
+        NeedAuthorization = True
+        DWParams = <>
+        JsonMode = jmPureJSON
+        Name = 'pedido_cozinha'
+        EventName = 'pedido_cozinha'
+        OnlyPreDefinedParams = False
+        OnReplyEventByType = DWServerEvents1Eventspedido_cozinhaReplyEventByType
+      end
+      item
+        Routes = [crAll]
+        NeedAuthorization = True
+        DWParams = <>
+        JsonMode = jmDataware
+        Name = 'dwevent18'
+        EventName = 'dwevent18'
+        OnlyPreDefinedParams = False
       end>
-    Left = 168
-    Top = 152
+    Left = 48
+    Top = 160
   end
   object qrGeral: TFDQuery
     Connection = FDConnection1
     Left = 168
     Top = 16
+  end
+  object FDStanStorageBinLink1: TFDStanStorageBinLink
+    Left = 208
+    Top = 152
+  end
+  object VQuery: TFDQuery
+    Connection = FDConnection1
+    Left = 248
+    Top = 16
+  end
+  object VQueryComplemento: TFDQuery
+    Connection = FDConnection1
+    Left = 200
+    Top = 80
+  end
+  object FDStanStorageJSONLink1: TFDStanStorageJSONLink
+    Left = 344
+    Top = 88
+  end
+  object VqueryVendas: TFDQuery
+    Connection = FDConnection1
+    Left = 432
+    Top = 184
+  end
+  object ClientDataSet1: TClientDataSet
+    PersistDataPacket.Data = {
+      290000009619E0BD01000000180000000100000000000300000029000669646D
+      65736104000100000000000000}
+    Active = True
+    Aggregates = <>
+    Params = <>
+    Left = 312
+    Top = 160
+    object ClientDataSet1idmesa: TIntegerField
+      FieldName = 'idmesa'
+    end
+  end
+  object Timer1: TTimer
+    Interval = 5000
+    Left = 328
+    Top = 208
   end
   object RESTDWPoolerDB1: TRESTDWPoolerDB
     RESTDriver = RESTDWDriverFD1
@@ -229,36 +350,13 @@ object DataModuleServidorRestFull: TDataModuleServidorRestFull
     Active = True
     PoolerOffMessage = 'RESTPooler not active.'
     ParamCreate = True
-    Left = 48
-    Top = 152
+    Left = 192
+    Top = 200
   end
   object RESTDWDriverFD1: TRESTDWDriverFD
     CommitRecords = 100
     Connection = FDConnection1
     Left = 48
-    Top = 72
-  end
-  object FDStanStorageBinLink1: TFDStanStorageBinLink
-    Left = 280
-    Top = 152
-  end
-  object VQuery: TFDQuery
-    Connection = FDConnection1
-    Left = 248
-    Top = 16
-  end
-  object VQueryComplemento: TFDQuery
-    Connection = FDConnection1
-    Left = 280
-    Top = 88
-  end
-  object FDStanStorageJSONLink1: TFDStanStorageJSONLink
-    Left = 400
-    Top = 88
-  end
-  object VqueryVendas: TFDQuery
-    Connection = FDConnection1
-    Left = 416
-    Top = 168
+    Top = 216
   end
 end
